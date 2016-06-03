@@ -1,17 +1,17 @@
-#' Selects optimal tree depth for randomForest() using corss-validation by tuning the nodesize parameter
+#' Selects optimal tree depth for SL.randomForest() using cross-validation by tuning the nodesize parameter
 #'
-#' @param Y outcome
-#' @param X matrix of features that predict Y
-#' @param id id variable to identify independent observations for V-splits
-#' @param SLlib SuperLearner library
+#' @param Y The outcome. Must be a numeric vector.
+#' @param X A matrix of features that predict Y, usually a data.frame.
+#' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
+#' @param SL.library SuperLearner library
 #' @param print logical. print messages? Defaults to FALSE
 #'
 #' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks
-#' @examples
-#'
-#Additional Context can be found at bottom of file
+#' @details \code{slab_cvRF} is an internal function called by \code{\link[SLAb]{slab_curve}} or \code{slab_tmle} if SL.randomForest() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of node sizes evaluated is 15, 20, ..., 40.  In the context of Age-antibody curves, without this tuning step random forest will fit extremely jagged curves that are clear overfits. This additional selection step prevents overfitting. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+#' @examples TBD
 
-SLAb.cvRF <- function(Y,X,id,SLlib,print=FALSE) {
+
+slab_cvRF <- function(Y,X,id,SL.library,print=FALSE) {
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.randomForest.")
     cat("\nThe default R implementation of randomForest tends to overfit the data")
@@ -43,7 +43,7 @@ SLAb.cvRF <- function(Y,X,id,SLlib,print=FALSE) {
   colnames(cvr.tab) <- c("nodesize","CVRisk")
 
   # update the library
-  SLlib2 <- gsub("SL.randomForest",paste("SL.randomForest.ns",ns.opt,sep=""),SLlib)
+  SLlib2 <- gsub("SL.randomForest",paste("SL.randomForest.ns",ns.opt,sep=""),SL.library)
 
   if(print==TRUE) {
     cat("\n-----------------------------------")
@@ -53,37 +53,7 @@ SLAb.cvRF <- function(Y,X,id,SLlib,print=FALSE) {
   }
 
   # return results
-  return(list(SLlib=SLlib2,ns.opt=ns.opt,cvRisks=cvr.tab))
+  return(list(SL.library=SLlib2,ns_opt=ns.opt,cvRisks=cvr.tab))
 
 }
 
-
-#---------------------------------------
-# SLAb-cvRF.R
-#
-# Developed by Ben Arnold (benarnold@berkeley.edu)
-#
-# select optimal tree depth for
-# randomForest() using cross-validation
-# by tuning the nodesize parameter
-#
-# if you don't do this, RF will usually
-# grow the trees that are too deep
-# (e.g., to nodes with 1 obs)
-# and this will overfit the data
-#
-# In the context of Age-antibody curves,
-# it will make extremely jagged curves
-# that are clear overfits. This adds
-# the one-step optimization of that parameter
-# that should probably be included in the
-# default implementation of the
-# randomForest package, but isn't
-#
-# this function is designed to be
-# called by SLAb.curve or SLAb.tmle
-# if they include SL.randomForest in the
-# ensemble library
-# it leverages SuperLearner() to estimate
-# cross-validated Risks
-#---------------------------------------
