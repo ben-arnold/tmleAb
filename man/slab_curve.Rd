@@ -4,20 +4,20 @@
 \alias{slab_curve}
 \title{Fit an age-dependent antibody curve with ensemble machine learning}
 \usage{
-slab_curve(Y, Age, W = NULL, id = 1:length(Y), SL_library = c("SL.mean",
+slab_curve(Y, Age, W = NULL, id = NULL, SL.library = c("SL.mean",
   "SL.glm", "SL.bayesglm", "SL.loess", "SL.gam", "SL.glmnet",
   "SL.randomForest"), ...)
 }
 \arguments{
-\item{Y}{Antibody measurement at the individual level}
+\item{Y}{Antibody measurement. Must be a numeric vector.}
 
-\item{Age}{Age of the individual at the time of measurement}
+\item{Age}{Age of the individual at the time of measurement. Must be a numeric vector.}
 
-\item{W}{(optional) A vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve}
+\item{W}{An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve}
 
-\item{id}{(optional) An id variable that identifies independent units for datasets with repeated measures (to ensure appropriate cross-validation sampling)}
+\item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
 
-\item{SL_library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
+\item{SL.library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
 
 \item{...}{Further arguments passed to or from other methods.}
 }
@@ -37,13 +37,10 @@ slab_curve(Y, Age, W = NULL, id = 1:length(Y), SL_library = c("SL.mean",
 \code{slab_curve} uses ensemble machine learning with \code{\link[SuperLearner]{SuperLearner}} to fit population mean antibody curves by age. If covariates \code{W} are included, the predicted curve is marginally adjusted for \code{W}.
 }
 \details{
-The \code{slab_curve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL_library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{slab_curve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function.
+The \code{slab_curve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{slab_curve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function.
 }
 \examples{
 TBD
-}
-\references{
-Arnold BF et al. Nonparametric methods to measure the intensity of infectious disease transmission from circulating antibodies (\emph{under review})
 }
 \seealso{
 \code{\link{slab_tmle}}

@@ -5,11 +5,11 @@
 #'
 #' \code{slab_curve} uses ensemble machine learning with \code{\link[SuperLearner]{SuperLearner}} to fit population mean antibody curves by age. If covariates \code{W} are included, the predicted curve is marginally adjusted for \code{W}.
 #'
-#' @param Y Antibody measurement at the individual level
-#' @param Age Age of the individual at the time of measurement
-#' @param W (optional) A vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve
-#' @param id (optional) An id variable that identifies independent units for datasets with repeated measures (to ensure appropriate cross-validation sampling)
-#' @param SL_library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
+#' @param Y Antibody measurement. Must be a numeric vector.
+#' @param Age Age of the individual at the time of measurement. Must be a numeric vector.
+#' @param W An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve
+#' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
+#' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param ... Further arguments passed to or from other methods.
 #'
 #'
@@ -25,15 +25,16 @@
 #' }
 #'
 #'
-#' @details The \code{slab_curve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL_library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{slab_curve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function.
+#' @details The \code{slab_curve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{slab_curve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function.
 #'
-
-#' @references Arnold BF et al. Nonparametric methods to measure the intensity of infectious disease transmission from circulating antibodies (\emph{under review})
+#' @references
 #' @seealso \code{\link{slab_tmle}}
 #' @export
 #'
 #' @examples TBD
-slab_curve <-function(Y,Age,W=NULL,id=1:length(Y),SL_library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess", "SL.gam","SL.glmnet","SL.randomForest"),...) {
+slab_curve <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess", "SL.gam","SL.glmnet","SL.randomForest"),...) {
+
+  if (is.null(id)) id <- 1:length(Y)
 
   # if W is null, create a row of 1s so that the SL.glmnet algorithm will run
   # this will make the SL.glm library throw warnings (due to a rank-deficient model). this is not a problem
@@ -63,13 +64,13 @@ slab_curve <-function(Y,Age,W=NULL,id=1:length(Y),SL_library= c("SL.mean","SL.gl
   # If randomForest is included in the library,
   # select optimal node size (tree depth) using cross-validated risk
   # and then update the ensemble library to include the optimal node size
-  if (length(grep("SL.randomForest",SL_library))>0) {
-    cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL_library=SL_library)
-    SLlib <- cvRF$SLlib
+  if (length(grep("SL.randomForest",SL.library))>0) {
+    cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library)
+    SL.library <- cvRF$SL.library
   }
 
   # Fit SuperLearner
-  SLfit <- withCallingHandlers( SuperLearner::SuperLearner(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL_library,family=gaussian,method="method.NNLS"), warning = muffw)
+  SLfit <- withCallingHandlers( SuperLearner::SuperLearner(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,family=gaussian,method="method.NNLS"), warning = muffw)
   print(SLfit)
 
   # obtain marginally averaged, predicted values of Y at A=a:  E_W[E(Y|A=a, X=x, W)]

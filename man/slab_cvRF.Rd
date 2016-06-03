@@ -4,7 +4,7 @@
 \alias{slab_cvRF}
 \title{Selects optimal tree depth for SL.randomForest() using cross-validation by tuning the nodesize parameter}
 \usage{
-slab_cvRF(Y, X, id, SL.library, print = FALSE)
+slab_cvRF(Y, X, id = NULL, SL.library, print = FALSE)
 }
 \arguments{
 \item{Y}{The outcome. Must be a numeric vector.}

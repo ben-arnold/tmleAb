@@ -11,7 +11,7 @@
 #' @examples TBD
 
 
-slab_cvRF <- function(Y,X,id,SL.library,print=FALSE) {
+slab_cvRF <- function(Y,X,id=NULL,SL.library,print=FALSE) {
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.randomForest.")
     cat("\nThe default R implementation of randomForest tends to overfit the data")
@@ -21,6 +21,8 @@ slab_cvRF <- function(Y,X,id,SL.library,print=FALSE) {
     cat("\n  from 15,20,...,40 using V-fold cross-validation.")
     cat("\nThis could take a few minutes, depending on the size of your dataset...\n")
   }
+
+  if(is.null(id)) id <- 1:length(Y)
 
   nodesizes <- seq(15,40,by=5)
   create.SL.randomForest <- function(tune = list(nodesize = nodesizes)) {
