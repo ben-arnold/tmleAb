@@ -1,0 +1,34 @@
+#' Open Science Framework data on enteric disease in Haiti
+#'
+#' The Haiti data include measurements from 142 children measured between 1 and 9 times in Leogane, Haiti.
+#' The codebooks for each file include variable descriptions and details.
+#'
+#' @docType data
+#'
+#' @usage data(haiti_enterics)
+#'
+#' @format CSV table
+#'
+#' @keywords datasets
+#'
+#'        #----------TODO: I put the references I found in the README on OSF here. Edit if you'd like---------------
+#'
+#' @references Moore CR, Johnson LS, Kwak I-Y, Livny M, Broman KW,
+#' Moss, Delynn M., Jeffrey W. Priest, Kathy Hamlin, Gordana Derado, Joel Herbein, William A. Petri Jr, and Patrick J. Lammie. 2014.
+#' “Longitudinal Evaluation of Enteric Protozoa in Haitian Children by Stool Exam and Multiplex Serologic Assay.”
+#' The American Journal of Tropical Medicine and Hygiene 90 (4): 653–60.
+#'
+#' @source \href{https://osf.io/np2ft/}{Open Science Framework Storage}
+#'
+#'
+#'           #----------TODO: Put examples here ---------------
+#' @examples
+#' data(grav)
+#' times <- attr(grav, "time")
+#' phe <- grav$pheno
+#' \donttest{
+#' iplotCurves(phe, times, phe[,c(61,121)], phe[,c(121,181)],
+#'             chartOpts=list(curves_xlab="Time (hours)", curves_ylab="Root tip angle (degrees)",
+#'                            scat1_xlab="Angle at 2 hrs", scat1_ylab="Angle at 4 hrs",
+#'                            scat2_xlab="Angle at 4 hrs", scat2_ylab="Angle at 6 hrs"))}
+"haiti_enterics"
