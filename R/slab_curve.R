@@ -10,7 +10,7 @@
 #' @param W An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
-#' @param ... Further arguments passed to or from other methods.
+#' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #'
 #'
 #' @return \code{slab_curve} returns a list that includes the following objects:
@@ -32,7 +32,7 @@
 #' @export
 #'
 #' @examples TBD
-slab_curve <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess", "SL.gam","SL.glmnet","SL.randomForest"),...) {
+slab_curve <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess", "SL.gam","SL.glmnet","SL.randomForest"), RFnodesize=NULL) {
 
   if (is.null(id)) id <- 1:length(Y)
 
@@ -65,7 +65,8 @@ slab_curve <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.
   # select optimal node size (tree depth) using cross-validated risk
   # and then update the ensemble library to include the optimal node size
   if (length(grep("SL.randomForest",SL.library))>0) {
-    cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library)
+    if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
+    cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
     SL.library <- cvRF$SL.library
   }
 
