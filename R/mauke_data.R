@@ -1,22 +1,20 @@
-#' Open Science Framework data on enteric disease in Haiti
+#' DESCRIPTION OF DATA HERE (what it is)
 #'
-#' The Haiti data include measurements from 142 children measured between 1 and 9 times in Leogane, Haiti.
-#' The codebooks for each file include variable descriptions and details.
+#' DESCRIPTION OF DATA HERE (where its from, what kinds of things at the high-level are contained in it)
 #'
 #' @docType data
 #'
-#' @usage data(haiti_enterics)
+#' @usage data(maukeWb123)
 #'
 #' @format dataframe
+#' each row includes variable descriptions and details for a single individual
 #'
 #' @keywords datasets
 #'
 #'        #----------TODO: I put the references I found in the README on OSF here. Edit if you'd like---------------
 #'
-#' @references Moore CR, Johnson LS, Kwak I-Y, Livny M, Broman KW,
-#' Moss, Delynn M., Jeffrey W. Priest, Kathy Hamlin, Gordana Derado, Joel Herbein, William A. Petri Jr, and Patrick J. Lammie. 2014.
-#' “Longitudinal Evaluation of Enteric Protozoa in Haitian Children by Stool Exam and Multiplex Serologic Assay.”
-#' The American Journal of Tropical Medicine and Hygiene 90 (4): 653–60.
+#' @references Steel, Cathy, Joseph Kubofcik, Eric A. Ottesen, and Thomas B. Nutman. 2012.
+#' “Antibody to the Filarial Antigen Wb123 Reflects Reduced Transmission and Decreased Exposure in Children Born Following Single Mass Drug Administration (MDA).” PLoS Neglected Tropical Diseases 6 (12): e1940.
 #'
 #' @source \href{https://osf.io/7frw2/}{Open Science Framework Storage}
 #'
@@ -31,4 +29,4 @@
 #'             chartOpts=list(curves_xlab="Time (hours)", curves_ylab="Root tip angle (degrees)",
 #'                            scat1_xlab="Angle at 2 hrs", scat1_ylab="Angle at 4 hrs",
 #'                            scat2_xlab="Angle at 4 hrs", scat2_ylab="Angle at 6 hrs"))}
-"haiti_enterics"
+"maukeWb123"

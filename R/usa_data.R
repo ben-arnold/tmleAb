@@ -1,4 +1,4 @@
-#' Open Science Framework data on enteric disease in the United States 
+#' Open Science Framework data on enteric disease in the United States
 #'
 #' The USA data include measurements from 86 anonymous blood donors in the USA. There is one record per child.
 #' The codebooks for each file include variable descriptions and details.
@@ -7,7 +7,7 @@
 #'
 #' @usage data(usa_enterics)
 #'
-#' @format CSV table
+#' @format dataframe
 #'
 #' @keywords datasets
 #'
@@ -18,7 +18,7 @@
 #' “Longitudinal Evaluation of Enteric Protozoa in Haitian Children by Stool Exam and Multiplex Serologic Assay.”
 #' The American Journal of Tropical Medicine and Hygiene 90 (4): 653–60.
 #'
-#' @source \href{https://osf.io/vyms5/}{Open Science Framework Storage}
+#' @source \href{https://osf.io/7frw2/}{Open Science Framework Storage}
 #'
 #'
 #'           #----------TODO: Put examples here ---------------
