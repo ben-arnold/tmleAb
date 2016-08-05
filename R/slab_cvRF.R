@@ -19,13 +19,13 @@ slab_cvRF <- function(Y,X,id=NULL,SL.library,print=FALSE, RFnodesize=seq(15,40,b
     cat("\n\tby growing trees that are too deep.")
     cat("\nPrevent overfitting by properly tuning the node size.")
     cat("\nSelecting the optimal node size (tree depth)")
-    cat("\n\tfrom 15,20,...,40 using V-fold cross-validation.")
+    cat("\n",RFnodesize[1],"to",RFnodesize[length(RFnodesize)],"using V-fold cross-validation.")
     cat("\nThis could take a few minutes, depending on the size of your dataset...\n")
   }
 
   if(is.null(id)) id <- 1:length(Y)
 
-  
+
   create.SL.randomForest <- function(tune = list(nodesize = RFnodesize)) {
     for(mm in seq(length(tune$nodesize))) {
       eval(parse(file = "", text = paste("SL.randomForest.ns", tune$nodesize[mm], "<- function(...,nodesize = ", tune$nodesize[mm], ") SL.randomForest(..., nodesize = nodesize)", sep = "")), envir = .GlobalEnv)
