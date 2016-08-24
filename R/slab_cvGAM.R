@@ -3,6 +3,7 @@
 #' @param Y The outcome. Must be a numeric vector.
 #' @param X A matrix of features that predict Y, usually a data.frame.
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
+#' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library SuperLearner library
 #' @param print logical. print messages? Defaults to FALSE
 #' @param df a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to a sequence from 2 to 10
@@ -12,7 +13,7 @@
 #' @examples TBD
 #' @export
 
-slab_cvGAM <- function(Y,X,id=NULL,SL.library,print=FALSE, df=2:10) {
+slab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:10) {
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.gam.")
     cat("\nThe default R implementation of gam() may over- or under-smooth the data")
@@ -34,7 +35,7 @@ slab_cvGAM <- function(Y,X,id=NULL,SL.library,print=FALSE, df=2:10) {
   # estimate cross-validated Risks for different node sizes
   cvRisks <- rep(NA,length(df))
   for(nn in seq(length(df))) {
-    fit <- SuperLearner(Y=Y,X=X,id=id,SL.library=paste("SL.gam.df",df[nn],sep=""))
+    fit <- SuperLearner(Y=Y,X=X,id=id,family=family,SL.library=paste("SL.gam.df",df[nn],sep=""))
     cvRisks[nn] <- fit$cvRisk
   }
   # identify the lowest risk

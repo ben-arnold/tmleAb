@@ -4,8 +4,8 @@
 \alias{slab_cvRF}
 \title{Selects optimal tree depth for SL.randomForest() using cross-validation by tuning the nodesize parameter}
 \usage{
-slab_cvRF(Y, X, id = NULL, SL.library, print = FALSE, RFnodesize = seq(15,
-  40, by = 5))
+slab_cvRF(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
+  RFnodesize = seq(15, 40, by = 5))
 }
 \arguments{
 \item{Y}{The outcome. Must be a numeric vector.}
@@ -13,6 +13,8 @@ slab_cvRF(Y, X, id = NULL, SL.library, print = FALSE, RFnodesize = seq(15,
 \item{X}{A matrix of features that predict Y, usually a data.frame.}
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
+
+\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
 
 \item{SL.library}{SuperLearner library}
 

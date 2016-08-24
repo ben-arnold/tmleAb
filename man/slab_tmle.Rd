@@ -4,8 +4,9 @@
 \alias{slab_tmle}
 \title{slab_tmle}
 \usage{
-slab_tmle(Y, Age, X = NULL, W = NULL, id, SLlib = c("SL.mean", "SL.glm",
-  "SL.loess", "SL.gam", "SL.randomForest"), diff = FALSE)
+slab_tmle(Y, Age, X = NULL, W = NULL, id = NULL, family = gaussian(),
+  SL.library = c("SL.mean", "SL.glm", "SL.loess", "SL.gam",
+  "SL.randomForest"), diff = FALSE, RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
 \item{Y}{antibody measurement}
@@ -16,11 +17,15 @@ slab_tmle(Y, Age, X = NULL, W = NULL, id, SLlib = c("SL.mean", "SL.glm",
 
 \item{W}{matrix of covariates (optional)}
 
-\item{id}{ID variable, unique for each individual (to identify repeated obs)}
+\item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
 
-\item{diff}{logical. calculate the difference between treatment groups? If FALSE (default) it returns the mean}
+\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
 
-\item{SL.library}{SuperLearner algorithm library}
+\item{SL.library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
+
+\item{RFnodesize}{Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.}
+
+\item{gamdf}{Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.}
 }
 \description{
 Targeted maximum liklihood estimation (TMLE) for mean antibody levels or differences in antibody levels

@@ -7,9 +7,11 @@
 #' @param Age individual's age
 #' @param X comparison group  (must be binary, 0/1, for tmle() ).
 #' @param W matrix of covariates (optional)
-#' @param id ID variable, unique for each individual (to identify repeated obs)
-#' @param SL.library SuperLearner algorithm library
-#' @param diff logical. calculate the difference between treatment groups? If FALSE (default) it returns the mean
+#' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
+#' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
+#' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
+#' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
+#' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.
 #'
 #' @details TBD
 #'
@@ -17,12 +19,17 @@
 #' @export
 #'
 #' @examples TBD
-slab_tmle <- function(Y,Age,X=NULL,W=NULL,id,SLlib=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE) {
+slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family=gaussian(),SL.library=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
 
 	# if X is null, create a row of 1s
 	if (is.null(X)) {
 		X <- rep(1,length(Y))
 	}
+
+  # if id is null, fill it in
+  if (is.null(id)) {
+    id <- 1:length(Y)
+  }
 
   # restrict dataset to non-missing observations
   if (is.null(W)) {
@@ -42,7 +49,7 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id,SLlib=c("SL.mean","SL.glm","SL.loes
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
 	  if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
-	  cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
+	  cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 

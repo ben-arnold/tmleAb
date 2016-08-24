@@ -1,23 +1,19 @@
 
-#--------------------------------
-# generalized plotting routine
-# for cross-validated super learner
-# predictions of antibody data
-#--------------------------------
-
-#' Plotting routine for cross-validated risk of super learner predictions of antibody data (along with its constituent algorithms)
+#' Plots of cross-validated risk (loss)
+#'
+#'#' Plotting routine for cross-validated risk of super learner predictions of antibody data (along with its constituent algorithms)
 #'
 #' @param x Object of class CV.SuperLearner
-#' @param col (optional) Colors for plotting
+#' @param col Colors for plotting (optional)
 #' @param ylab Name of the loss function (defaults uses generic "Risk") but it can be modified to be more specific, such as MSE, AUC, etc...
-#' @param title (optional) Title for the plot
-#' @param xlim (optional) X-axis limits
+#' @param title  Title for the plot (optional)
+#' @param ylim  set Y-axis limits, e.g., ylim=c(0,1) (optional)
 #'
 #' @return
 #' @export
 #'
 #' @examples
-slab_plot_cvSL <- function(x,col='blue',ylab="V-fold CV Risk Estimate", title=NULL,xlim=NULL) {
+slab_plot_cvSL <- function(x,col="black",ylab="V-fold CV Risk Estimate", title=NULL,ylim=NULL) {
 
 # load ggplot2
 require(ggplot2)
@@ -73,7 +69,8 @@ assign("d", data.frame(Y = Mean, X = sumx$Table$Algorithm,
     geom_linerange() + geom_point(size=4) + coord_flip() +
     ggtitle(title) +
     ylab(ylab) + xlab("Method") +
-    scale_colour_manual(name = "X",values = col)  +
+    expand_limits(y=ylim) +
+    scale_colour_manual(name = "X",values = col) +
     theme_bw() + theme(legend.position="none")
 
   return(p)

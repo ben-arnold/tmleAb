@@ -3,6 +3,7 @@
 #' @param Y The outcome. Must be a numeric vector.
 #' @param X A matrix of features that predict Y, usually a data.frame.
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
+#' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library SuperLearner library
 #' @param print logical. print messages? Defaults to FALSE
 #' @param RFnodesize a sequence of nodes used by the random forest algorithm. Defaults to a sequence from 15 to 40 by every 5 nodes
@@ -12,7 +13,7 @@
 #' @examples TBD
 #' @export
 
-slab_cvRF <- function(Y,X,id=NULL,SL.library,print=FALSE, RFnodesize=seq(15,40,by=5)) {
+slab_cvRF <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, RFnodesize=seq(15,40,by=5)) {
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.randomForest.")
     cat("\nThe default R implementation of randomForest tends to overfit the data")
@@ -37,7 +38,7 @@ slab_cvRF <- function(Y,X,id=NULL,SL.library,print=FALSE, RFnodesize=seq(15,40,b
   # estimate cross-validated Risks for different node sizes
   cvRisks <- rep(NA,length(RFnodesize))
   for(nn in seq(length(RFnodesize))) {
-    fit <- SuperLearner(Y=Y,X=X,id=id,SL.library=paste("SL.randomForest.ns",RFnodesize[nn],sep=""))
+    fit <- SuperLearner(Y=Y,X=X,id=id,family=family,SL.library=paste("SL.randomForest.ns",RFnodesize[nn],sep=""))
     cvRisks[nn] <- fit$cvRisk
   }
   # identify the lowest risk

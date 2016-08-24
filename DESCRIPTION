@@ -18,5 +18,8 @@ Imports:
 Suggests:
     gam,
     glmnet,
-    randomForest
+    randomForest,
+    polysplines,
+    ggplot2,
+    r2weight
 RoxygenNote: 5.0.1

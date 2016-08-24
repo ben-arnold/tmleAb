@@ -4,7 +4,8 @@
 \alias{slab_cvGAM}
 \title{Selects optimal degrees of freedom for SL.gam() using cross-validation by tuning the df parameter}
 \usage{
-slab_cvGAM(Y, X, id = NULL, SL.library, print = FALSE, df = 2:10)
+slab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library,
+  print = FALSE, df = 2:10)
 }
 \arguments{
 \item{Y}{The outcome. Must be a numeric vector.}
@@ -12,6 +13,8 @@ slab_cvGAM(Y, X, id = NULL, SL.library, print = FALSE, df = 2:10)
 \item{X}{A matrix of features that predict Y, usually a data.frame.}
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
+
+\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
 
 \item{SL.library}{SuperLearner library}
 

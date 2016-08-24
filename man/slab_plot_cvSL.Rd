@@ -2,23 +2,23 @@
 % Please edit documentation in R/slab_plot_cvSL.R
 \name{slab_plot_cvSL}
 \alias{slab_plot_cvSL}
-\title{Plotting routine for cross-validated risk of super learner predictions of antibody data (along with its constituent algorithms)}
+\title{Plots of cross-validated risk (loss)}
 \usage{
-slab_plot_cvSL(x, col = "blue", ylab = "V-fold CV Risk Estimate",
-  title = NULL, xlim = NULL)
+slab_plot_cvSL(x, col = "black", ylab = "V-fold CV Risk Estimate",
+  title = NULL, ylim = NULL)
 }
 \arguments{
 \item{x}{Object of class CV.SuperLearner}
 
-\item{col}{(optional) Colors for plotting}
+\item{col}{Colors for plotting (optional)}
 
 \item{ylab}{Name of the loss function (defaults uses generic "Risk") but it can be modified to be more specific, such as MSE, AUC, etc...}
 
-\item{title}{(optional) Title for the plot}
+\item{title}{Title for the plot (optional)}
 
-\item{xlim}{(optional) X-axis limits}
+\item{ylim}{set Y-axis limits, e.g., ylim=c(0,1) (optional)}
 }
 \description{
-Plotting routine for cross-validated risk of super learner predictions of antibody data (along with its constituent algorithms)
+#' Plotting routine for cross-validated risk of super learner predictions of antibody data (along with its constituent algorithms)
 }
 
