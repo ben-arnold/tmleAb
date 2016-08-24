@@ -1,5 +1,4 @@
 
-#----------------------------------------------------------------
 #' Convert a vector, matrix or data frame with factors into a design matrix
 #'
 #' An internal, convenience function that automatically transforms a vector, matrix, or data.frame with factors into a design matrix with indicator variables and an ommitted category.
@@ -8,7 +7,8 @@
 #'
 #' @return A design matrix version of \code{W} where factor variables have been converted into columns of indicator variables with the first level excluded.
 #'
-#' @examples
+#' @export
+#' @examples TBD
 #'
 design_matrix <- function(W) {
   # W : data frame of covariates that might include factors

@@ -16,6 +16,7 @@ A design matrix version of \code{W} where factor variables have been converted i
 An internal, convenience function that automatically transforms a vector, matrix, or data.frame with factors into a design matrix with indicator variables and an ommitted category.
 }
 \examples{
+TBD
 
 }
 
