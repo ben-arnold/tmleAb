@@ -1,11 +1,6 @@
 
-
-#--------------------------------------
-# SL functions to model age-dependent
-# antibody curves using the antibody
-# acquisition model from Yman 2016
-#--------------------------------------
-# SL.Yman2016
+#' Antibody acquisition model
+#'
 #' An internal SuperLearner wrapper for the antibody acquisition and loss model in Yman et al. 2016
 #'
 #' @param Y log quantitative antibody level
@@ -30,8 +25,10 @@
 #' abobs <- exp( log(abtrue) +rnorm(length(age),mean=0,sd=sigma) )
 #'
 #' # Fit the model and obtain predictions
-#' yman2016fit <- SL.Yman2016(Y=log(abobs),X=age)
-#' pY <- predict(yman2016fit$fit,newdata=age)
+#' X <- data.frame(age=age)
+#' Y <- log(abobs)
+#' yman2016fit <- SL.Yman2016(Y=Y,X=X)
+#' pY <- predict(yman2016fit$fit,newdata=X)
 #'
 #' # compare against truth
 #' cbind(c(alpha,r,sigma),yman2016fit$fit$object$par)
@@ -114,7 +111,15 @@ SL.Yman2016 <- function(Y,X,newX=NULL,...) {
 #'
 #' @examples
 predict.SL.Yman2016 <- function(object,newdata,...) {
-  pred <-  log( (object$object$par[1]/object$object$par[2])*(1-exp(-object$object$par[2]*newdata)) )
+
+  if( is.null(dim(newdata)) ){
+    age <- as.numeric(newdata)
+  }
+  else {
+    age <- as.numeric(newdata[,1])
+  }
+
+  pred <-  log( (object$object$par[1]/object$object$par[2])*(1-exp(-object$object$par[2]*age)) )
   pred
 }
 

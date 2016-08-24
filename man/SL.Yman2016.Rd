@@ -2,7 +2,7 @@
 % Please edit documentation in R/SL.Yman2016.R
 \name{SL.Yman2016}
 \alias{SL.Yman2016}
-\title{An internal SuperLearner wrapper for the antibody acquisition and loss model in Yman et al. 2016}
+\title{Antibody acquisition model}
 \usage{
 SL.Yman2016(Y, X, newX = NULL, ...)
 }
@@ -37,8 +37,10 @@ abtrue <- (alpha/r)*(1-exp(-r*age))
 abobs <- exp( log(abtrue) +rnorm(length(age),mean=0,sd=sigma) )
 
 # Fit the model and obtain predictions
-yman2016fit <- SL.Yman2016(Y=log(abobs),X=age)
-pY <- predict(yman2016fit$fit,newdata=age)
+X <- data.frame(age=age)
+Y <- log(abobs)
+yman2016fit <- SL.Yman2016(Y=Y,X=X)
+pY <- predict(yman2016fit$fit,newdata=X)
 
 # compare against truth
 cbind(c(alpha,r,sigma),yman2016fit$fit$object$par)
