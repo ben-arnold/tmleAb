@@ -4,9 +4,9 @@
 \alias{slab_curve}
 \title{Fit an age-dependent antibody curve with ensemble machine learning}
 \usage{
-slab_curve(Y, Age, W = NULL, id = NULL, SL.library = c("SL.mean",
-  "SL.glm", "SL.bayesglm", "SL.loess", "SL.gam", "SL.glmnet",
-  "SL.randomForest"), ...)
+slab_curve(Y, Age, W = NULL, id = NULL, family = gaussian(),
+  SL.library = c("SL.mean", "SL.glm", "SL.loess", "SL.gam",
+  "SL.randomForest"), RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
 \item{Y}{Antibody measurement. Must be a numeric vector.}
@@ -17,9 +17,13 @@ slab_curve(Y, Age, W = NULL, id = NULL, SL.library = c("SL.mean",
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
 
+\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
+
 \item{SL.library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
 
-\item{...}{Further arguments passed to or from other methods.}
+\item{RFnodesize}{Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.}
+
+\item{gamdf}{Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.}
 }
 \value{
 \code{slab_curve} returns a list that includes the following objects:
@@ -37,7 +41,7 @@ slab_curve(Y, Age, W = NULL, id = NULL, SL.library = c("SL.mean",
 \code{slab_curve} uses ensemble machine learning with \code{\link[SuperLearner]{SuperLearner}} to fit population mean antibody curves by age. If covariates \code{W} are included, the predicted curve is marginally adjusted for \code{W}.
 }
 \details{
-The \code{slab_curve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{slab_curve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function.
+The \code{slab_curve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{slab_curve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{slab_curve} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df options, you can do so by passing an argument \code{gamdf} through this function.
 }
 \examples{
 TBD

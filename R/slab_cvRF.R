@@ -10,7 +10,7 @@
 #' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks
 #' @details \code{slab_cvRF} is an internal function called by \code{\link[SLAb]{slab_curve}} or \code{slab_tmle} if SL.randomForest() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of node sizes evaluated is 15, 20, ..., 40.  In the context of Age-antibody curves, without this tuning step random forest will fit extremely jagged curves that are clear overfits. This additional selection step prevents overfitting. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
 #' @examples TBD
-
+#' @export
 
 slab_cvRF <- function(Y,X,id=NULL,SL.library,print=FALSE, RFnodesize=seq(15,40,by=5)) {
   if(print==TRUE) {

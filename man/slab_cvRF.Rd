@@ -4,7 +4,8 @@
 \alias{slab_cvRF}
 \title{Selects optimal tree depth for SL.randomForest() using cross-validation by tuning the nodesize parameter}
 \usage{
-slab_cvRF(Y, X, id = NULL, SL.library, print = FALSE)
+slab_cvRF(Y, X, id = NULL, SL.library, print = FALSE, RFnodesize = seq(15,
+  40, by = 5))
 }
 \arguments{
 \item{Y}{The outcome. Must be a numeric vector.}
@@ -16,6 +17,8 @@ slab_cvRF(Y, X, id = NULL, SL.library, print = FALSE)
 \item{SL.library}{SuperLearner library}
 
 \item{print}{logical. print messages? Defaults to FALSE}
+
+\item{RFnodesize}{a sequence of nodes used by the random forest algorithm. Defaults to a sequence from 15 to 40 by every 5 nodes}
 }
 \value{
 returns a list with updated SuperLearner library, the optimal node size, and cvRisks
