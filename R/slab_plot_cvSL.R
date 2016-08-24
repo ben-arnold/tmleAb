@@ -9,7 +9,7 @@
 #'
 #' @param x Object of class CV.SuperLearner
 #' @param col (optional) Colors for plotting
-#' @param loss Name of the loss function (defaults to generic "Risk") but can be MSE, AUC, or whatever loss function was used in the cross-validation.
+#' @param ylab Name of the loss function (defaults uses generic "Risk") but it can be modified to be more specific, such as MSE, AUC, etc...
 #' @param title (optional) Title for the plot
 #' @param xlim (optional) X-axis limits
 #'
@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-slab_plot_cvSL <- function(x,col='blue',loss="Risk", title=NULL,xlim=NULL) {
+slab_plot_cvSL <- function(x,col='blue',ylab="V-fold CV Risk Estimate", title=NULL,xlim=NULL) {
 
 # load ggplot2
 require(ggplot2)
@@ -33,6 +33,7 @@ sumx$Table$Algorithm <- factor(sumx$Table$Algorithm)
 sumx$Table$Algorithm <- as.character(sumx$Table$Algorithm)
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.mean_All"] <- "Simple Mean"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.glm_All"] <- "GLM"
+sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.glm.interaction_All"] <- "GLM Interaction"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.bayesglm_All"] <- "Bayes GLM"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.loess_All"] <- "LOESS"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.polymars_All"] <- "MARS"
@@ -71,7 +72,7 @@ assign("d", data.frame(Y = Mean, X = sumx$Table$Algorithm,
   p <- ggplot(d, aes_string(x = "X", y = "Y", ymin = "Lower",  ymax = "Upper", color = "X")) +
     geom_linerange() + geom_point(size=4) + coord_flip() +
     ggtitle(title) +
-    ylab(paste("V-fold CV",loss,"Estimate")) + xlab("Method") +
+    ylab(ylab) + xlab("Method") +
     scale_colour_manual(name = "X",values = col)  +
     theme_bw() + theme(legend.position="none")
 

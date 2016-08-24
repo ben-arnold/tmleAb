@@ -2,6 +2,7 @@
 
 S3method(predict,SL.Yman2016)
 export(SL.Yman2016)
+export(design_matrix)
 export(slab_curve)
 export(slab_cvGAM)
 export(slab_cvRF)
