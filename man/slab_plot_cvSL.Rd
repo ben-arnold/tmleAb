@@ -4,12 +4,15 @@
 \alias{slab_plot_cvSL}
 \title{Plotting routine for cross-validated risk of super learner predictions of antibody data (along with its constituent algorithms)}
 \usage{
-slab_plot_cvSL(x, col = "blue", title = NULL, xlim = NULL)
+slab_plot_cvSL(x, col = "blue", loss = "Risk", title = NULL,
+  xlim = NULL)
 }
 \arguments{
 \item{x}{Object of class CV.SuperLearner}
 
 \item{col}{(optional) Colors for plotting}
+
+\item{loss}{Name of the loss function (defaults to generic "Risk") but can be MSE, AUC, or whatever loss function was used in the cross-validation.}
 
 \item{title}{(optional) Title for the plot}
 

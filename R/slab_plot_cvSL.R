@@ -9,6 +9,7 @@
 #'
 #' @param x Object of class CV.SuperLearner
 #' @param col (optional) Colors for plotting
+#' @param loss Name of the loss function (defaults to generic "Risk") but can be MSE, AUC, or whatever loss function was used in the cross-validation.
 #' @param title (optional) Title for the plot
 #' @param xlim (optional) X-axis limits
 #'
@@ -16,7 +17,7 @@
 #' @export
 #'
 #' @examples
-slab_plot_cvSL <- function(x,col='blue',title=NULL,xlim=NULL) {
+slab_plot_cvSL <- function(x,col='blue',loss="Risk", title=NULL,xlim=NULL) {
 
 # load ggplot2
 require(ggplot2)
@@ -33,11 +34,11 @@ sumx$Table$Algorithm <- as.character(sumx$Table$Algorithm)
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.mean_All"] <- "Simple Mean"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.glm_All"] <- "GLM"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.bayesglm_All"] <- "Bayes GLM"
-sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.gam_All"] <- "GAM"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.loess_All"] <- "LOESS"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.polymars_All"] <- "MARS"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.glmnet_All"] <- "Lasso (glmnet)"
 sumx$Table$Algorithm[sumx$Table$Algorithm=="SL.Yman2016_All"] <- "Yman2016"
+sumx$Table$Algorithm[grep("SL.gam",sumx$Table$Algorithm)] <- "GAM"
 sumx$Table$Algorithm[grep("SL.randomForest",sumx$Table$Algorithm)] <- "Random Forest"
 sumx$Table$Algorithm <- as.factor(sumx$Table$Algorithm)
 
@@ -70,7 +71,7 @@ assign("d", data.frame(Y = Mean, X = sumx$Table$Algorithm,
   p <- ggplot(d, aes_string(x = "X", y = "Y", ymin = "Lower",  ymax = "Upper", color = "X")) +
     geom_linerange() + geom_point(size=4) + coord_flip() +
     ggtitle(title) +
-    ylab("V-fold CV Risk Estimate") + xlab("Method") +
+    ylab(paste("V-fold CV",loss,"Estimate")) + xlab("Method") +
     scale_colour_manual(name = "X",values = col)  +
     theme_bw() + theme(legend.position="none")
 

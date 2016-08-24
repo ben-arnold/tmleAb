@@ -2,18 +2,37 @@
 % Please edit documentation in R/slab_cvSL.R
 \name{slab_cvSL}
 \alias{slab_cvSL}
-\title{SLAb wrapper function to estimate CV risk for the super learner ensemble predicting antibody measurements using age and potentially other covariates}
+\title{slab_cvSL}
 \usage{
 slab_cvSL(Y, Age, W = NULL, id = 1:length(Y), family = gaussian(),
   V = 10, SL.library = c("SL.mean", "SL.glm", "SL.bayesglm", "SL.loess",
-  "SL.gam", "SL.randomForest"))
+  "SL.gam", "SL.randomForest"), RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
-\item{Y}{log antibody measurement}
+\item{Y}{Antibody measurement. Must be a numeric vector.}
 
-\item{SL.library}{}
+\item{Age}{Age of the individual at the time of measurement. Must be a numeric vector.}
+
+\item{W}{An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve}
+
+\item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
+
+\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
+
+\item{SL.library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
+
+\item{RFnodesize}{Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.}
+
+\item{gamdf}{Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.}
 }
 \description{
 SLAb wrapper function to estimate CV risk for the super learner ensemble predicting antibody measurements using age and potentially other covariates
+}
+\details{
+TBD
+}
+\examples{
+TBD
+
 }
 
