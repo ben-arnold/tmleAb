@@ -19,11 +19,14 @@
 #' @export
 #'
 #' @examples TBD
-slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family=gaussian(),SL.library=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
+slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
 
 	# if X is null, create a row of 1s
 	if (is.null(X)) {
+	  nullX <- TRUE
 		X <- rep(1,length(Y))
+	} else{
+	  nullX <- FALSE
 	}
 
   # if id is null, fill it in
@@ -42,14 +45,21 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family=gaussian(),SL.library=c
     fulld <- data.frame(id,Y,X,Age,Wdesign)
   }
   fitd <- fulld[complete.cases(fulld),]
-  fitW <- fitd[,-c(1:3)]
+  fitXW <- subset(fitd,select=c(-id,-Y))
+  fitW <- subset(fitd,select=c(-id,-Y,-X))
 
 	# If SL.randomForest is included in the library,
 	# select optimal node size (tree depth) using cross-validated risk
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
 	  if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
-	  cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
+	  if(nullX==TRUE) {
+	    rfX <- fitW
+	  }
+	  else {
+	    rfX <- fitXW
+	  }
+	  cvRF <- slab_cvRF(Y=fitd$Y,X=rfX,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 
@@ -58,7 +68,13 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family=gaussian(),SL.library=c
 	# and then updated the ensemble library to include the optimal df
 	if (length(grep("SL.gam",SL.library))>0) {
 	  if(is.null(gamdf)) gamdf <- 2:10
-	  cvGAM <- slab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
+	  if(nullX==TRUE) {
+	    gamX <- fitW
+	  }
+	  else {
+	    gamX <- fitXW
+	  }
+	  cvGAM <- slab_cvGAM(Y=fitd$Y,X=gamX,id=fitd$id,SL.library=SL.library,df=gamdf)
 	  SL.library <- cvGAM$SL.library
 	}
 
@@ -68,7 +84,9 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family=gaussian(),SL.library=c
 			A=fitd$X,
 			W=fitW,
 			id=fitd$id,
-			Q.SL.library=SL.library
+			Q.SL.library=SL.library,
+			family=family,
+			fluctuation = "logistic"
 		)
 		print(tmle.fit)
 		psi  <- tmle.fit$estimates$ATE$psi
@@ -78,9 +96,11 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family=gaussian(),SL.library=c
 	} else {
 		tmle.fit <- tmle(Y=fitd$Y,
 			A=NULL,
-			W=data.frame(fitd$Age,fitd$W),
+			W=fitW,
 			id=fitd$id,
-			Q.SL.library=SLlib
+			Q.SL.library=SL.library,
+			family=family,
+			fluctuation = "logistic"
 		)
 		print(tmle.fit)
 		psi  <- tmle.fit$estimates$EY1$psi

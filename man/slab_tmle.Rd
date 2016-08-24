@@ -4,7 +4,7 @@
 \alias{slab_tmle}
 \title{slab_tmle}
 \usage{
-slab_tmle(Y, Age, X = NULL, W = NULL, id = NULL, family = gaussian(),
+slab_tmle(Y, Age, X = NULL, W = NULL, id = NULL, family = "gaussian",
   SL.library = c("SL.mean", "SL.glm", "SL.loess", "SL.gam",
   "SL.randomForest"), diff = FALSE, RFnodesize = NULL, gamdf = NULL)
 }
