@@ -21,15 +21,7 @@
 #' @examples TBD
 slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
 
-	# if X is null, create a row of 1s
-	if (is.null(X)) {
-	  nullX <- TRUE
-		X <- rep(1,length(Y))
-	} else{
-	  nullX <- FALSE
-	}
 
-  # if id is null, fill it in
   if (is.null(id)) {
     id <- 1:length(Y)
   }
@@ -37,29 +29,33 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c
   # restrict dataset to non-missing observations
   if (is.null(W)) {
     nullW <-TRUE
-    fulld <- data.frame(id,Y,X,Age)
+    fulld <- data.frame(id,Y,Age)
   } else{
     nullW <-FALSE
     # convert W into a design matrix (SuperLearner does not acommodate factor variables)
     Wdesign <- design_matrix(W)
-    fulld <- data.frame(id,Y,X,Age,Wdesign)
+    fulld <- data.frame(id,Y,Age,Wdesign)
   }
+
+  if (is.null(X)) {
+    nullX <- TRUE
+  } else{
+    nullX <- FALSE
+    if(min(X)!=0 & max(X)!=1){
+      error("X must be a binary variable 0/1")
+    }
+    fulld$X <- X
+  }
+
   fitd <- fulld[complete.cases(fulld),]
-  fitXW <- subset(fitd,select=c(-id,-Y))
-  fitW <- subset(fitd,select=c(-id,-Y,-X))
+  fitW <- subset(fitd,select=c(-id,-Y))
 
 	# If SL.randomForest is included in the library,
 	# select optimal node size (tree depth) using cross-validated risk
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
 	  if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
-	  if(nullX==TRUE) {
-	    rfX <- fitW
-	  }
-	  else {
-	    rfX <- fitXW
-	  }
-	  cvRF <- slab_cvRF(Y=fitd$Y,X=rfX,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
+	  cvRF <- slab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 
@@ -68,33 +64,28 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c
 	# and then updated the ensemble library to include the optimal df
 	if (length(grep("SL.gam",SL.library))>0) {
 	  if(is.null(gamdf)) gamdf <- 2:10
-	  if(nullX==TRUE) {
-	    gamX <- fitW
-	  }
-	  else {
-	    gamX <- fitXW
-	  }
-	  cvGAM <- slab_cvGAM(Y=fitd$Y,X=gamX,id=fitd$id,SL.library=SL.library,df=gamdf)
+	  cvGAM <- slab_cvGAM(Y=fitd$Y,X=fitW,id=fitd$id,SL.library=SL.library,df=gamdf)
 	  SL.library <- cvGAM$SL.library
 	}
 
 	# estimate either the difference (A=fitd$X) or the adjusted mean (A=NULL)
 	if (diff==TRUE) {
-		tmle.fit <- tmle(Y=fitd$Y,
+		tmle_fit <- tmle::tmle(Y=fitd$Y,
 			A=fitd$X,
 			W=fitW,
 			id=fitd$id,
 			Q.SL.library=SL.library,
+			g.SL.library=SL.library,
 			family=family,
 			fluctuation = "logistic"
 		)
-		print(tmle.fit)
-		psi  <- tmle.fit$estimates$ATE$psi
-		se   <- sqrt(tmle.fit$estimates$ATE$var.psi)
-		ci   <- tmle.fit$estimates$ATE$CI
-		p    <- tmle.fit$estimates$ATE$pvalue
+		print(tmle_fit)
+		psi  <- tmle_fit$estimates$ATE$psi
+		se   <- sqrt(tmle_fit$estimates$ATE$var.psi)
+		ci   <- tmle_fit$estimates$ATE$CI
+		p    <- tmle_fit$estimates$ATE$pvalue
 	} else {
-		tmle.fit <- tmle(Y=fitd$Y,
+		tmle_fit <- tmle::tmle(Y=fitd$Y,
 			A=NULL,
 			W=fitW,
 			id=fitd$id,
@@ -102,11 +93,11 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c
 			family=family,
 			fluctuation = "logistic"
 		)
-		print(tmle.fit)
-		psi  <- tmle.fit$estimates$EY1$psi
-		se   <- sqrt(tmle.fit$estimates$EY1$var.psi)
-		ci   <- tmle.fit$estimates$EY1$CI
-		p    <- tmle.fit$estimates$EY1$pvalue
+		print(tmle_fit)
+		psi  <- tmle_fit$estimates$EY1$psi
+		se   <- sqrt(tmle_fit$estimates$EY1$var.psi)
+		ci   <- tmle_fit$estimates$EY1$CI
+		p    <- tmle_fit$estimates$EY1$pvalue
 	}
 	# return estimate, SE, 95% CI, and P-value
 	list(psi=psi,se=se,lb=ci[1],ub=ci[2],p=p)

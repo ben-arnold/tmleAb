@@ -79,12 +79,16 @@ SL.Yman2016 <- function(Y,X,newX=NULL,...) {
     newX <- X
   }
 
-  # throw a warning if X has more than 1 variable
-  if(ncol(X)>1 ) {
-    warning("For the SL.Yman2016 model, X can only include one variable (age)\n...Assuming that the first column in X is Age and discarding other information.")
+  # Stop if X does not include Age
+  if(length(grep("Age",names(X)))<=0 ) {
+    error("For the SL.Yman2016 model, X must include a variable named 'Age'.")
   }
-  X <- X[,1]
-  newX <- newX[,1]
+  X <- X[,"Age"]
+
+  if(length(grep("Age",names(newX)))<=0 ) {
+    error("For the SL.Yman2016 model, newX must include a variable named 'Age'.")
+  }
+  newX <- newX[,"Age"]
 
   # ML fit of L(theta | X, Y)
   mlfit <- optim(c(0.1,0.01,1),fn=LL,Age=X,logAb=Y)
@@ -103,7 +107,7 @@ SL.Yman2016 <- function(Y,X,newX=NULL,...) {
 #' Internal prediction method for SL.Yman2016
 #'
 #' @param object An object of class \code{SL.Yman2016}
-#' @param newdata New data used for predicting the outcome (must be univariate and equal to age)
+#' @param newdata New data used for predicting the outcome (must be univariate and equal to age, or if multivariate, it must include a variable 'Age')
 #' @param ... Other arguments passed to the function (currently ignored)
 #'
 #' @return pred Predicted values given \code{newdata}
@@ -116,7 +120,10 @@ predict.SL.Yman2016 <- function(object,newdata,...) {
     age <- as.numeric(newdata)
   }
   else {
-    age <- as.numeric(newdata[,1])
+    if(length(grep("Age",names(newdata)))<=0 ) {
+      error("For the SL.Yman2016 model, newX must include a variable named 'Age'.")
+    }
+    age <- as.numeric(newdata[,"Age"])
   }
 
   pred <-  log( (object$object$par[1]/object$object$par[2])*(1-exp(-object$object$par[2]*age)) )

@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{An object of class \code{SL.Yman2016}}
 
-\item{newdata}{New data used for predicting the outcome (must be univariate and equal to age)}
+\item{newdata}{New data used for predicting the outcome (must be univariate and equal to age, or if multivariate, it must include a variable 'Age')}
 
 \item{...}{Other arguments passed to the function (currently ignored)}
 }
