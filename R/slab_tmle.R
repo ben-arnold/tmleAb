@@ -75,11 +75,10 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c
 			W=fitW,
 			id=fitd$id,
 			Q.SL.library=SL.library,
-			g.SL.library=SL.library,
 			family=family,
 			fluctuation = "logistic"
 		)
-		print(tmle_fit)
+		tmle::print.tmle(tmle_fit)
 		psi  <- tmle_fit$estimates$ATE$psi
 		se   <- sqrt(tmle_fit$estimates$ATE$var.psi)
 		ci   <- tmle_fit$estimates$ATE$CI
@@ -93,7 +92,7 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c
 			family=family,
 			fluctuation = "logistic"
 		)
-		print(tmle_fit)
+		tmle::print.tmle(tmle_fit)
 		psi  <- tmle_fit$estimates$EY1$psi
 		se   <- sqrt(tmle_fit$estimates$EY1$var.psi)
 		ci   <- tmle_fit$estimates$EY1$CI
