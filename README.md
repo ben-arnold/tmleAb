@@ -1,2 +1,2 @@
-# SLAb
-The R SLAb package: Super Learning (SL) for Antibody (Ab) measurements
+# tmleAb
+tmleAb: Targeted maximum likelihood estimation for antibody (Ab) data

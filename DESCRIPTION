@@ -1,11 +1,10 @@
-Package: SLAb
+Package: tmleAb
 Type: Package
-Title: Super Learning (SL) for antibody (Ab) measurements
+Title: Targeted maximum likelihood estimation for antibody (Ab) measurements
 Version: 0.1.0
 Authors@R: person("Ben", "Arnold", email = "benarnold@berkeley.edu", role = c("aut", "cre"))
-Description: Ensemble machine learning (Super Learning) to fit
-    age-dependent antibody curves in R. In addition to estimating age-dependent
-    antibody curves, the SLAb package makes it easy to estimate marginally
+Description: Targeted maximum likelihood estimation for antibody data in R. In addition to estimating age-dependent
+    antibody curves, the tmleAb package makes it easy to estimate marginally
     adjusted means from the curves, and compare marginally adjusted means between
     populations. This package is mainly a wrapper: the heavy lifting for machine
     learning is conducted using the \code{\link[SuperLearner]{SuperLearner}} package, and statistical estimation

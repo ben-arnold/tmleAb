@@ -1,4 +1,6 @@
-#' Selects optimal tree depth for SL.randomForest() using cross-validation by tuning the nodesize parameter
+#' Select optimal tree depth for SL.randomForest() using cross-validation 
+#' 
+#' ab_cvRF is an internal tuning function called by \code{ab_agecurve} and \code{ab_tmle} that selects optimal tree depth by tuning the nodesize parameter
 #'
 #' @param Y The outcome. Must be a numeric vector.
 #' @param X A matrix of features that predict Y, usually a data.frame.
@@ -8,12 +10,12 @@
 #' @param print logical. print messages? Defaults to FALSE
 #' @param RFnodesize a sequence of nodes used by the random forest algorithm. Defaults to a sequence from 15 to 40 by every 5 nodes
 #'
-#' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks
-#' @details \code{slab_cvRF} is an internal function called by \code{\link[SLAb]{slab_curve}} or \code{slab_tmle} if SL.randomForest() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of node sizes evaluated is 15, 20, ..., 40.  In the context of Age-antibody curves, without this tuning step random forest will fit extremely jagged curves that are clear overfits. This additional selection step prevents overfitting. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+#' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks (cross-validated risks for each nodesize evaluated)
+#' @details \code{ab_cvRF} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.randomForest() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of node sizes evaluated is 15, 20, ..., 40.  In the context of Age-antibody curves, without this tuning step random forest will fit extremely jagged curves that are clear overfits. This additional selection step prevents overfitting. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
 #' @examples TBD
 #' @export
 
-slab_cvRF <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, RFnodesize=seq(15,40,by=5)) {
+ab_cvRF <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, RFnodesize=seq(15,40,by=5)) {
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.randomForest.")
     cat("\nThe default R implementation of randomForest tends to overfit the data")

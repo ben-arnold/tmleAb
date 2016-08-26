@@ -1,5 +1,5 @@
 
-#' slab_tmle
+#' Targeted maximum liklihood estimation for antibody measurements
 #'
 #' Targeted maximum liklihood estimation (TMLE) for mean antibody levels or differences in antibody levels
 #'
@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples TBD
-slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
+ab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
 
 
   if (is.null(id)) {
@@ -55,7 +55,7 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
 	  if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
-	  cvRF <- slab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
+	  cvRF <- ab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 
@@ -64,7 +64,7 @@ slab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c
 	# and then updated the ensemble library to include the optimal df
 	if (length(grep("SL.gam",SL.library))>0) {
 	  if(is.null(gamdf)) gamdf <- 2:10
-	  cvGAM <- slab_cvGAM(Y=fitd$Y,X=fitW,id=fitd$id,SL.library=SL.library,df=gamdf)
+	  cvGAM <- ab_cvGAM(Y=fitd$Y,X=fitW,id=fitd$id,SL.library=SL.library,df=gamdf)
 	  SL.library <- cvGAM$SL.library
 	}
 

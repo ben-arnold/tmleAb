@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-slab_plot_cvSL <- function(x,col="black",ylab="V-fold CV Risk Estimate", title=NULL,ylim=NULL) {
+ab_plot_cvSL <- function(x,col="black",ylab="V-fold CV Risk Estimate", title=NULL,ylim=NULL) {
 
 # load ggplot2
 require(ggplot2)

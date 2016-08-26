@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-slab_plot_cvR2 <- function(cvsl,X,col='blue',ylab="V-fold Cross Validated R-squared", title=NULL,ylim=c(0,1)) {
+ab_plot_cvR2 <- function(cvsl,X,col='blue',ylab="V-fold Cross Validated R-squared", title=NULL,ylim=c(0,1)) {
 
   # Compute cross-validated R-squared from the CV risk estimates
   lnames <- c("SuperLearner",cvsl$libraryNames)

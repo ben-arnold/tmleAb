@@ -1,7 +1,7 @@
 
-#' slab_cvSL
+#' Wrapper function to estimate cross-validated risk for the super learner ensemble using antibody data
 #'
-#' SLAb wrapper function to estimate CV risk for the super learner ensemble predicting antibody measurements using age and potentially other covariates
+#' A convenience wrapper for \code{\link[SuperLearner]{CV.SuperLearner}}
 #'
 #' @param Y Antibody measurement. Must be a numeric vector.
 #' @param Age Age of the individual at the time of measurement. Must be a numeric vector.
@@ -19,7 +19,7 @@
 #'
 #' @examples TBD
 #'
-slab_cvSL <-function(Y,Age,W=NULL,id=1:length(Y),family=gaussian(),V=10,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess","SL.gam","SL.randomForest"),RFnodesize=NULL,gamdf=NULL) {
+ab_cvSL <-function(Y,Age,W=NULL,id=1:length(Y),family=gaussian(),V=10,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess","SL.gam","SL.randomForest"),RFnodesize=NULL,gamdf=NULL) {
 	# wrapper function for the CV.SuperLearner algorithm
   # to compute cross-validated risk for the super learner and its constituent algorithms
 	#
