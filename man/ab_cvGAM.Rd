@@ -5,7 +5,7 @@
 \title{Select optimal degrees of freedom for SL.gam() using cross-validation}
 \usage{
 ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
-  df = 2:10)
+  df = seq(2, 20, by = 1))
 }
 \arguments{
 \item{Y}{The outcome. Must be a numeric vector.}
@@ -29,7 +29,7 @@ returns a list with updated SuperLearner library, the optimal node size, and cvR
 ab_cvGAM is an internal tuning function called by \code{ab_agecurve} and \code{ab_tmle} that selects degrees of freedom for natural splines in a GAM model using cross-validation
 }
 \details{
-\code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of degrees of freedom is 2, 3, ...10, which is usually sufficient.  In the context of Age-antibody curves, without this tuning step the default parameters for GAM will usually under-smooth. This additional selection step tunes the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+\code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of degrees of freedom is 2, 4, ...20, which is usually sufficient.  In the context of Age-antibody curves, without this tuning step the default parameters for GAM will usually under-smooth. This additional selection step tunes the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
 }
 \examples{
 TBD

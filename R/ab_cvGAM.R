@@ -1,5 +1,5 @@
-#' Select optimal degrees of freedom for SL.gam() using cross-validation 
-#' 
+#' Select optimal degrees of freedom for SL.gam() using cross-validation
+#'
 #' ab_cvGAM is an internal tuning function called by \code{ab_agecurve} and \code{ab_tmle} that selects degrees of freedom for natural splines in a GAM model using cross-validation
 #'
 #' @param Y The outcome. Must be a numeric vector.
@@ -11,11 +11,11 @@
 #' @param df a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to a sequence from 2 to 10
 #'
 #' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks
-#' @details \code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of degrees of freedom is 2, 3, ...10, which is usually sufficient.  In the context of Age-antibody curves, without this tuning step the default parameters for GAM will usually under-smooth. This additional selection step tunes the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+#' @details \code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of degrees of freedom is 2, 4, ...20, which is usually sufficient.  In the context of Age-antibody curves, without this tuning step the default parameters for GAM will usually under-smooth. This additional selection step tunes the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
 #' @examples TBD
 #' @export
 
-ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:10) {
+ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=seq(2,20,by=1)) {
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.gam.")
     cat("\nThe default R implementation of gam() may over- or under-smooth the data")
@@ -28,7 +28,7 @@ ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:
 
   create.SL.gam <- function(tune = list(df = df)) {
     for(mm in seq(length(tune$df))) {
-      eval(parse(file = "", text = paste("SL.gam.df", tune$df[mm], "<- function(...,df = ", tune$df[mm], ") SL.gam(..., df = df)", sep = "")), envir = .GlobalEnv)
+      eval(parse(file = "", text = paste("SL.gam.df", tune$df[mm], "<- function(...,deg.gam = ", tune$df[mm], ") SL.gam(..., deg.gam = deg.gam)", sep = "")), envir = .GlobalEnv)
     }
     invisible(TRUE)
   }

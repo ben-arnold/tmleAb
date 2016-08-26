@@ -40,7 +40,7 @@ ab_cvSL <-function(Y,Age,W=NULL,id=1:length(Y),family=gaussian(),V=10,SL.library
   if (is.null(W)) {
     fitd <- data.frame(id,Y,Age)
 	} else{
-	  Wdesign <- design.matrix(W)
+	  Wdesign <- design_matrix(W)
 	  fitd <- data.frame(id,Y,Age,Wdesign)
 	}
 
@@ -53,7 +53,7 @@ ab_cvSL <-function(Y,Age,W=NULL,id=1:length(Y),family=gaussian(),V=10,SL.library
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
 	  if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
-	  cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
+	  cvRF <- ab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 
@@ -62,7 +62,7 @@ ab_cvSL <-function(Y,Age,W=NULL,id=1:length(Y),family=gaussian(),V=10,SL.library
 	# and then updated the ensemble library to include the optimal df
 	if (length(grep("SL.gam",SL.library))>0) {
 	  if(is.null(gamdf)) gamdf <- 2:10
-	  cvGAM <- slab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
+	  cvGAM <- ab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
 	  SL.library <- cvGAM$SL.library
 	}
 
@@ -73,42 +73,5 @@ ab_cvSL <-function(Y,Age,W=NULL,id=1:length(Y),family=gaussian(),V=10,SL.library
 }
 
 
-
-# --------------------------------------
-# automatic transform of a covariate
-# data.frame with factors into one
-# with indicator variables (and an
-# ommitted category)
-# --------------------------------------
-design.matrix <- function(W) {
-  # W : data frame of covariates that might include factors
-  if(class(W)!="matrix" & class(W)!="data.frame"){
-    #cat("\n-----------------------------------------\nThe design matrix you supplied is not a matrix or a data.frame\nAssuming that it is a single variable\n-----------------------------------------\n")
-    W <- data.frame(W)
-  }
-  ncolW <- ncol(W)
-  flist <- numeric()
-  for(i in 1:ncolW) {
-    if(class(W[,i])!="factor"){
-      next
-    } else {
-      flist <- c(flist,i)
-      # strip out extra levels
-      W[,i] <- factor(W[,i])
-      # create a design matrix, remove the first level
-      mm <- model.matrix(~-1+W[,i])
-      mW <- mm[,-c(1)]
-      # format the names of the indicator variables
-      # and add them to the design matrix
-      levs <- gsub(" ","",levels(W[,i]) )[-c(1)]
-      if(length(levs)<2) mW <- matrix(mW,ncol=1)
-      colnames(mW) <- paste(names(W)[i],levs,sep="")
-      W <- data.frame(W,mW)
-    }
-  }
-  # now drop the factors that have been replaced by indicators
-  W <- W[,-c(flist)]
-  return(W)
-}
 
 
