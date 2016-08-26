@@ -1,13 +1,13 @@
 
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to the SLAb package\nSuper Learning (SL) for antibody (Ab) measurements.")
+  packageStartupMessage("Welcome to the tmleAb package\nTargeted maximum likelihood estimation for antibody (Ab) measurements.")
 }
 
 .onLoad <- function(libname, pkgname) {
   op <- options()
   op.devtools <- list(
-    devtools.path = "~/SLAb",
+    devtools.path = "~/tmleAb",
     devtools.install.args = "",
     devtools.name = "Ben Arnold",
     devtools.desc.author = '"Ben Arnold <benarnold@berkeley.edu> [aut, cre]"',
