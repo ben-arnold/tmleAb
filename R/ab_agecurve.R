@@ -30,7 +30,7 @@
 #' @details The \code{ab_agecurve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{ab_agecurve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{ab_agecurve} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df options, you can do so by passing an argument \code{gamdf} through this function.
 #'
 #' @references
-#' @seealso \code{\link{slab_tmle}}
+#' @seealso \code{\link{ab_tmle}}
 #' @export
 #'
 #' @examples TBD
@@ -63,7 +63,7 @@ ab_agecurve <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.
   # and then update the ensemble library to include the optimal node size
   if (length(grep("SL.randomForest",SL.library))>0) {
     if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
-    cvRF <- slab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
+    cvRF <- ab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
     SL.library <- cvRF$SL.library
   }
 
@@ -72,7 +72,7 @@ ab_agecurve <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.
   # and then updated the ensemble library to include the optimal df
   if (length(grep("SL.gam",SL.library))>0) {
     if(is.null(gamdf)) gamdf <- 2:10
-    cvGAM <- slab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
+    cvGAM <- ab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
     SL.library <- cvGAM$SL.library
   }
 

@@ -47,6 +47,6 @@ The \code{ab_agecurve} function is a wrapper for \code{\link[SuperLearner]{Super
 TBD
 }
 \seealso{
-\code{\link{slab_tmle}}
+\code{\link{ab_tmle}}
 }
 
