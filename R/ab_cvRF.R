@@ -1,5 +1,5 @@
-#' Select optimal tree depth for SL.randomForest() using cross-validation 
-#' 
+#' Select optimal tree depth for SL.randomForest() using cross-validation
+#'
 #' ab_cvRF is an internal tuning function called by \code{ab_agecurve} and \code{ab_tmle} that selects optimal tree depth by tuning the nodesize parameter
 #'
 #' @param Y The outcome. Must be a numeric vector.
@@ -16,6 +16,9 @@
 #' @export
 
 ab_cvRF <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, RFnodesize=seq(15,40,by=5)) {
+  if(is.null(RFnodesize)){
+    RFnodesize <- seq(15,40,by=5)
+  }
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.randomForest.")
     cat("\nThe default R implementation of randomForest tends to overfit the data")

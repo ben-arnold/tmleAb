@@ -8,14 +8,17 @@
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library SuperLearner library
 #' @param print logical. print messages? Defaults to FALSE
-#' @param df a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to a sequence from 2 to 10
+#' @param df a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to 2:6
 #'
 #' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks
-#' @details \code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal node depth for random forest using cross validation. The default range of degrees of freedom is 2, 4, ...20, which is usually sufficient.  In the context of Age-antibody curves, without this tuning step the default parameters for GAM will usually under-smooth. This additional selection step tunes the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+#' @details \code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal spline degress of freedom using cross validation. The default is to search over degrees 2,3,...10, which is usually pretty good. This additional selection step enables you to tune the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
 #' @examples TBD
 #' @export
 
-ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=seq(2,20,by=1)) {
+ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:6) {
+  if(is.null(df)) {
+    df <- 2:10
+  }
   if(print==TRUE) {
     cat("\nThe ensemble library includes SL.gam.")
     cat("\nThe default R implementation of gam() may over- or under-smooth the data")

@@ -63,7 +63,7 @@ ab_plot_cvR2 <- function(cvsl,X,col='blue',ylab="V-fold Cross Validated R-square
   cvr2$Algorithm <- factor(cvr2$Algorithm, levels=c(levels(cvr2$Algorithm)[-grep("Super Learner",levels(cvr2$Algorithm))],"Super Learner") )
 
   # print R2 estimates
-  print(cvr2,digits=4)
+  print(cbind(cvr2$Algorithm,round(cvr2[,2:4],digits=4)))
 
   # plot
   p <- ggplot(cvr2, aes_string(x = "Algorithm", y = "r2", ymin = "lower",  ymax = "upper", color = "Algorithm")) +

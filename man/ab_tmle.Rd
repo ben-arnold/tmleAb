@@ -5,8 +5,8 @@
 \title{Targeted maximum liklihood estimation for antibody measurements}
 \usage{
 ab_tmle(Y, Age, X = NULL, W = NULL, id = NULL, family = "gaussian",
-  SL.library = c("SL.mean", "SL.glm", "SL.loess", "SL.gam",
-  "SL.randomForest"), diff = FALSE, RFnodesize = NULL, gamdf = NULL)
+  SL.library = c("SL.mean", "SL.glm", "SL.gam", "SL.loess"), diff = FALSE,
+  RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
 \item{Y}{antibody measurement}
@@ -25,7 +25,7 @@ ab_tmle(Y, Age, X = NULL, W = NULL, id = NULL, family = "gaussian",
 
 \item{RFnodesize}{Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.}
 
-\item{gamdf}{Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.}
+\item{gamdf}{Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-6. Specifying this option will override the default.}
 }
 \description{
 Targeted maximum liklihood estimation (TMLE) for mean antibody levels or differences in antibody levels

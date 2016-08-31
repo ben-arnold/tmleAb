@@ -11,7 +11,7 @@
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
-#' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.
+#' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-6. Specifying this option will override the default.
 #'
 #' @details TBD
 #'
@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples TBD
-ab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
+ab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),diff=FALSE,RFnodesize=NULL,gamdf=NULL) {
 
 
   if (is.null(id)) {
@@ -41,7 +41,7 @@ ab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("
     nullX <- TRUE
   } else{
     nullX <- FALSE
-    if(min(X)!=0 & max(X)!=1){
+    if(min(X,na.rm=T)!=0 & max(X,na.rm=T)!=1){
       error("X must be a binary variable 0/1")
     }
     fulld$X <- X
@@ -54,7 +54,6 @@ ab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("
 	# select optimal node size (tree depth) using cross-validated risk
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
-	  if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
 	  cvRF <- ab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
@@ -63,7 +62,6 @@ ab_tmle <- function(Y,Age,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("
 	# select the optimal degrees of freedom for the smoothing splines using cross-validated risk
 	# and then updated the ensemble library to include the optimal df
 	if (length(grep("SL.gam",SL.library))>0) {
-	  if(is.null(gamdf)) gamdf <- 2:10
 	  cvGAM <- ab_cvGAM(Y=fitd$Y,X=fitW,id=fitd$id,SL.library=SL.library,df=gamdf)
 	  SL.library <- cvGAM$SL.library
 	}

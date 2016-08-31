@@ -12,7 +12,7 @@
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
-#' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.
+#' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-6. Specifying this option will override the default.
 #'
 #'
 #' @return \code{ab_agecurve} returns a list that includes the following objects:
@@ -27,14 +27,14 @@
 #' }
 #'
 #'
-#' @details The \code{ab_agecurve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{ab_agecurve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{ab_agecurve} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df options, you can do so by passing an argument \code{gamdf} through this function.
+#' @details The \code{ab_agecurve} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{ab_agecurve} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{ab_agecurve} will select the optimal degrees of freedom for natural splines (between 2 and 6) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df options, you can do so by passing an argument \code{gamdf} through this function.
 #'
 #' @references
 #' @seealso \code{\link{ab_tmle}}
 #' @export
 #'
 #' @examples TBD
-ab_agecurve <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.mean","SL.glm","SL.loess","SL.gam","SL.randomForest"), RFnodesize=NULL,gamdf=NULL) {
+ab_agecurve <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.mean","SL.glm","SL.gam","SL.loess"), RFnodesize=NULL,gamdf=NULL) {
 
   if (is.null(id)) id <- 1:length(Y)
 
@@ -62,7 +62,6 @@ ab_agecurve <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.
   # select optimal node size (tree depth) using cross-validated risk
   # and then update the ensemble library to include the optimal node size
   if (length(grep("SL.randomForest",SL.library))>0) {
-    if(is.null(RFnodesize)) RFnodesize <- seq(15,40,by=5)
     cvRF <- ab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
     SL.library <- cvRF$SL.library
   }
@@ -71,7 +70,6 @@ ab_agecurve <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.
   # select the optimal degrees of freedom for the smoothing splines using cross-validated risk
   # and then updated the ensemble library to include the optimal df
   if (length(grep("SL.gam",SL.library))>0) {
-    if(is.null(gamdf)) gamdf <- 2:10
     cvGAM <- ab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
     SL.library <- cvGAM$SL.library
   }
