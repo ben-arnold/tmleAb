@@ -1,4 +1,4 @@
-#' dataset: Malaria antibody measurements in Miton, Haiti
+#' dataset: Miton, Haiti malaria (MSP-1) serology data
 #'
 #' A 1998 cross-sectional serological survey in the community of Miton, Haiti, near Leogane, collected finger prick blood specimens from 383 people ages 2 weeks to 90 years old as part of a trial to measure the effect of salt fortified with diethylcarbamazine on lymphatic filariasis transmission (Freeman et al. 2001). Antibody levels were measured on the Luminex platform and are in units of median flourescence intensity minus background (MFI-bg).
 #'

@@ -4,7 +4,7 @@
 \alias{ab_cvGAM}
 \title{Select optimal degrees of freedom for SL.gam() using cross-validation}
 \usage{
-ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = TRUE,
+ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
   df = 2:10)
 }
 \arguments{
@@ -18,7 +18,7 @@ ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = TRUE,
 
 \item{SL.library}{SuperLearner library}
 
-\item{print}{logical. print messages? Defaults to TRUE}
+\item{print}{logical. print messages? Defaults to FALSE}
 
 \item{df}{a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to 2:6}
 }

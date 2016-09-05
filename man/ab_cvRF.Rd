@@ -4,7 +4,7 @@
 \alias{ab_cvRF}
 \title{Select optimal tree depth for SL.randomForest() using cross-validation}
 \usage{
-ab_cvRF(Y, X, id = NULL, family = gaussian(), SL.library, print = TRUE,
+ab_cvRF(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
   RFnodesize = seq(15, 40, by = 5))
 }
 \arguments{
@@ -18,7 +18,7 @@ ab_cvRF(Y, X, id = NULL, family = gaussian(), SL.library, print = TRUE,
 
 \item{SL.library}{SuperLearner library}
 
-\item{print}{logical. print messages? Defaults to TRUE}
+\item{print}{logical. print messages? Defaults to FALSE}
 
 \item{RFnodesize}{a sequence of nodes used by the random forest algorithm. Defaults to a sequence from 15 to 40 by every 5 nodes}
 }

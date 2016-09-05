@@ -3,7 +3,7 @@
 \docType{data}
 \name{usa_enterics}
 \alias{usa_enterics}
-\title{dataset: Enteric pathogen antibody data from the United States}
+\title{dataset: United States enteric pathogen multiplex antibody data}
 \format{A data frame with 86 observations and 10 variables.
 \describe{
  \item{\code{id}}{individual ID}

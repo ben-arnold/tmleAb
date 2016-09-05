@@ -3,7 +3,7 @@
 \docType{data}
 \name{miton_malaria}
 \alias{miton_malaria}
-\title{dataset: Malaria antibody measurements in Miton, Haiti}
+\title{dataset: Miton, Haiti malaria (MSP-1) serology data}
 \format{A data frame with 383 observations and 3 variables.
 \describe{
  \item{\code{id}}{individual ID}

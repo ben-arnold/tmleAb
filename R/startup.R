@@ -1,7 +1,7 @@
 
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to the tmleAb package\nTargeted maximum likelihood estimation for antibody measurements.\n\nVersion 0.1.0.\n\nCheck github.com/ben-arnold/tmleAb for the most current version -- we have planned some useful additions!")
+  packageStartupMessage("Welcome to the tmleAb package\nTargeted maximum likelihood estimation for antibody measurements.\n\nVersion 0.1.0.\n\nCheck github.com/ben-arnold/tmleAb for the most current version\n(we have plans for some useful additions!)")
 }
 
 .onLoad <- function(libname, pkgname) {

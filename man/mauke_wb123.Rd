@@ -3,7 +3,7 @@
 \docType{data}
 \name{mauke_wb123}
 \alias{mauke_wb123}
-\title{dataset: lymphatic filariasis Wb123 antibody measurements on Mauke island}
+\title{dataset: Mauke island lymphatic filariasis Wb123 antibody measurements}
 \format{A data frame with 922 observations and 7 variables.
 \describe{
  \item{\code{id75}}{individual ID in 1975}

@@ -3,7 +3,7 @@
 \docType{data}
 \name{haiti_enterics}
 \alias{haiti_enterics}
-\title{dataset: Enteric pathogen antibody data from Leogane, Haiti}
+\title{dataset: Leogane, Haiti enteric pathogen multiplex antibody data}
 \format{A data frame with 771 observations and 12 variables.
 \describe{
  \item{\code{id}}{individual ID}

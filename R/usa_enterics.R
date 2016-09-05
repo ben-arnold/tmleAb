@@ -1,4 +1,4 @@
-#' dataset: Enteric pathogen antibody data from the United States
+#' dataset: United States enteric pathogen multiplex antibody data
 #'
 #' IgG antibody responses to protozoan, bacterial, and viral enteric pathogens measured with a multiplex bead assay in sample sets collected from 86 anonymous blood donors in the USA. There is one record per child. All antibody levels were measured on the Luminex platform and are in units of median flourescence intensity minus background (MFI-bg). A comparable dataset (and run with the same bead set) for children in Haiti is also included in the package: \code{\link{haiti_enterics}}.
 #'

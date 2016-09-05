@@ -1,4 +1,4 @@
-#' dataset: Garki Project Serology Data
+#' dataset: Garki Project (Nigeria) serology data
 #'
 #' The \code{garki_sero} dataset includes a semi-processed version of publicly available serology data from the Garki Project, Nigeria. This file includes merged data from the \code{village}, \code{people}, and \code{serology} tables in the original Garki files. The original files are documented through the Garki Project's website (\url{http://garkiproject.nd.edu/}).  These data were downloaded originally from the Swiss Tropical Institute (\url{http://www.swisstph.ch/fr/ressources/epidemiological-databases.html}). The dictionary file from STI included important additional information about data labels. The Stata script that merged the original tables is located here: \url{https://osf.io/7frw2/}.
 #'

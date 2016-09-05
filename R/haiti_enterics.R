@@ -1,4 +1,4 @@
-#' dataset: Enteric pathogen antibody data from Leogane, Haiti
+#' dataset: Leogane, Haiti enteric pathogen multiplex antibody data
 #'
 #' IgG antibody responses to protozoan, bacterial, and viral enteric pathogens measured with a multiplex bead assay in sample sets collected from 142 children ages 0-12 years in Leogane, Haiti. Children were enrolled between the ages of 1 month and 6 years on a rolling basis from 1991-1999 to monitor lymphatic filariasis, and the selection of samples from the Haiti cohort has been described in detail. Children were measured between 1 and 9 times. All antibody levels were measured on the Luminex platform and are in units of median flourescence intensity minus background (MFI-bg).  A comparable dataset (and run with the same bead set) for children in the USA is also included in the package: \code{\link{usa_enterics}}.
 #'

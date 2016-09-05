@@ -3,7 +3,7 @@
 \docType{data}
 \name{garki_sero}
 \alias{garki_sero}
-\title{dataset: Garki Project Serology Data}
+\title{dataset: Garki Project (Nigeria) serology data}
 \format{A data frame with 20,441 observations and 52 variables. Variable labels below have been copied from \url{http://garkiproject.nd.edu}. The original table's source is added as a prefix, else it was derived.
 \describe{
  \item{\code{id}}{people: individual ID}
