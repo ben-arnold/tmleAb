@@ -1,32 +1,28 @@
-#' DESCRIPTION OF DATA HERE (what it is)
+#' dataset: lymphatic filariasis Wb123 antibody measurements on Mauke island
 #'
-#' DESCRIPTION OF DATA HERE (where its from, what kinds of things at the high-level are contained in it)
+#' Serological measurements from two surveys on Mauke, Cook Islands The dataset includes serum samples from two cross-sectional measurements of the permanent resident population; the first in 1975 (N=362, approximately 58% of the population) and the second in 1992 (N=553, approximately 88% percent of the population). The 1992 measurement occurred five years after a single, island-wide mass drug administration of diethylcarbamazine for all individuals >=5 years old. There were 115 individuals who were measured in both surveys (their \code{id75} value is repeated for both observations). Antibody levels to the Wb123 antigen were measured on the Luciferase Immunoprecipitation System (LIPS) and are in light units.
 #'
 #' @docType data
 #'
-#' @usage data(maukeWb123)
+#' @usage data(mauke_wb123)
 #'
-#' @format dataframe
-#' each row includes variable descriptions and details for a single individual
+#' @format A data frame with 922 observations and 7 variables.
+#' \describe{
+#'  \item{\code{id75}}{individual ID in 1975}
+#'  \item{\code{id92}}{individual ID in 1992}
+#'  \item{\code{year}}{Year of the measurement (1975 or 1992)}
+#'  \item{\code{age}}{age in years. Note that age records years completed.}
+#'  \item{\code{CAg}}{Level of circulating filarial antigen (>32 is considered positive for circulating antigen)}
+#'  \item{\code{wb123}}{response to the Wuchereria bancrofti Wb123 antigen}
+#'  \item{\code{wb123pos}}{Seropositive, based on Wb123 using a cutoff of 10968, identified in Kubofcik et al. (2012)}
+#'  }
+#'
 #'
 #' @keywords datasets
 #'
-#'        #----------TODO: I put the references I found in the README on OSF here. Edit if you'd like---------------
 #'
-#' @references Steel, Cathy, Joseph Kubofcik, Eric A. Ottesen, and Thomas B. Nutman. 2012.
-#' “Antibody to the Filarial Antigen Wb123 Reflects Reduced Transmission and Decreased Exposure in Children Born Following Single Mass Drug Administration (MDA).” PLoS Neglected Tropical Diseases 6 (12): e1940.
-#'
-#' @source \href{https://osf.io/7frw2/}{Open Science Framework Storage}
+#' @references C. Steel, J. Kubofcik, E. A. Ottesen, T. B. Nutman, Antibody to the filarial antigen Wb123 reflects reduced transmission and decreased exposure in children born following single mass drug administration (MDA). PLoS Negl. Trop. Dis. 6, e1940 (2012).
+#' @references J. Kubofcik, D. L. Fink, T. B. Nutman, Identification of Wb123 as an early and specific marker of Wuchereria bancrofti infection. PLoS Negl. Trop. Dis. 6, e1930 (2012).
 #'
 #'
-#'           #----------TODO: Put examples here ---------------
-#' @examples
-#' data(grav)
-#' times <- attr(grav, "time")
-#' phe <- grav$pheno
-#' \donttest{
-#' iplotCurves(phe, times, phe[,c(61,121)], phe[,c(121,181)],
-#'             chartOpts=list(curves_xlab="Time (hours)", curves_ylab="Root tip angle (degrees)",
-#'                            scat1_xlab="Angle at 2 hrs", scat1_ylab="Angle at 4 hrs",
-#'                            scat2_xlab="Angle at 4 hrs", scat2_ylab="Angle at 6 hrs"))}
-"maukeWb123"
+"mauke_wb123"

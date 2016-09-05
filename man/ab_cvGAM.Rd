@@ -4,8 +4,8 @@
 \alias{ab_cvGAM}
 \title{Select optimal degrees of freedom for SL.gam() using cross-validation}
 \usage{
-ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
-  df = 2:6)
+ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = TRUE,
+  df = 2:10)
 }
 \arguments{
 \item{Y}{The outcome. Must be a numeric vector.}
@@ -18,7 +18,7 @@ ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
 
 \item{SL.library}{SuperLearner library}
 
-\item{print}{logical. print messages? Defaults to FALSE}
+\item{print}{logical. print messages? Defaults to TRUE}
 
 \item{df}{a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to 2:6}
 }
@@ -26,10 +26,10 @@ ab_cvGAM(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
 returns a list with updated SuperLearner library, the optimal node size, and cvRisks
 }
 \description{
-ab_cvGAM is an internal tuning function called by \code{ab_agecurve} and \code{ab_tmle} that selects degrees of freedom for natural splines in a GAM model using cross-validation
+ab_cvGAM is an internal tuning function called by \code{agecurveAb} and \code{tmleAb} that selects degrees of freedom for natural splines in a GAM model using cross-validation
 }
 \details{
-\code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{ab_agecurve}} or \code{ab_tmle} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal spline degress of freedom using cross validation. The default is to search over degrees 2,3,...10, which is usually pretty good. This additional selection step enables you to tune the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+\code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{agecurveAb}} or \code{tmleAb} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal spline degress of freedom using cross validation. The default is to search over degrees 2,3,...10, which is usually pretty good. This additional selection step enables you to tune the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
 }
 \examples{
 TBD

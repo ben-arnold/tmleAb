@@ -1,32 +1,22 @@
-#' DESCRIPTION OF DATA HERE (what it is)
+#' dataset: Malaria antibody measurements in Miton, Haiti
 #'
-#' DESCRIPTION OF DATA HERE (where its from, what kinds of things at the high-level are contained in it)
+#' A 1998 cross-sectional serological survey in the community of Miton, Haiti, near Leogane, collected finger prick blood specimens from 383 people ages 2 weeks to 90 years old as part of a trial to measure the effect of salt fortified with diethylcarbamazine on lymphatic filariasis transmission (Freeman et al. 2001). Antibody levels were measured on the Luminex platform and are in units of median flourescence intensity minus background (MFI-bg).
 #'
 #' @docType data
 #'
 #' @usage data(miton_malaria)
 #'
-#' @format dataframe
-#' each row includes variable descriptions and details for a single individual
+#' @format A data frame with 383 observations and 3 variables.
+#' \describe{
+#'  \item{\code{id}}{individual ID}
+#'  \item{\code{age}}{age in years. Note that age records years completed except for children <1.}
+#'  \item{\code{msp13d7}}{reponse (MFI-bg) to the Plasmodium falciparum MSP-1_19 fusion protein cloned from P. falciparum isolate 3D7}
+#'  }
 #'
 #' @keywords datasets
 #'
-#'        #----------TODO: I put the references I found in the README on OSF here. Edit if you'd like---------------
-#'
-#' @references Arnold, Benjamin F., Jeffrey W. Priest, Katy L. Hamlin, Delynn M. Moss, John M. Colford Jr, and Patrick J. Lammie. 2014.
-#' “Serological Measures of Malaria Transmission in Haiti: Comparison of Longitudinal and Cross-Sectional Methods.” PloS One 9 (4): e93684.
-#'
-#' @source \href{https://osf.io/7frw2/}{Open Science Framework Storage}
+#' @references B. F. Arnold et al., Serological measures of malaria transmission in haiti: comparison of longitudinal and cross-sectional methods. PLoS One. 9, e93684 (2014).
+#' @references A. R. Freeman et al., A community-based trial for the control of lymphatic filariasis and iodine deficiency using salt fortified with diethylcarbamazine and iodine. Am. J. Trop. Med. Hyg. 65, 865–871 (2001).
 #'
 #'
-#'           #----------TODO: Put examples here ---------------
-#' @examples
-#' data(grav)
-#' times <- attr(grav, "time")
-#' phe <- grav$pheno
-#' \donttest{
-#' iplotCurves(phe, times, phe[,c(61,121)], phe[,c(121,181)],
-#'             chartOpts=list(curves_xlab="Time (hours)", curves_ylab="Root tip angle (degrees)",
-#'                            scat1_xlab="Angle at 2 hrs", scat1_ylab="Angle at 4 hrs",
-#'                            scat2_xlab="Angle at 4 hrs", scat2_ylab="Angle at 6 hrs"))}
 "miton_malaria"

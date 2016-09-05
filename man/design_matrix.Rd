@@ -15,8 +15,7 @@ A design matrix version of \code{W} where factor variables have been converted i
 \description{
 An internal, convenience function that automatically transforms a vector, matrix, or data.frame with factors into a design matrix with indicator variables and an ommitted category.
 }
-\examples{
-TBD
-
+\details{
+The \code{design_matrix} function is used by \code{agecurveAb} and \code{tmleAb} as a data processing tool for functions that do not readily accommodate factor variables in a data.frame object. In particular, the \code{SuperLearner()} and \code{tmle()} functions typically have difficulty with factor variables and so this function transforms data before calling those functions.
 }
 
