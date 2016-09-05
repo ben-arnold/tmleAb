@@ -7,7 +7,7 @@
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library SuperLearner library
-#' @param print logical. print messages? Defaults to TRUE
+#' @param print logical. print messages? Defaults to FALSE
 #' @param RFnodesize a sequence of nodes used by the random forest algorithm. Defaults to a sequence from 15 to 40 by every 5 nodes
 #'
 #' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks (cross-validated risks for each nodesize evaluated)
@@ -15,7 +15,7 @@
 #' @examples TBD
 #' @export
 
-ab_cvRF <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=TRUE, RFnodesize=seq(15,40,by=5)) {
+ab_cvRF <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, RFnodesize=seq(15,40,by=5)) {
   if(is.null(RFnodesize)){
     RFnodesize <- seq(15,40,by=5)
   }

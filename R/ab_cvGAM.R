@@ -7,7 +7,7 @@
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library SuperLearner library
-#' @param print logical. print messages? Defaults to TRUE
+#' @param print logical. print messages? Defaults to FALSE
 #' @param df a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to 2:6
 #'
 #' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks
@@ -15,7 +15,7 @@
 #' @examples TBD
 #' @export
 
-ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=TRUE, df=2:10) {
+ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:10) {
   if(is.null(df)) {
     df <- 2:10
   }
