@@ -1,24 +1,25 @@
 Package: tmleAb
 Type: Package
-Title: Targeted maximum likelihood estimation for antibody (Ab) measurements
+Title: Targeted maximum likelihood estimation for antibody measurements
 Version: 0.1.0
-Authors@R: person("Ben", "Arnold", email = "benarnold@berkeley.edu", role = c("aut", "cre"))
-Description: Targeted maximum likelihood estimation for antibody data in R. In addition to estimating age-dependent
+Authors@R: as.person(c("Ben Arnold <benarnold@berkeley.edu> [aut, cre]","Kunal Mishra <kmisrha9@berkeley.edu> [aut]"))
+URL:http://github.com/ben-arnold/tmleAb
+Description: Targeted maximum likelihood estimation for antibody measurements in R. In addition to estimating age-dependent
     antibody curves, the tmleAb package makes it easy to estimate marginally
     adjusted means from the curves, and compare marginally adjusted means between
-    populations. This package is mainly a wrapper: the heavy lifting for machine
+    populations. This package is first and foremost a convenience wrapper: the heavy lifting for machine
     learning is conducted using the \code{\link[SuperLearner]{SuperLearner}} package, and statistical estimation
     is conducted using the \code{\link[tmle]{tmle}} package.
-License: Creative Commons Attribution 3.0 Unported License
+    However, it also provides easy ccess to parametric modeling methods applied to antibody data.
+License: GNU General Public License v3.0
 LazyData: TRUE
 Imports:
     SuperLearner (>= 2.0),
     tmle (>= 1.2.0)
 Suggests:
     gam,
+    ggplot2,
     glmnet,
     randomForest,
-    polysplines,
-    ggplot2,
-    r2weight
+    polysplines
 RoxygenNote: 5.0.1
