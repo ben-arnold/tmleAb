@@ -88,7 +88,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
   # if W is not null, then need to do marginal averaging at each age
   # and merge that back to the analysis data frame, which is slower
   if(nullW==TRUE) {
-    res <- fitd[,1:3]
+    res <- fitd[,c("id","Age")]
     res$pY <- predict(SLfit)$pred
   } else{
     As <- unique(X$Age)
