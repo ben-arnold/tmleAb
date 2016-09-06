@@ -1,4 +1,4 @@
-#' dataset: lymphatic filariasis Wb123 antibody measurements on Mauke island
+#' dataset: Mauke island lymphatic filariasis Wb123 antibody measurements
 #'
 #' Serological measurements from two surveys on Mauke, Cook Islands The dataset includes serum samples from two cross-sectional measurements of the permanent resident population; the first in 1975 (N=362, approximately 58% of the population) and the second in 1992 (N=553, approximately 88% percent of the population). The 1992 measurement occurred five years after a single, island-wide mass drug administration of diethylcarbamazine for all individuals >=5 years old. There were 115 individuals who were measured in both surveys (their \code{id75} value is repeated for both observations). Antibody levels to the Wb123 antigen were measured on the Luciferase Immunoprecipitation System (LIPS) and are in light units.
 #'
