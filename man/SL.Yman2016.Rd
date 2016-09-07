@@ -2,7 +2,7 @@
 % Please edit documentation in R/SL.Yman2016.R
 \name{SL.Yman2016}
 \alias{SL.Yman2016}
-\title{Antibody acquisition model}
+\title{SuperLearner wrapper for antibody acquisition models}
 \usage{
 SL.Yman2016(Y, X, newX = NULL, ...)
 }
@@ -26,44 +26,10 @@ An internal SuperLearner wrapper for the antibody acquisition and loss model in 
 \details{
 The \code{SL.Yman2016} wrapper enables the inclusion of this model in a \code{\link[SuperLearner]{SuperLearner}} ensemble. The model assumes that rates of antibody acquistion and loss are constant. It can only use information about age and not additional covariates. If \code{X} includes more than 1 column, then the function will assume that the first column of \code{X} is age and will throw a warning.
 }
-\examples{
-# simulate data assuming the Yman 2016 model is the truth
-set.seed(1234)
-age <- runif(1000,min=1,max=20)
-alpha <- 0.5
-r <- 0.07
-sigma <- log(1.7)
-abtrue <- (alpha/r)*(1-exp(-r*age))
-abobs <- exp( log(abtrue) +rnorm(length(age),mean=0,sd=sigma) )
+\seealso{
+\code{\link[tmleAb]{Yman2016}}
 
-# Fit the model and obtain predictions
-X <- data.frame(age=age)
-Y <- log(abobs)
-yman2016fit <- SL.Yman2016(Y=Y,X=X)
-pY <- predict(yman2016fit$fit,newdata=X)
-
-# compare against truth
-cbind(c(alpha,r,sigma),yman2016fit$fit$object$par)
-# figure (not run)
-# plot(age,log(abobs),cex=0.25,col="gray40",pch=16)
-# lines(age[order(age)],log(abtrue[order(age)]),lwd=3,lty=2)
-# lines(age[order(age)],pY[order(age)],lwd=1)
-
-# super learner fit
-# (note that it selects Yman 2016 under
-# conditions where it models the truth)
-SL.library <- c("SL.glm","SL.loess","SL.Yman2016")
-SLfit <- SuperLearner(Y=log(abobs),X=data.frame(age=age),SL.library=SL.library)
-SLfit
-
-# The Yman 2016 model can only use age, not additional covariates,
-# so it will throw a warning if X includes more than 1 covariate
-# and it will assume that the first column of X is age
-SLfit2 <- SuperLearner(Y=log(abobs),X=data.frame(age=age,age2=age^2),SL.library=SL.library)
-SLfit2
-
+\code{\link[SuperLearner]{SuperLearner}}
 }
-\references{
-Yman V, White MT, Rono J, Arcà B, Osier FH, Troye-Blomberg M, et al. Antibody acquisition models: A new tool for serological surveillance of malaria transmission intensity. Sci Rep. ; 2016;6: 19472. (\url{http://www.nature.com/articles/srep19472})
-}
+\keyword{internal}
 

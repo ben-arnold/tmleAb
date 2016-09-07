@@ -42,9 +42,22 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
 Targeted maximum liklihood estimation (TMLE) for mean antibody levels or differences in antibody levels
 }
 \details{
-TBD
+The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE).
 }
 \examples{
-TBD
+# TBD
+
+}
+\references{
+Gruber S, van der Laan M. tmle: An R Package for Targeted Maximum Likelihood Estimation. J Stat Softw. 2012;51: 1–35.
+
+van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
+}
+\seealso{
+\code{\link[tmleAb]{agecurveAb}}
+
+\code{\link[SuperLearner]{SuperLearner}}
+
+\code{\link[tmle]{tmle}}
 }
 

@@ -12,7 +12,8 @@
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
-#' @details TBD
+#' @details
+#' The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE).
 #'
 #' @return \code{psi} Mean (if \code{X=NULL}) or difference
 #' @return \code{se} Standard error of \code{psi}, estimated from the influence curve
@@ -20,9 +21,19 @@
 #' @return \code{ub} Upper bound of the 95 percent confidence interval of \code{psi}
 #' @return \code{p} P-value for a test that \code{psi=0}
 #' @return \code{tmle_fit} The original \code{tmle()} fit (see the \code{\link[tmle]{tmle}} package for details).
+#'
+#' @seealso \code{\link[tmleAb]{agecurveAb}}
+#' @seealso \code{\link[SuperLearner]{SuperLearner}}
+#' @seealso \code{\link[tmle]{tmle}}
+#'
+#' @references Gruber S, van der Laan M. tmle: An R Package for Targeted Maximum Likelihood Estimation. J Stat Softw. 2012;51: 1–35.
+#' @references van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
+#'
+#' @examples
+#' # TBD
+#'
 #' @export
 #'
-#' @examples TBD
 tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner and tmle packages are loaded

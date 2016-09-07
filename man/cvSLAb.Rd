@@ -2,7 +2,7 @@
 % Please edit documentation in R/cvSLAb.R
 \name{cvSLAb}
 \alias{cvSLAb}
-\title{Estimate cross-validated risk for the super learner ensemble using antibody data}
+\title{Estimate cross-validated risk for the super learner fit to antibody data}
 \usage{
 cvSLAb(Y, W, id = 1:length(Y), family = gaussian(), V = 10,
   SL.library = c("SL.mean", "SL.glm", "SL.bayesglm", "SL.loess", "SL.gam",
@@ -33,7 +33,12 @@ A convenience wrapper for \code{\link[SuperLearner]{CV.SuperLearner}} for antibo
 The SuperLearner function builds a estimator, but does not contain an estimate on the performance of the estimator. Various methods exist for estimator performance evaluation. If you are familiar with the super learner algorithm, it should be no surprise we recommend using cross-validation to evaluate the honest performance of the super learner estimator. The function \code{cvSLAb} provides a convenient wrapper for the \code{CV.SuperLearner} routine to compute the V-fold cross-validated risk estimate for the super learner (and all algorithms in \code{SL.library} for comparison). The wrapper adds convenience by restricting the dataset to complete cases, transforming the covariate matrix (\code{W}) into a data.frame, and allowing the user to tune parameters in the Random Forest and GAM libraries if they are included in \code{SL.library}.
 }
 \examples{
-TBD
+# TBD
 
+}
+\seealso{
+\code{\link{tmleAb}}
+
+\code{\link[SuperLearner]{SuperLearner}}
 }
 

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>cvSLAb. tmleAb 0.1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">tmleAb 0.1.0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Estimate cross-validated risk for the super learner fit to antibody data</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='cvSLAb.html'>cvSLAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">W</span><span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/length'>length</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/family'>gaussian</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">V</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">10</span><span class="keyword">,</span>
+  <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span> <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.bayesglm"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span>
+  <span class="string">"SL.randomForest"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>Y</dt>
+      <dd>Antibody measurement. Must be a numeric vector.</dd>
+      <dt>W</dt>
+      <dd>A vector, matrix, or data.frame of covariates for each individual used to predict antibody levels</dd>
+      <dt>id</dt>
+      <dd>An optional cluster or repeated measures id variable. For cross-validation splits, <code>id</code> forces observations in the same cluster or for the same individual to be in the same validation fold.</dd>
+      <dt>family</dt>
+      <dd>Model family (gaussian for continuous outcomes, binomial for binary outcomes)</dd>
+      <dt>SL.library</dt>
+      <dd>Library of algorithms to include in the ensemble (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details).</dd>
+      <dt>RFnodesize</dt>
+      <dd>Optional argument to specify a range of minimum node sizes for the random forest algorithm. If <code>SL.library</code> includes <code>SL.randomForest</code>, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.</dd>
+      <dt>gamdf</dt>
+      <dd>Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If <code>SL.library</code> includes <code>SL.gam</code>, then the default is to search over degrees of freedom 2,3,...10. Specifying this option will override the default.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+This function returns an object of class <code>CV.SuperLearner</code> (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details)
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>A convenience wrapper for <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/CV.SuperLearner'>CV.SuperLearner</a></code> for antibody measurements.</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>The SuperLearner function builds a estimator, but does not contain an estimate on the performance of the estimator. Various methods exist for estimator performance evaluation. If you are familiar with the super learner algorithm, it should be no surprise we recommend using cross-validation to evaluate the honest performance of the super learner estimator. The function <code>cvSLAb</code> provides a convenient wrapper for the <code>CV.SuperLearner</code> routine to compute the V-fold cross-validated risk estimate for the super learner (and all algorithms in <code>SL.library</code> for comparison). The wrapper adds convenience by restricting the dataset to complete cases, transforming the covariate matrix (<code>W</code>) into a data.frame, and allowing the user to tune parameters in the Random Forest and GAM libraries if they are included in <code>SL.library</code>.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># TBD</span></div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>cvSLAb</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p><code><a href='tmleAb.html'>tmleAb</a></code></p>
+
+      <p><code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

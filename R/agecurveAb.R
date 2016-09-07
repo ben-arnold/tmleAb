@@ -14,23 +14,23 @@
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
-#'
-#' @return {\code{pY}} {Vector of predicted mean antibody levels for the individual, same length as \code{Y}. If adjusted by \code{W}, then \code{pY} includes the marginally adjusted prediction at Age=a.}
-#' @return {\code{Y}} {Returns \code{Y} in the same format as its argument.}
-#' @return {\code{Age}} {Returns \code{Age} in the same format as its argument.}
-#' @return {\code{W}} {Returns \code{W} in the same format as its argument.}
-#' @return {\code{id}} {Returns \code{id} in the same format as its argument.}
-#' @return {\code{pYframe}} {An object of class data.frame that includes the actual dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables.}
+#' @return \code{agecurveAb} returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables. Observations are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
 #'
 #'
 #'
 #' @details The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{agecurveAb} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{agecurveAb} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument \code{gamdf} through this function.
 #'
-#' #'@references
 #' @seealso \code{\link{tmleAb}}
+#' @seealso \code{\link[SuperLearner]{SuperLearner}}
+#'
+#' @references van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
+#'
+#'
 #' @export
 #'
-#' @examples TBD
+#' @examples
+#' # TBD
+#'
 agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.mean","SL.glm","SL.gam","SL.loess"), RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner package is loaded
@@ -56,7 +56,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
   # throw a warning if observations have missing data
   n.orig <- dim(fulld)[1]
   n.fit  <- dim(fitd)[1]
-  if(n.orig>n.fit) warning(paste(n.orig-n.fit,'observations were dropped due to missing values in the outcome, age, or adjustement covariates. \n The original dataset contained',n.orig,'observations,\n but agecurveAb is fitting the curve using',n.fit,'observations.'))
+  if(n.orig>n.fit) warning(paste("\n\n",n.orig-n.fit,'observations were dropped due to missing values\n in the outcome, age, or adjustement covariates. \n The original dataset contained',n.orig,'observations,\n but agecurveAb is fitting the curve using',n.fit,'observations.'))
 
   #  matrix of features used for SuperLearner prediction (drop id and outcome, Y)
   X <- subset(fitd,select=-c(1:2) )
@@ -79,7 +79,10 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
 
   # Fit SuperLearner
   SLfit <- SuperLearner::SuperLearner(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,family=family,method="method.NNLS")
-  print(SLfit)
+  p_res <- cbind(SLfit$cvRisk,SLfit$coef)
+  colnames(p_res) <- c("CV-Risk","Coef")
+  cat("\nSummary of SuperLearner cross validated risk and \nweights for algorithms included in the library:\n\n")
+  print(p_res)
 
   # obtain marginally averaged, predicted values of Y at A=a:  E_W[E(Y|A=a, X=x, W)]
   # with X=x implied by the subset of data used to fit the function
@@ -110,8 +113,8 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
   pYframe <- fulld_pY[complete.cases(fulld_pY),]
   pYframe <- pYframe[order(pYframe$Age),]
 
-  # return list
-  return(list(pY=fulld_pY$pY, id=id, Age=Age, Y=Y, W=W, pYframe=pYframe))
+  # return the data frame with predicted values
+  return(pYframe)
 }
 
 

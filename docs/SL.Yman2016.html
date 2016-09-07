@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SL.Yman2016. tmleAb 0.1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">tmleAb 0.1.0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>SuperLearner wrapper for antibody acquisition models</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='SL.Yman2016.html'>SL.Yman2016</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">X</span><span class="keyword">,</span> <span class="argument">newX</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>Y</dt>
+      <dd>log quantitative antibody level</dd>
+      <dt>X</dt>
+      <dd>age</dd>
+      <dt>newX</dt>
+      <dd>(optional) new values of age over which to predict</dd>
+      <dt>...</dt>
+      <dd>other arguments passed to the function (currently ignored)</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<code>pred</code> Predicted outcome values</p>
+
+      <p><code>fit</code> Maximum likelihood fit object returned from optim
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>An internal SuperLearner wrapper for the antibody acquisition and loss model in Yman et al. 2016</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>The <code>SL.Yman2016</code> wrapper enables the inclusion of this model in a <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> ensemble. The model assumes that rates of antibody acquistion and loss are constant. It can only use information about age and not additional covariates. If <code>X</code> includes more than 1 column, then the function will assume that the first column of <code>X</code> is age and will throw a warning.</p>
+
+    </div>
+      </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>SL.Yman2016</li>
+    </ul>
+    <ul>
+      <li>internal</li>
+    </ul> -->
+
+    <h2>See also</h2>
+      <p><code><a href='Yman2016.html'>Yman2016</a></code></p>
+
+      <p><code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

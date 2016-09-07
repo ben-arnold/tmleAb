@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>agecurveAb. tmleAb 0.1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">tmleAb 0.1.0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Fit an age-dependent antibody curve with ensemble machine learning</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='agecurveAb.html'>agecurveAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">Age</span><span class="keyword">,</span> <span class="argument">W</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/family'>gaussian</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span> <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>Y</dt>
+      <dd>Antibody measurement. Must be a numeric vector.</dd>
+      <dt>Age</dt>
+      <dd>Age of the individual at the time of measurement. Must be a numeric vector.</dd>
+      <dt>W</dt>
+      <dd>An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve</dd>
+      <dt>id</dt>
+      <dd>An optional cluster or repeated measures id variable. For cross-validation splits, <code>id</code> forces observations in the same cluster or for the same individual to be in the same validation fold.</dd>
+      <dt>family</dt>
+      <dd>Model family (gaussian for continuous outcomes, binomial for binary outcomes)</dd>
+      <dt>SL.library</dt>
+      <dd>Library of algorithms to include in the ensemble (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details).</dd>
+      <dt>RFnodesize</dt>
+      <dd>Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If <code>SL.library</code> includes <code>SL.randomForest</code>, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.</dd>
+      <dt>gamdf</dt>
+      <dd>Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If <code>SL.library</code> includes <code>SL.gam</code>, then the default is to search over a range of df=2-10. Specifying this option will override the default.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<code>agecurveAb</code> returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (<code>pY</code>). Note that the estimation dataset excludes any observations with missing values in <code>Y</code>, <code>Age</code>, <code>W</code> (if not NULL), or <code>id</code> (if specified). Factors in <code>W</code> are converted to design-matrix-style indicator variables. Observations are sorted by <code>Age</code> for more convenient plotting. If covariates are included, then <code>pY</code> is the mean predicted antibody level at <code>Age=a</code>, averaged over the covariates <code>W</code>.
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p><code>agecurveAb</code> uses ensemble machine learning with <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> to fit population mean antibody curves by age. If covariates <code>W</code> are included, the predicted curve is marginally adjusted for <code>W</code>.</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>The <code>agecurveAb</code> function is a wrapper for <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> that provides a convenient interface for this specific estimation problem. If the <code>SL.library</code> argument includes just one model or algorithm, then there is no &#39;ensemble&#39; but the function provides a standard interface for using single algorithms (e.g., <code>SL.loess</code>)  Note that if <code>SL.randomForest</code> is included in the library, <code>agecurveAb</code> will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument <code>RFnodesize</code> through this function. Similarly, if <code>SL.gam</code> is included in the library, <code>agecurveAb</code> will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument <code>gamdf</code> through this function.</p>
+
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+
+      <p>van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># TBD</span></div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>agecurveAb</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p><code><a href='tmleAb.html'>tmleAb</a></code></p>
+
+      <p><code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

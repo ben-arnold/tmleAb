@@ -29,9 +29,10 @@ returns a list with updated SuperLearner library, the optimal node size, and cvR
 ab_cvGAM is an internal tuning function called by \code{agecurveAb} and \code{tmleAb} that selects degrees of freedom for natural splines in a GAM model using cross-validation
 }
 \details{
-\code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{agecurveAb}} or \code{tmleAb} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal spline degress of freedom using cross validation. The default is to search over degrees 2,3,...10, which is usually pretty good. This additional selection step enables you to tune the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+\code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{agecurveAb}} or \code{\link[tmleAb]{tmleAb}} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal spline degress of freedom using cross validation. The default is to search over degrees 2,3,...10, which is usually pretty good. This additional selection step enables you to tune the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
 }
 \examples{
-TBD
+# TBD
 }
+\keyword{internal}
 

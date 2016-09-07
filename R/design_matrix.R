@@ -8,14 +8,23 @@
 #' @return A design matrix version of \code{W} where factor variables have been converted into columns of indicator variables with the first level excluded.
 #' @details The \code{design_matrix} function is used by \code{agecurveAb} and \code{tmleAb} as a data processing tool for functions that do not readily accommodate factor variables in a data.frame object. In particular, the \code{SuperLearner()} and \code{tmle()} functions typically have difficulty with factor variables and so this function transforms data before calling those functions.
 #'
+#' @keywords internal
+#'
 #' @export
 #'
 #'
 design_matrix <- function(W) {
   # W : data frame of covariates that might include factors
   if(class(W)!="matrix" & class(W)!="data.frame"){
-    cat("\n-----------------------------------------\nThe design matrix you supplied is not a matrix or a data.frame\nAssuming that it is a single variable\n-----------------------------------------\n")
+
     W <- data.frame(W)
+    if(is.null(ncol(W)) | ncol(W)==0) {
+      stop("Something in wrong with W.\nTo be safe, please try specifying it as class=data.frame.")
+    }
+    if(ncol(W)==1) {
+      cat("\n-----------------------------------------\nThe design matrix you supplied is not a matrix or a data.frame\nAssuming that it is a single variable\n-----------------------------------------\n")
+    }
+
   }
   ncolW <- ncol(W)
   flist <- numeric()
@@ -37,8 +46,11 @@ design_matrix <- function(W) {
       W <- data.frame(W,mW)
     }
   }
-  # now drop the factors that have been replaced by indicators
-  W <- W[,-c(flist)]
+  # now drop the factors that have been replaced by indicators (if any)
+  if(length(flist)>0) {
+    W <- W[,-c(flist)]
+  }
+  # return results
   return(W)
 }
 

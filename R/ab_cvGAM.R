@@ -11,8 +11,10 @@
 #' @param df a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to 2:6
 #'
 #' @return returns a list with updated SuperLearner library, the optimal node size, and cvRisks
-#' @details \code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{agecurveAb}} or \code{tmleAb} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal spline degress of freedom using cross validation. The default is to search over degrees 2,3,...10, which is usually pretty good. This additional selection step enables you to tune the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
-#' @examples TBD
+#' @details \code{ab_cvGAM} is an internal function called by \code{\link[tmleAb]{agecurveAb}} or \code{\link[tmleAb]{tmleAb}} if SL.gam() is included in the algorithm library. It performs an addition pre-screen step of selecting the optimal spline degress of freedom using cross validation. The default is to search over degrees 2,3,...10, which is usually pretty good. This additional selection step enables you to tune the smoothing parameter. Cross-validated risks are estimated using \code{\link[SuperLearner]{SuperLearner}}.
+#' @examples
+#' # TBD
+#' @keywords internal
 #' @export
 
 ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:10) {

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Home. tmleAb 0.1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">tmleAb 0.1.0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <div class="row">
+  <div class="span8">
+    <h1>tmleAb</h1>
+
+<p>tmleAb: Targeted maximum likelihood estimation for antibody data</p>
+
+<p>In addition to estimating age-dependent antibody curves, the <code>tmleAb</code> package makes it easy to estimate marginally adjusted means from the curves, and compare marginally adjusted means between populations. </p>
+
+<p>This package is first and foremost a convenience wrapper: the heavy lifting for machine learning is conducted using the <code>SuperLearner</code> package, and statistical estimation is conducted using the <code>tmle</code> package. In addition to these features, the package also provides some methods for parametric models applied to antibody data (such as antibody acquisition models).</p>
+
+<p>The package&#39;s more convenient web interface is: <a href="http://ben-arnold.github.io/tmleAb/">http://ben-arnold.github.io/tmleAb/</a></p>
+
+<h2>Installation</h2>
+
+<p>You can install this package easily using the <code>devtools</code> package in R. </p>
+
+<pre><code>library(devtools)
+install_github(&quot;ben-arnold/tmleAb&quot;)
+</code></pre>
+
+<p>The <code>tmleAb</code> package is a development version. Check back here for updates: we have many updated features planned.  If you use the package and have any comments please send them along &ndash; we&#39;d love to hear from you.  The package vignette includes some details about the package and a few examples of how to use its key features. </p>
+
+  </div>
+
+  <div class="span3 offset1 sidebar">
+    <h2>Vignettes</h2>
+    <ul>
+      <li><a href="vignettes/tmleAb-vignette.html">tmleAb Vignette</a></li>
+    </ul>
+        <h2>Authors</h2>
+    <ul>
+      <li><a href='mailto:benarnold@berkeley.edu'>Ben Arnold</a> [aut, cre]</li>
+      <li><a href='mailto:kmisrha9@berkeley.edu'>Kunal Mishra</a> [aut]</li>
+    </ul>
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

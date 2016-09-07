@@ -7,7 +7,7 @@
 \method{predict}{SL.Yman2016}(object, newdata, ...)
 }
 \arguments{
-\item{object}{An object of class \code{SL.Yman2016}}
+\item{object}{An object of class \code{Yman2016}}
 
 \item{newdata}{New data used for predicting the outcome (must be univariate and equal to age, or if multivariate, it must include a variable 'Age')}
 
@@ -19,4 +19,5 @@ pred Predicted values given \code{newdata}
 \description{
 Internal prediction method for SL.Yman2016
 }
+\keyword{internal}
 

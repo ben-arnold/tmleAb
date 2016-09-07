@@ -26,30 +26,24 @@ agecurveAb(Y, Age, W = NULL, id = NULL, family = gaussian(),
 \item{gamdf}{Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.}
 }
 \value{
-{\code{pY}} {Vector of predicted mean antibody levels for the individual, same length as \code{Y}. If adjusted by \code{W}, then \code{pY} includes the marginally adjusted prediction at Age=a.}
-
-{\code{Y}} {Returns \code{Y} in the same format as its argument.}
-
-{\code{Age}} {Returns \code{Age} in the same format as its argument.}
-
-{\code{W}} {Returns \code{W} in the same format as its argument.}
-
-{\code{id}} {Returns \code{id} in the same format as its argument.}
-
-{\code{pYframe}} {An object of class data.frame that includes the actual dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables.}
+\code{agecurveAb} returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables. Observations are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
 }
 \description{
 \code{agecurveAb} uses ensemble machine learning with \code{\link[SuperLearner]{SuperLearner}} to fit population mean antibody curves by age. If covariates \code{W} are included, the predicted curve is marginally adjusted for \code{W}.
 }
 \details{
 The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{agecurveAb} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{agecurveAb} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument \code{gamdf} through this function.
-
-#'@references
 }
 \examples{
-TBD
+# TBD
+
+}
+\references{
+van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
 }
 \seealso{
 \code{\link{tmleAb}}
+
+\code{\link[SuperLearner]{SuperLearner}}
 }
 

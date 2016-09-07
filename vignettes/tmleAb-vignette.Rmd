@@ -1,0 +1,271 @@
+---
+title: "tmleAb"
+author: "vignette for version 0.1.0"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_float: true
+    fig_width: 6
+    fig_height: 6
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{tmleAb Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r algorithm libraries,include=FALSE}
+# load other algorithm packages to clean up the output for agecurveAb(), below
+require(randomForest)
+require(arm)
+require(gam)
+require(polspline)
+require(glmnet)
+require(scales)
+```
+
+## Overview
+
+This vignette describes the main functions in the `tmleAb` package. The software is written in [R](http://www.r-project.org) and is developed on [GitHub](http://www.github.com/ben-arnold/tmleAb). We also recommend the free [RStudio](https://www.rstudio.com/) computing environment.
+
+`tmleAb` is first and foremost a convenience wrapper for two related R packages (both required): `SuperLearner` and `tmle` both on the [CRAN repository](https://cran.r-project.org/). Gruber and van der Laan^[Gruber S, van der Laan M. tmle: An R Package for Targeted Maximum Likelihood Estimation. J Stat Softw. 2012;51: 1–35.] provide a helpful overview of the `tmle` package, and the `SuperLearner` [GitHub page](https://github.com/ecpolley/SuperLearner) includes additional resources beyond the R package and the original article^[van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.].
+
+At this time, there are two main functions in the package that will be most useful (details below):
+
+* `agecurveAb`
+    + This function estimates age-dependent antibody curves with ensemble machine learning (super learner algorithm) or using a single method such as splines, locally weighted regression, or even parametric antibody acquisition models.
+
+* `tmleAb`
+    + This function uses targeted maximum likelihood estimation (TMLE) to estimate population means or differences in means for antibody measurements using ensemble machine learning to adjust for age and any other covariates that could confound comparisons between groups.
+
+In addition to these functions, the package also includes a number of antibody datasets:
+
+* `garki_sero` Garki Project (Nigeria) malaria IFA serology data
+* `miton_malaria` Miton, Haiti malaria (MSP-1) serology data
+* `mauke_wb123` Mauke island lymphatic filariasis Wb123 serology data
+* `haiti_enterics` Leogane, Haiti enteric pathogen multiplex serology data
+* `usa_enterics` United States enteric pathogen multiplex serology data
+
+Please see the article _Measuring population changes in infectious disease transmission from quantitative antibody levels_ (Arnold et al. _in review_) for details about the methodology that underlies this software, as well as more information about the included datasets. 
+
+## Istallation and Updates
+
+You can install this package from GitHub using the `devtools` package in R. 
+```
+library(devtools)
+install_github("ben-arnold/tmleAb")
+```
+
+The package is fully functional but should be considered a development version. Check back here for updates!  We have many updated features planned.  If you use the package and have any comments please send them along -- we'd love to hear from you.
+
+## agecurveAb
+
+The `agecurveAb` function provides a convenient way to estimate an age-dependent antibody curve -- that is, an average antibody level by age in an population. To provide an example of how to use the function, we'll use the [publically available](http://garkiproject.nd.edu) Garki project data, which includes IFA antibody titres to _Plasmodium falciparum_ measured in individuals living in 6 intervention villages and 2 control villages^[Molineaux L, Gramiccia G. The Garki Project [Internet]. World Health Organization; 1980. Available: http://garkiproject.nd.edu/static/documents/garkiproject.pdf] ^[Cornille-Brögger R, Mathews HM, Storey J, Ashkar TS, Brögger S, Molineaux L. Changing patterns in the humoral immune response to malaria before, during, and after the application of control measures: a longitudinal study in the West African savanna. Bull World Health Organ. 1978;56: 579–600.]  A formatted version of the data is included in the package (`?garki_sero`). To simplify the exposition, we will focus only on the data collected in the active intervention period: three measurements took place after 20, 50, and 70 weeks of intervention: 
+
+```{r read data}
+# load the package into R
+library(tmleAb)
+library(SuperLearner)
+# load the Garki serology data (included in the package)
+data(garki_sero)
+# and subset it to measurement rounds 3-5, ages <20, non-missing IFA Pf titres
+d <- garki_sero
+d <- subset(d,serosvy>=3 & serosvy<=5 & ageyrs<=20 & !is.na(ifatpftitre))
+# create a log-transformed version of the IFA titres (add 1 for 0 values)
+d$logpftitre <- log10(d$ifatpftitre+1)
+# further subset the data by intervention group for convenience
+dc <- d[d$tr=="Control" ,]
+di <- d[d$tr=="Intervention",]
+```
+
+### arguments
+
+The `agecurveAb` function has a number of arguments, but these are the most important:
+
+* `Y` : Antibody measurement. Must be a numeric vector.
+
+* `Age` : Age of the individual at the time of measurement. Must be a numeric vector.
+
+* `W` : An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve.
+
+* `id` : An optional cluster or repeated measures id variable. For cross-validation splits, id forces observations in the same cluster or for the same individual to be in the same validation fold.
+    
+* `SL.library` : library of algorithms to include in the super learner ensemble. 
+    + The default is `c("SL.mean","SL.glm","SL.loess", "SL.gam")`, but many others can be included. Use the `listWrappers()` function in the `SuperLearner` package for a full list (or write your own!).
+
+
+### fitting curves
+
+The parameter of interest is $E(Y_{a,x}) = E_W[E(Y|A=a, X=x, W)]$, for age $A$, group $X$ and covariates $W$.  **Important:** `agecurveAb` does not separately stratify by group ($X$), and so it actually estimates $E(Y_{a}) = E_W[E(Y|A=a, W)]$, with stratification by group ($X$) achieved by estimating the curve on the stratified datasets.  
+
+Here is an example of how to fit separate age-antibody curves for the intervention ($X=1$) and control ($X=0$) villages in the Garki Project. The code below uses an algorithm library that includes the simple mean, a main terms generalized linear model, an antibody acquistion model proposed by Yman et al^[Yman V, White MT, Rono J, Arcà B, Osier FH, Troye-Blomberg M, et al. Antibody acquisition models: A new tool for serological surveillance of malaria transmission intensity. Sci Rep.; 2016;6: 19472.], generalized additive models with natural splines, and locally weighted regression:
+```{r fit EYax int,cache=TRUE}
+# list of models and algorithms to include:
+mylib <- c("SL.mean","SL.glm","SL.Yman2016","SL.gam","SL.loess")
+
+# Intervention villages (X=1), fitted curve
+set.seed(625234)
+fit_i <- agecurveAb(Y=di$logpftitre,Age=di$ageyrs,id=di$id,SL.library=mylib)
+```
+
+Since the SuperLearner algorithm splits the data randomly by id for cross-validation, setting a seed before estimation ensures that you obtain perfectly reproducible results.  The final, printed output from `agecurveAb` is the cross-validated risk of each algorithm included in the library (column 1) along with the weight given to the algorithm in the final prediction (column 2). "Risk" in this sense is not the epidemiologic concept of risk but instead the loss function. For quantitative antibody measurements, the loss function is the mean squared error (MSE) of the predicted antibody levels compared with the actual antibody levels. 
+
+In this particular example, generalized additive models (GAM) wins the day and is the only algorithm used in the prediction. The weights represent the optimal combination of the algorithm predictions with respect to the cross-validated risk (MSE). Since the algorithm is data-adaptive, the weighting can change depending on the dataset used or the particular mix of models/algorithms included in the library. For example, add random forest into the library:
+
+```{r fit EYax int2,cache=TRUE}
+mylib2 <- c("SL.mean","SL.glm","SL.Yman2016","SL.gam","SL.loess","SL.randomForest")
+set.seed(625234)
+fit_i2 <- agecurveAb(Y=di$logpftitre,Age=di$ageyrs,id=di$id,SL.library=mylib2)
+```
+
+With the addition of the new member to the ensemble, GAM still contributes to the super learner prediction, but the optimal combination also includes information from random forest. We have found in practice that highly adaptive algorithms such as random forest or multivariate adaptive regression splines (MARS) tend to produce jagged age-antibody curves, so using flexible but smoother nonparametric algorithms like natural splines can provide consistent curves that are easier to compare across populations.
+
+A similar curve can be fit in the control villages, $X=0$ (reverting to the original library that excludes random forest):
+```{r fit EYax control,cache=TRUE}
+# Control villages (X=0), fitted curve
+fit_c <- agecurveAb(Y=dc$logpftitre,Age=dc$ageyrs,id=dc$id,SL.library=mylib)
+```
+
+As with the intervention villages, GAM is given the full weight in the super learner prediction.  This is not at all true in general -- oftentimes the optimal combination of models/algorithms in the library weights many of them in the overall prediction. As we will see below, the age-antibody curves in this population are highly nonlinear, and the only algorithm in this library that can accommodate that is GAM.  The important point is that it is impossible to know ahead of time what the optimal combination would be -- the data-adaptive machine learning provides an automated solution and investigators can remain agnostic about which model/algorithm to rely on in the curve fitting.
+
+### returned values
+
+`agecurveAb` returns an object of class data.frame that includes the actual dataset (feature matrix) used for estimation, along with fitted results (`pY`). Note that the estimation dataset drops any observations with missing values in `Y`, `Age`, `W` (if not NULL), and `id` (if specified). Factors in `W` are converted to design-matrix-style indicator variables. The data are sorted by `Age`. If the call includes covariates `W`, then `pY` values are marginally adjusted values at each age $A=a$.
+
+### visualizing the results
+
+At this time, there is no default plotting method for `agecurveAb` objects (it is on the to-do list). But, we designed the function output to make plots relatively painless using the returned results. Simple plots are easy -- for example, compare control and intervention curves (fit above):
+```{r plot control and intervention}
+# grab a color blind friendly palette
+cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+cols <- cbPalette[c(7,6)]
+# plot the curves
+plot(fit_c$Age,fit_c$pY,type="l",col=cols[1],
+    main="Age-dependent antibody curves in control and intervention villages",
+    xlim=c(0,20),xlab="Age, years",
+    ylim=c(0,4),ylab="Log10 P. Falciparum IFA antibody titre",
+    bty="n",las=1)
+lines(fit_i$Age,fit_i$pY,col=cols[2],lty=2)
+legend("topleft",legend=c("Control","Intervention"),col=cols,lty=c(1,2),bty="n",horiz=T)
+```
+
+Or compare the different ensemble library fits in the intervention villages, and show the underlying data
+```{r plot intervention}
+# plot the curves
+cols <- cbPalette[c(1,7)]
+plot(fit_i2$Age,fit_i2$pY,type="l",col=cols[1],
+    main="Age-dependent antibody curves in intervention villages with different ensembles",
+    xlim=c(0,20),xlab="Age, years",
+    ylim=c(0,4),ylab="Log10 P. Falciparum IFA antibody titre",
+    bty="n",las=1)
+lines(fit_i$Age,fit_i$pY,col=cols[2],lty=1)
+legend("topleft",legend=c("Incl. random forest","Excl. random forest"),col=cols,lty=c(1,1),bty="n",horiz=T)
+
+# add the underlying raw data points as well
+library(scales)
+points(fit_i$Age,fit_i$Y,pch=16,cex=0.2,col=alpha("black",alpha=0.5))
+```
+
+In this example, the restricted library closely approximates the more jagged prediction using the larger library that included random forest.
+
+### marginally adjusted curves
+
+In some settings, such as evaluating programs that were not randomly allocated, you might want to adjust the curves for potentially confounding covariates `W`. This is straightforward: simply pass a dataframe into the `W` argument to `agecurveAb`. For example, we could estimate a marginally adjusted age-antibody curve in the intervention villages, additionally adjusting for sex, season (wet vs. dry), and village:
+
+```{r fit EYax int adj,cache=TRUE}
+# fit the age-antibody curve in intervention villages, adjusting for sex, season, and village
+fit_iadj <- agecurveAb(Y=di$logpftitre,Age=di$ageyrs,id=di$id,
+                       W=subset(di,select=c("sex","wetseason","vname")),
+                       SL.library=mylib)
+```
+Although the cross-valided MSE ("risk") is slightly lower after adjusting for the additional covariates, the mean age-antibody relationship is remarkably similar after adjustment.
+
+```{r plot intervention adj}
+# compare the results with the unadjusted curve
+cols <- cbPalette[c(1,7)]
+plot(fit_i$Age,fit_i$pY,type="l",col=cols[1],
+    main="Unadjusted and marginally adjusted age-dependent antibody curves in intervention villages",
+    xlim=c(0,20),xlab="Age, years",
+    ylim=c(0,4),ylab="Log10 P. Falciparum IFA antibody titre",
+    bty="n",las=1)
+lines(fit_iadj$Age,fit_iadj$pY,col=cols[2],lty=1)
+legend("topleft",legend=c("Unadjusted","Adjusted"),col=cols,lty=c(1,1),bty="n",horiz=T)
+
+```
+
+
+## tmleAb
+
+Fitting age-antibody curves provides a visual comparison between groups, and `tmleAb` provides statistical inference for differences between the curves. Group means are a smooth functional of the curve, which allows for asymptotically normally distributed and efficient estimators. One such estimator is targeted maximum likelihood estimation (TMLE)^[van der Laan MJ, Rubin D. Targeted Maximum Likelihood Learning. Int J Biostat. 2006;2: 1–38.] ^[van der Laan MJ, Rose S. Targeted Learning: Causal Inference for Observational and Experimental Data. Springer Series in Statistics; 2011.]. TMLE is unique among statistical estimation theory in that it still provides correct inference while incorporating data-adaptive machine learning in the estimation step. 
+
+Here, the parameter of interest is the group mean or difference in means, marginally averaged over age and potentially other covariates: $E(Y_x) = E_{A,W}[E(Y|X=x,A,W)]$, for age $A$, group $X$ and covariates $W$. In fact, estimating $E(Y_x)$ is the same as calculating the area under the age-antibody curves estimated with `agecurveAb`.
+
+
+### arguments
+
+The `tmleAb` function has (by design) almost identical arguments to `agecurveAb`, but replaces `Age` with `X`:
+
+* `Y` : antibody measurement
+
+* `X` : comparison group indicator (must be binary, 0/1) (optional)
+
+* `W` : A matrix of covariates -- should probably at minimum include the individual's age (if available).
+
+* `id` : An optional cluster or repeated measures id variable. For cross-validation splits, id forces observations in the same cluster or for the same individual to be in the same validation fold.
+    
+* `SL.library` : library of algorithms to include in the super learner ensemble. 
+    + The default is `c("SL.mean","SL.glm","SL.loess", "SL.gam")`, but many others can be included. Use the `listWrappers()` function in the `SuperLearner` package for a full list (or write your own!).
+
+If `X=NULL`, then `tmleAb` estimates the marginal mean antibody level along with influence curve based standard errors.  If `X` includes a binary indicator for groups, then `tmleAb` estimates the difference between groups and provides inference for the difference.
+
+### estimate group means
+Above in the `agecurveAb` example, we used the _P. falciparum_ IFA test results in control and intervention villages. In the notation above, intervention is denoted $X=1$ and control is $X=0$. Here, we illustrate how to estimate group means and in the next section a difference in means.
+
+```{r fit EYx,cache=TRUE}
+# list of models and algorithms to include:
+mylib <- c("SL.mean","SL.glm","SL.Yman2016","SL.gam","SL.loess")
+
+# Intervention villages (X=1)
+set.seed(625234)
+Wi <- data.frame(Age=di$ageyrs)
+mu_i <- tmleAb(Y=di$logpftitre,X=NULL,W=Wi,id=di$id,SL.library=mylib)
+
+# Control villages (X=0)
+Wc <- data.frame(Age=dc$ageyrs)
+mu_c <- tmleAb(Y=dc$logpftitre,X=NULL,W=Wc,id=dc$id,SL.library=mylib)
+```
+
+### estimate difference in means
+
+The age-antibody curves in control and intervention villages look different, and their means (a summary of the curve) also look different. We can formally test for differences using `tmleAb`.  Note that in the examples above, it was convenient to rely on stratified datasets (`di`, `dc`) to separately estimate parameters in control and intervention villages. But, to compare groups you need to have a single dataset, with a binary indicator to identify groups. If you wish to compare many different groups, you can do it by repeating the call to `tmleAb` using separate indicator variables that contrast each comparison.
+
+```{r test for diff in EYx,cache=TRUE}
+# make a binary indicator variable for intervention vs. control
+d$tr01 <- ifelse(d$tr=="Intervention",1,0)
+W <- data.frame(Age=d$ageyrs)
+psi_diff <- tmleAb(Y=d$logpftitre,X=d$tr01,W=W,id=d$id,SL.library=mylib)
+```
+
+### returned values
+
+The `tmleAb` function returns a list that includes the following objects:
+
+* `psi` : the mean (or difference) estimated
+* `se`  : the standard error of `psi`, estimated from the influence curve
+* `lb`  : the lower 95% confidence interval for `psi`
+* `ub`  : the upper 95% confidence interval for `psi`
+* `p`   : a p-value for a test that `psi=0`
+* `tmle_fit` : an object of class `tmle` that includes detailed information about the fit. See the `tmle` package for details.
+
+## Additional functions
+
+The `tmleAb` package includes some additional functions that are listed on the reference page. Most are internal functions that you can ignore, but some are useful.  If you wish to evaluate the predictive performance of the super learner and its constituent algorithms, then the `cvSLAb()` function provides a convenient wrapper for the `CV.SuperLearner()` routine.  If you wish to fit age-dependent antibody acquisition models, then the `Yman2016()` function enables this.  
+
+
+## References
+
+
+
+

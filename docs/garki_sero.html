@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>garki_sero. tmleAb 0.1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">tmleAb 0.1.0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>dataset: Garki Project (Nigeria) serology data</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='http://www.rdocumentation.org/packages/utils/topics/data'>data</a></span><span class="keyword">(</span><span class="symbol">garki_sero</span><span class="keyword">)</span></pre>
+        
+    <div class="Format">
+      <h2>Format</h2>
+
+      <p>A data frame with 20,441 observations and 52 variables. Variable labels below have been copied from <a href = 'http://garkiproject.nd.edu'>http://garkiproject.nd.edu</a>. The original table&#39;s source is added as a prefix, else it was derived.
+<dl>
+ <dt><code>id</code></dt><dd>people: individual ID</dd></p>
+
+      <p><dt><code>village</code></dt><dd>village: village ID</dd></p>
+
+      <p><dt><code>compount</code></dt><dd>people: compound ID</dd></p>
+
+      <p><dt><code>serosvy</code></dt><dd>serology: Serological survey number</dd></p>
+
+      <p><dt><code>survey</code></dt><dd>village: Garki project survey number</dd></p>
+
+      <p><dt><code>area</code></dt><dd>village: Garki project study area</dd></p>
+
+      <p><dt><code>grid</code></dt><dd>village: Garki project grid number</dd></p>
+
+      <p><dt><code>fup</code></dt><dd>village: The follow-up cluster village is in</dd></p>
+
+      <p><dt><code>vname</code></dt><dd>village: Village name</dd></p>
+
+      <p><dt><code>vu</code></dt><dd>village: Code representing one village unit for a group</dd></p>
+
+      <p><dt><code>grouped1</code></dt><dd>village: number of compounds in compact part? CD</dd></p>
+
+      <p><dt><code>grouped2</code></dt><dd>village: unknown</dd></p>
+
+      <p><dt><code>scattered1</code></dt><dd>village: number of compounds in scattered part? CD</dd></p>
+
+      <p><dt><code>scattered2</code></dt><dd>village: unknown</dd></p>
+
+      <p><dt><code>population</code></dt><dd>village: Population of village (when?) CD</dd></p>
+
+      <p><dt><code>move</code></dt><dd>people: unknown</dd></p>
+
+      <p><dt><code>pers</code></dt><dd>people: unknown</dd></p>
+
+      <p><dt><code>sfreg</code></dt><dd>people: The number of the survey the person first registered with.</dd></p>
+
+      <p><dt><code>sex</code></dt><dd>people: Identifies the sex of the person. Coding unknown.</dd></p>
+
+      <p><dt><code>dob</code></dt><dd>people: unknown</dd></p>
+
+      <p><dt><code>dateb</code></dt><dd>people: The date of birth of the person.</dd></p>
+
+      <p><dt><code>batch_igg</code></dt><dd>serology: Batch number IgG.</dd></p>
+
+      <p><dt><code>batch_igm</code></dt><dd>serology: Batch number IgM.</dd></p>
+
+      <p><dt><code>plate_igg</code></dt><dd>serology: Plate number IgG.</dd></p>
+
+      <p><dt><code>plate_igm</code></dt><dd>serology: Plate number IgM.</dd></p>
+
+      <p><dt><code>diam_igg</code></dt><dd>serology: Specimen diameter IgG.</dd></p>
+
+      <p><dt><code>diam_igm</code></dt><dd>serology: Specimen diameter IgM.</dd></p>
+
+      <p><dt><code>eval_igg</code></dt><dd>serology: Specimen evaluation IgG.</dd></p>
+
+      <p><dt><code>eval_igm</code></dt><dd>serology: Specimen evaluation IgM.</dd></p>
+
+      <p><dt><code>perc_igg</code></dt><dd>serology: Percentage IgG.</dd></p>
+
+      <p><dt><code>perc_igm</code></dt><dd>serology: Percentage IgM.</dd></p>
+
+      <p><dt><code>precipitin</code></dt><dd>serology: Result of the precipitin reaction. Coded as follows: 0=Test not done, 1-7=Number of bands, 8=No bands</dd></p>
+
+      <p><dt><code>blank1</code></dt><dd>serology: unknown</dd></p>
+
+      <p><dt><code>ifat_pfa</code></dt><dd>serology: IFA test for Plasmodium falciparum, 0=no result, 1= Titre 20, 2=60, 3=180, 4=540, 5=1620,6=4860, 7=14580,8=titres &gt;14580, 9= titre &lt; 20 (for computations take 0); In general Titre=20*3**(code-1) </dd></p>
+
+      <p><dt><code>blank2</code></dt><dd>serology: unknown</dd></p>
+
+      <p><dt><code>ifat_pm</code></dt><dd>serology: IFA test for Plasmodium malariae, 0=no result, 1= Titre 20, 2=60, 3=180, 4=540, 5=1620,6=4860, 7=14580,8=titres &gt;14580, 9= titre &lt; 20 (for computations take 0); In general Titre=20*3**(code-1)  </dd></p>
+
+      <p><dt><code>haem_code</code></dt><dd>serology: 1 = AA; 2 = AS, 3 = SS, 4 =AC, 5 = CC, 6 = SC, 9 = not done</dd></p>
+
+      <p><dt><code>haem_phbs</code></dt><dd>serology: unknown</dd></p>
+
+      <p><dt><code>recd_iha</code></dt><dd>serology: Record identifier for IHA (code 116)</dd></p>
+
+      <p><dt><code>specno</code></dt><dd>serology: specimen number</dd></p>
+
+      <p><dt><code>titrcode</code></dt><dd>serology: IHA titre code, 4 to 16 = titre 2**4 to 2**16 (in general titre=2**code)</dd></p>
+
+      <p><dt><code>date</code></dt><dd>serology: unknown</dd></p>
+
+      <p><dt><code>tr</code></dt><dd>(derived): factor: control or intervention village</dd></p>
+
+      <p><dt><code>phase</code></dt><dd>(derived): factor: baseline, intervention, post-intervention phase</dd></p>
+
+      <p><dt><code>wetseason</code></dt><dd>(derived): factor: dry or wet season</dd></p>
+
+      <p><dt><code>bdate</code></dt><dd>(derived): individuals date of birth (standard date format)</dd></p>
+
+      <p><dt><code>mdate</code></dt><dd>(derived): measurement date</dd></p>
+
+      <p><dt><code>agedays</code></dt><dd>(derived): age in days at time of measurement</dd></p>
+
+      <p><dt><code>ageyrs</code></dt><dd>(derived): age in years at time of measurement</dd></p>
+
+      <p><dt><code>ifatpftitre</code></dt><dd>(derived): IFA test for P. falciparum antibody titres</dd></p>
+
+      <p><dt><code>ifatpmtitre</code></dt><dd>(derived): IFA test for P. malariae antibody titres</dd></p>
+
+      <p><dt><code>ihatitre</code></dt><dd>(derived): IHA test antibody titres</dd></p>
+
+      <p></dl></p>
+
+    </div>
+
+    <div class="Source">
+      <h2>Source</h2>
+
+      <p><a href = 'http://www.swisstph.ch/fr/ressources/epidemiological-databases.html'>http://www.swisstph.ch/fr/ressources/epidemiological-databases.html</a></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The <code>garki_sero</code> dataset includes a semi-processed version of publicly available serology data from the Garki Project, Nigeria. This file includes merged data from the <code>village</code>, <code>people</code>, and <code>serology</code> tables in the original Garki files. The original files are documented through the Garki Project&#39;s website (<a href = 'http://garkiproject.nd.edu/'>http://garkiproject.nd.edu/</a>).  These data were downloaded originally from the Swiss Tropical Institute (<a href = 'http://www.swisstph.ch/fr/ressources/epidemiological-databases.html'>http://www.swisstph.ch/fr/ressources/epidemiological-databases.html</a>). The dictionary file from STI included important additional information about data labels. The Stata script that merged the original tables is located here: <a href = 'https://osf.io/7frw2/'>https://osf.io/7frw2/</a>.</p>
+
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+
+      <p>Molineaux L, Gramiccia G, 1980. The Garki Project. Geneva: World Health Organisation.
+http://whqlibdoc.who.int/publications/9241560614.pdf</p>
+
+      <p>http://garkiproject.nd.edu/</p>
+
+      <p></p>
+
+    </div>
+      </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>garki_sero</li>
+    </ul>
+    <ul>
+      <li>datasets</li>
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
