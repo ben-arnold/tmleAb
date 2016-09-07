@@ -143,7 +143,7 @@ cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 cols <- cbPalette[c(7,6)]
 # plot the curves
 plot(fit_c$Age,fit_c$pY,type="l",col=cols[1],
-    main="Age-dependent antibody curves in control and intervention villages",
+    main="Age-dependent antibody curves\nin control and intervention villages",
     xlim=c(0,20),xlab="Age, years",
     ylim=c(0,4),ylab="Log10 P. Falciparum IFA antibody titre",
     bty="n",las=1)
@@ -156,7 +156,7 @@ Or compare the different ensemble library fits in the intervention villages, and
 # plot the curves
 cols <- cbPalette[c(1,7)]
 plot(fit_i2$Age,fit_i2$pY,type="l",col=cols[1],
-    main="Age-dependent antibody curves in intervention villages with different ensembles",
+    main="Age-dependent antibody curves\nin intervention villages with different ensembles",
     xlim=c(0,20),xlab="Age, years",
     ylim=c(0,4),ylab="Log10 P. Falciparum IFA antibody titre",
     bty="n",las=1)
@@ -180,13 +180,13 @@ fit_iadj <- agecurveAb(Y=di$logpftitre,Age=di$ageyrs,id=di$id,
                        W=subset(di,select=c("sex","wetseason","vname")),
                        SL.library=mylib)
 ```
-Although the cross-valided MSE ("risk") is slightly lower after adjusting for the additional covariates, the mean age-antibody relationship is remarkably similar after adjustment.
+Although the cross-validated MSE ("risk") is slightly lower after adjusting for the additional covariates, the mean age-antibody relationship is remarkably similar after adjustment.
 
 ```{r plot intervention adj}
 # compare the results with the unadjusted curve
 cols <- cbPalette[c(1,7)]
 plot(fit_i$Age,fit_i$pY,type="l",col=cols[1],
-    main="Unadjusted and marginally adjusted age-dependent antibody curves in intervention villages",
+    main="Unadjusted and marginally adjusted\nage-dependent antibody curves in intervention villages",
     xlim=c(0,20),xlab="Age, years",
     ylim=c(0,4),ylab="Log10 P. Falciparum IFA antibody titre",
     bty="n",las=1)

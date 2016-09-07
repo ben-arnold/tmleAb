@@ -17,7 +17,7 @@
 #' @seealso \code{\link[SuperLearner]{SuperLearner}}
 #'
 #' @keywords internal
-#'
+#' @export
 
 SL.Yman2016 <- function(Y,X,newX=NULL,...) {
 
@@ -59,6 +59,7 @@ SL.Yman2016 <- function(Y,X,newX=NULL,...) {
 #' @return pred Predicted values given \code{newdata}
 #'
 #' @keywords internal
+#' @export
 #'
 predict.SL.Yman2016 <- function(object,newdata,...) {
 
