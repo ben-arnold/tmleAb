@@ -1,6 +1,6 @@
 ---
 title: "tmleAb"
-author: "vignette for version 0.1.0"
+author: "vignette for version 0.1.1"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_document:
@@ -58,7 +58,7 @@ library(devtools)
 install_github("ben-arnold/tmleAb")
 ```
 
-The package is fully functional but should be considered a development version. Check back here for updates!  We have many updated features planned.  If you use the package and have any comments please send them along -- we'd love to hear from you.
+The package is in active development, so periodically check for updates!  We have many updated features planned.  If you use the package and have any comments please send them along -- we'd love to hear from you.
 
 ## agecurveAb
 
@@ -198,7 +198,7 @@ legend("topleft",legend=c("Unadjusted","Adjusted"),col=cols,lty=c(1,1),bty="n",h
 
 ## tmleAb
 
-Fitting age-antibody curves provides a visual comparison between groups, and `tmleAb` provides statistical inference for differences between the curves. Group means are a smooth functional of the curve, which allows for asymptotically normally distributed and efficient estimators. One such estimator is targeted maximum likelihood estimation (TMLE)^[van der Laan MJ, Rubin D. Targeted Maximum Likelihood Learning. Int J Biostat. 2006;2: 1–38.] ^[van der Laan MJ, Rose S. Targeted Learning: Causal Inference for Observational and Experimental Data. Springer Series in Statistics; 2011.]. TMLE is unique among statistical estimation theory in that it still provides correct inference while incorporating data-adaptive machine learning in the estimation step. 
+Fitting age-antibody curves provides a visual comparison between groups, and `tmleAb` provides statistical inference for differences between the curves. Group means are a smooth functional of the curve, which allows for asymptotically normally distributed and efficient estimators. One such estimator is targeted maximum likelihood estimation (TMLE)^[van der Laan MJ, Rubin D. Targeted Maximum Likelihood Learning. Int J Biostat. 2006;2: 1–38.] ^[van der Laan MJ, Rose S. Targeted Learning: Causal Inference for Observational and Experimental Data. Springer Series in Statistics; 2011.]. An important feature of TMLE is that it still provides correct inference while incorporating data-adaptive machine learning in the estimation step. 
 
 Here, the parameter of interest is the group mean or difference in means, marginally averaged over age and potentially other covariates: $E(Y_x) = E_{A,W}[E(Y|X=x,A,W)]$, for age $A$, group $X$ and covariates $W$. In fact, estimating $E(Y_x)$ is the same as calculating the area under the age-antibody curves estimated with `agecurveAb`.
 

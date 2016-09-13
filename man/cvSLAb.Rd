@@ -4,14 +4,14 @@
 \alias{cvSLAb}
 \title{Estimate cross-validated risk for the super learner fit to antibody data}
 \usage{
-cvSLAb(Y, W, id = 1:length(Y), family = gaussian(), V = 10,
+cvSLAb(Y, X, id = 1:length(Y), family = gaussian(), V = 10,
   SL.library = c("SL.mean", "SL.glm", "SL.bayesglm", "SL.loess", "SL.gam",
   "SL.randomForest"), RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
 \item{Y}{Antibody measurement. Must be a numeric vector.}
 
-\item{W}{A vector, matrix, or data.frame of covariates for each individual used to predict antibody levels}
+\item{X}{A vector, matrix, or data.frame of covariates for each individual used to predict antibody levels}
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
 

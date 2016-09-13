@@ -4,7 +4,7 @@
 #' A convenience wrapper for \code{\link[SuperLearner]{CV.SuperLearner}} for antibody measurements.
 #'
 #' @param Y Antibody measurement. Must be a numeric vector.
-#' @param W A vector, matrix, or data.frame of covariates for each individual used to predict antibody levels
+#' @param X A vector, matrix, or data.frame of covariates for each individual used to predict antibody levels
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
@@ -23,25 +23,25 @@
 #'
 #' @export
 #'
-cvSLAb <-function(Y,W,id=1:length(Y),family=gaussian(),V=10,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess","SL.gam","SL.randomForest"),RFnodesize=NULL,gamdf=NULL) {
+cvSLAb <-function(Y,X,id=1:length(Y),family=gaussian(),V=10,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess","SL.gam","SL.randomForest"),RFnodesize=NULL,gamdf=NULL) {
 
-  # convert W into a design matrix (SuperLearner does not acommodate factor variables)
-  if (is.null(W)) {
-    stop("You must include at least one covariate in W, such as age.")
+  # convert X into a design matrix (SuperLearner does not acommodate factor variables)
+  if (is.null(X)) {
+    stop("You must include at least one covariate in X, such as age.")
 	} else{
-	  Wdesign <- design_matrix(W)
-	  fitd <- data.frame(id,Y,Wdesign)
+	  Xdesign <- design_matrix(X)
+	  fitd <- data.frame(id,Y,Xdesign)
 	}
 
 	# restrict dataset to non-missing observations
 	fitd <- fitd[complete.cases(fitd),]
-	X <- subset(fitd,select=-c(1:2) )
+	fitX <- subset(fitd,select=-c(1:2) )
 
 	# If SL.randomForest is included in the library,
 	# select optimal node size (tree depth) using cross-validated risk
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
-	  cvRF <- ab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
+	  cvRF <- ab_cvRF(Y=fitd$Y,X=fitX,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 
@@ -49,13 +49,13 @@ cvSLAb <-function(Y,W,id=1:length(Y),family=gaussian(),V=10,SL.library= c("SL.me
 	# select the optimal degrees of freedom for the smoothing splines using cross-validated risk
 	# and then updated the ensemble library to include the optimal df
 	if (length(grep("SL.gam",SL.library))>0) {
-	  cvGAM <- ab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
+	  cvGAM <- ab_cvGAM(Y=fitd$Y,X=fitX,id=fitd$id,SL.library=SL.library,df=gamdf)
 	  SL.library <- cvGAM$SL.library
 	}
 
 
 	# Fit CV.SuperLearner
-	cvSL.fit <- SuperLearner::CV.SuperLearner(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,V=V,family=family,control=list(saveFitLibrary=TRUE))
+	cvSL.fit <- SuperLearner::CV.SuperLearner(Y=fitd$Y,X=fitX,id=fitd$id,SL.library=SL.library,V=V,family=family,control=list(saveFitLibrary=TRUE))
 	return(cvSL.fit)
 }
 

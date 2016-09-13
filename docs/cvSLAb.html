@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>cvSLAb. tmleAb 0.1.0</title>
+<title>cvSLAb. tmleAb 0.1.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.1.0</a>
+      <a class="brand" href="index.html">tmleAb 0.1.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -54,7 +54,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='cvSLAb.html'>cvSLAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">W</span><span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/length'>length</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/family'>gaussian</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">V</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">10</span><span class="keyword">,</span>
+    <pre><span class="functioncall"><a href='cvSLAb.html'>cvSLAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">X</span><span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/length'>length</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/family'>gaussian</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">V</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">10</span><span class="keyword">,</span>
   <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span> <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.bayesglm"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span>
   <span class="string">"SL.randomForest"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
     
@@ -62,7 +62,7 @@
     <dl>
       <dt>Y</dt>
       <dd>Antibody measurement. Must be a numeric vector.</dd>
-      <dt>W</dt>
+      <dt>X</dt>
       <dd>A vector, matrix, or data.frame of covariates for each individual used to predict antibody levels</dd>
       <dt>id</dt>
       <dd>An optional cluster or repeated measures id variable. For cross-validation splits, <code>id</code> forces observations in the same cluster or for the same individual to be in the same validation fold.</dd>
