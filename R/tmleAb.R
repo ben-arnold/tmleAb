@@ -90,11 +90,11 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
 	  SL.library <- cvGAM$SL.library
 	}
 
-	# estimate either the difference (A=fitd$X) or the adjusted mean (A=NULL)
-	if (nullX==FALSE) {
+	# estimate either the difference (A=fitd$X) or the mean (A=NULL), possibly adjusted for W
+	if (nullX==FALSE & nullW==FALSE) {
 		tmle_fit <- tmle::tmle(Y=fitd$Y,
 			A=fitd$X,
-			W=fitW,
+			W=subset(fitW,select=c(-X)),
 			id=fitd$id,
 			Q.SL.library=SL.library,
 			family=family,
@@ -105,7 +105,24 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
 		se   <- sqrt(tmle_fit$estimates$ATE$var.psi)
 		ci   <- tmle_fit$estimates$ATE$CI
 		p    <- tmle_fit$estimates$ATE$pvalue
-	} else {
+	}
+  if (nullX==FALSE & nullW==TRUE) {
+    emptyW <- data.frame(w1=rep(1,nrow(fitd)),w2=rep(1,nrow(fitd)))
+    tmle_fit <- tmle::tmle(Y=fitd$Y,
+                           A=fitd$X,
+                           W=emptyW,
+                           id=fitd$id,
+                           Q.SL.library=SL.library,
+                           family=family,
+                           fluctuation = "logistic"
+    )
+    tmle::print.tmle(tmle_fit)
+    psi  <- tmle_fit$estimates$ATE$psi
+    se   <- sqrt(tmle_fit$estimates$ATE$var.psi)
+    ci   <- tmle_fit$estimates$ATE$CI
+    p    <- tmle_fit$estimates$ATE$pvalue
+  }
+  if (nullX==TRUE & nullW==FALSE)  {
 		tmle_fit <- tmle::tmle(Y=fitd$Y,
 			A=NULL,
 			W=fitW,
@@ -119,7 +136,24 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
 		se   <- sqrt(tmle_fit$estimates$EY1$var.psi)
 		ci   <- tmle_fit$estimates$EY1$CI
 		p    <- tmle_fit$estimates$EY1$pvalue
-	}
+  }
+  if (nullX==TRUE & nullW==TRUE)  {
+    emptyW <- data.frame(w1=rep(1,nrow(fitd)),w2=rep(1,nrow(fitd)))
+    tmle_fit <- tmle::tmle(Y=fitd$Y,
+                           A=NULL,
+                           W=emptyW,
+                           id=fitd$id,
+                           Q.SL.library=SL.library,
+                           family=family,
+                           fluctuation = "logistic"
+    )
+    tmle::print.tmle(tmle_fit)
+    psi  <- tmle_fit$estimates$EY1$psi
+    se   <- sqrt(tmle_fit$estimates$EY1$var.psi)
+    ci   <- tmle_fit$estimates$EY1$CI
+    p    <- tmle_fit$estimates$EY1$pvalue
+  }
+
 	# return estimate, SE, 95% CI, and P-value, along with the tmle() object
 	list(psi=psi,se=se,lb=ci[1],ub=ci[2],p=p,tmle_fit=tmle_fit)
 }

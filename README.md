@@ -15,6 +15,6 @@ library(devtools)
 install_github("ben-arnold/tmleAb")
 ```
 
-The `tmleAb` package is in active development, so periodically check for updates!  We have many updated features planned.  If you use the package and have any comments please send them along -- we'd love to hear from you.  If you use the package and have any comments please send them along -- we'd love to hear from you.  The package vignette includes some details about the package and a few examples of how to use its key features. 
+The `tmleAb` package is in active development, so periodically check for updates!  We have many updated features planned.  If you use the package and have any comments please send them along -- we'd love to hear from you.  The package vignette includes some details about the package and a few examples of how to use its key features. 
 
 
