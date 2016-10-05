@@ -23,13 +23,34 @@
 #' @seealso \code{\link{tmleAb}}
 #' @seealso \code{\link[SuperLearner]{SuperLearner}}
 #'
-#' @references van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
+#' @references van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115. \link{http://www.ncbi.nlm.nih.gov/pubmed/17910531}
 #'
 #'
 #' @export
 #'
 #' @examples
-#' # TBD
+#' # load the Garki project serology data
+#' data("garki_sero")
+#' garki_sero$village <- factor(garki_sero$village)
+#' garki_sero$sex <- factor(garki_sero$sex)
+#'
+#' # control village measurements in round 5
+#' dc <- subset(garki_sero,serosvy==5 & tr=="Control")
+#'
+#' # intervention village measurements in round 5
+#' di <- subset(garki_sero,serosvy==5 & tr=="Intervention")
+#'
+#' # fit an age-antibody curve in control and intervention villages
+#' # adjusted for sex and village
+#' # set a seed for perfectly reproducible splits in the V-fold cross validation
+#' set.seed(12345)
+#' ccurve <-agecurveAb(Y=log10(dc$ifatpftitre+1),Age=dc$ageyrs,W=dc[,c("sex","village")],id=dc$id)
+#' set.seed(12345)
+#' icurve <-agecurveAb(Y=log10(di$ifatpftitre+1),Age=di$ageyrs,W=dc[,c("sex","village")],id=di$id)
+#'
+#' # plot the curves
+#' plot(ccurve$Age,ccurve$pY,type="l",ylim=c(0,4),bty="l",las=1)
+#' lines(icurve$Age,icurve$pY,col="blue")
 #'
 agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.mean","SL.glm","SL.gam","SL.loess"), RFnodesize=NULL,gamdf=NULL) {
 
@@ -91,7 +112,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
   # if W is not null, then need to do marginal averaging at each age
   # and merge that back to the analysis data frame, which is slower
   if(nullW==TRUE) {
-    res <- fitd[,c("id","Age")]
+    res <- fitd
     res$pY <- predict(SLfit)$pred
   } else{
     As <- unique(X$Age)
@@ -104,17 +125,9 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
     res <- merge(fitd,data.frame(Age=As,pY=pY),by="Age",all.x=T,all.y=T)
   }
 
-  # now get pY back for each of the original observations with a merge
-  # will include NA values for observations that were not included in the fit
-  fulld_pY <- merge(fulld,res,by=c("id","Age"),all.x=T)
-
-  # as a convenience option, return a data.frame of the final observations used in the fit, along with pY
-  # sorted by Age
-  pYframe <- fulld_pY[complete.cases(fulld_pY),]
-  pYframe <- pYframe[order(pYframe$Age),]
-
-  # return the data frame with predicted values
-  return(pYframe)
+  # return the data frame with predicted values, sorted by Age for convenience
+  res <- res[order(res$Age),]
+  return(res)
 }
 
 

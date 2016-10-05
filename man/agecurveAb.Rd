@@ -35,11 +35,32 @@ agecurveAb(Y, Age, W = NULL, id = NULL, family = gaussian(),
 The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{agecurveAb} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{agecurveAb} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument \code{gamdf} through this function.
 }
 \examples{
-# TBD
+# load the Garki project serology data
+data("garki_sero")
+garki_sero$village <- factor(garki_sero$village)
+garki_sero$sex <- factor(garki_sero$sex)
+
+# control village measurements in round 5
+dc <- subset(garki_sero,serosvy==5 & tr=="Control")
+
+# intervention village measurements in round 5
+di <- subset(garki_sero,serosvy==5 & tr=="Intervention")
+
+# fit an age-antibody curve in control and intervention villages
+# adjusted for sex and village
+# set a seed for perfectly reproducible splits in the V-fold cross validation
+set.seed(12345)
+ccurve <-agecurveAb(Y=log10(dc$ifatpftitre+1),Age=dc$ageyrs,W=dc[,c("sex","village")],id=dc$id)
+set.seed(12345)
+icurve <-agecurveAb(Y=log10(di$ifatpftitre+1),Age=di$ageyrs,W=dc[,c("sex","village")],id=di$id)
+
+# plot the curves
+plot(ccurve$Age,ccurve$pY,type="l",ylim=c(0,4),bty="l",las=1)
+lines(icurve$Age,icurve$pY,col="blue")
 
 }
 \references{
-van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
+van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115. \link{http://www.ncbi.nlm.nih.gov/pubmed/17910531}
 }
 \seealso{
 \code{\link{tmleAb}}
