@@ -15,12 +15,26 @@
 #'
 #' @return This function returns an object of class \code{CV.SuperLearner} (see the \code{\link[SuperLearner]{SuperLearner}} package for details)
 #'
-#' @seealso \code{\link{tmleAb}}
-#' @seealso \code{\link[SuperLearner]{SuperLearner}}
+#' @seealso
+#' \code{\link{tmleAb}}, \code{\link[SuperLearner]{SuperLearner}}
 #'
 #' @examples
-#' # TBD
+#' \dontrun{
+#' # load the Garki project serology data, subset to round 5 intervention
+#' data("garki_sero")
+#' garki_sero$village <- factor(garki_sero$village)
+#' garki_sero$sex <- factor(garki_sero$sex)
+#' garki_sero$tr01 <- ifelse(garki_sero$tr=="Intervention",1,0)
+#' d <- subset(garki_sero,serosvy==5 & tr=="Intervention")
 #'
+#' # fit the cross-validated super learner
+#' # with just Age as the predictor
+#' set.seed(62522)
+#' CVfit <- cvSLAb(Y=log10(d$ifatpftitre+1),X=data.frame(Age=d$ageyrs),id=d$id)
+#'
+#' # plot cross-validated MSE ("Risk")
+#' plot(CVfit)
+#'}
 #' @export
 #'
 cvSLAb <-function(Y,X,id=1:length(Y),family=gaussian(),V=10,SL.library= c("SL.mean","SL.glm","SL.bayesglm","SL.loess","SL.gam","SL.randomForest"),RFnodesize=NULL,gamdf=NULL) {

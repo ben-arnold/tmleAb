@@ -33,12 +33,24 @@ A convenience wrapper for \code{\link[SuperLearner]{CV.SuperLearner}} for antibo
 The SuperLearner function builds a estimator, but does not contain an estimate on the performance of the estimator. Various methods exist for estimator performance evaluation. If you are familiar with the super learner algorithm, it should be no surprise we recommend using cross-validation to evaluate the honest performance of the super learner estimator. The function \code{cvSLAb} provides a convenient wrapper for the \code{CV.SuperLearner} routine to compute the V-fold cross-validated risk estimate for the super learner (and all algorithms in \code{SL.library} for comparison). The wrapper adds convenience by restricting the dataset to complete cases, transforming the covariate matrix (\code{W}) into a data.frame, and allowing the user to tune parameters in the Random Forest and GAM libraries if they are included in \code{SL.library}.
 }
 \examples{
-# TBD
+\dontrun{
+# load the Garki project serology data, subset to round 5 intervention
+data("garki_sero")
+garki_sero$village <- factor(garki_sero$village)
+garki_sero$sex <- factor(garki_sero$sex)
+garki_sero$tr01 <- ifelse(garki_sero$tr=="Intervention",1,0)
+d <- subset(garki_sero,serosvy==5 & tr=="Intervention")
 
+# fit the cross-validated super learner
+# with just Age as the predictor
+set.seed(62522)
+CVfit <- cvSLAb(Y=log10(d$ifatpftitre+1),X=data.frame(Age=d$ageyrs),id=d$id)
+
+# plot cross-validated MSE ("Risk")
+plot(CVfit)
+}
 }
 \seealso{
-\code{\link{tmleAb}}
-
-\code{\link[SuperLearner]{SuperLearner}}
+\code{\link{tmleAb}}, \code{\link[SuperLearner]{SuperLearner}}
 }
 
