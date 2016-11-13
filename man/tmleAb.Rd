@@ -6,7 +6,7 @@
 \usage{
 tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
   SL.library = c("SL.mean", "SL.glm", "SL.gam", "SL.loess"),
-  RFnodesize = NULL, gamdf = NULL)
+  g.SL.library = c("SL.glm"), RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
 \item{Y}{antibody measurement}
@@ -19,7 +19,9 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
 
 \item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
 
-\item{SL.library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
+\item{SL.library}{Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
+
+\item{g.SL.library}{Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).}
 
 \item{RFnodesize}{Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.}
 
@@ -39,13 +41,45 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
 \code{tmle_fit} The original \code{tmle()} fit (see the \code{\link[tmle]{tmle}} package for details).
 }
 \description{
-Targeted maximum liklihood estimation (TMLE) for mean antibody levels or differences in antibody levels
+Targeted maximum liklihood estimation (TMLE) for mean antibody measurements or difference in antibody measurements between groups
 }
 \details{
 The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE).
 }
 \examples{
-# TBD
+\dontrun{
+# load the Garki project serology data, subset to round 5
+data("garki_sero")
+garki_sero$village <- factor(garki_sero$village)
+garki_sero$sex <- factor(garki_sero$sex)
+garki_sero$tr01 <- ifelse(garki_sero$tr=="Intervention",1,0)
+d <- subset(garki_sero,serosvy==5)
+
+# control and intervention village measurements
+dc <- subset(d, tr=="Control")
+di <- subset(d,tr=="Intervention")
+
+# estimate means in control and intervention villages
+# set a seed for perfectly reproducible splits
+# in the V-fold cross validation
+set.seed(12345)
+cmean <-tmleAb(Y=log10(dc$ifatpftitre+1),
+               W=dc[,c("ageyrs","sex","village")],
+               id=dc$id)
+set.seed(12345)
+imean <-tmleAb(Y=log10(di$ifatpftitre+1),
+               W=di[,c("ageyrs","sex","village")],
+               id=di$id)
+
+# estimate targeted difference in means
+# bewteen control and intervention villages
+# adjusted for age, sex and village
+set.seed(12345)
+psi_diff <-tmleAb(Y=log10(d$ifatpftitre+1),
+                  X=d$tr01,
+                  W=d[,c("ageyrs","sex","village")],
+                  id=d$id)
+}
 
 }
 \references{
@@ -54,10 +88,6 @@ Gruber S, van der Laan M. tmle: An R Package for Targeted Maximum Likelihood Est
 van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
 }
 \seealso{
-\code{\link[tmleAb]{agecurveAb}}
-
-\code{\link[SuperLearner]{SuperLearner}}
-
-\code{\link[tmle]{tmle}}
+\code{\link[tmleAb]{agecurveAb}}, \code{\link[SuperLearner]{SuperLearner}},  \code{\link[tmle]{tmle}}
 }
 

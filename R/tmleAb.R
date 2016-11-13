@@ -1,14 +1,15 @@
 
 #' Targeted maximum liklihood estimation for antibody measurements
 #'
-#' Targeted maximum liklihood estimation (TMLE) for mean antibody levels or differences in antibody levels
+#' Targeted maximum liklihood estimation (TMLE) for mean antibody measurements or difference in antibody measurements between groups
 #'
 #' @param Y antibody measurement
 #' @param X comparison group  (must be binary, 0/1). If \code{X=NULL}, then the function returns the mean (rather than the difference between levels of \code{X}).
 #' @param W matrix of covariates -- should probably at minimum include the individual's age (if available).
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
-#' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
+#' @param SL.library Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
+#' @param g.SL.library Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
@@ -22,19 +23,50 @@
 #' @return \code{p} P-value for a test that \code{psi=0}
 #' @return \code{tmle_fit} The original \code{tmle()} fit (see the \code{\link[tmle]{tmle}} package for details).
 #'
-#' @seealso \code{\link[tmleAb]{agecurveAb}}
-#' @seealso \code{\link[SuperLearner]{SuperLearner}}
-#' @seealso \code{\link[tmle]{tmle}}
+#' @seealso
+#' \code{\link[tmleAb]{agecurveAb}}, \code{\link[SuperLearner]{SuperLearner}},  \code{\link[tmle]{tmle}}
 #'
 #' @references Gruber S, van der Laan M. tmle: An R Package for Targeted Maximum Likelihood Estimation. J Stat Softw. 2012;51: 1–35.
 #' @references van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.
 #'
 #' @examples
-#' # TBD
+#' \dontrun{
+#' # load the Garki project serology data, subset to round 5
+#' data("garki_sero")
+#' garki_sero$village <- factor(garki_sero$village)
+#' garki_sero$sex <- factor(garki_sero$sex)
+#' garki_sero$tr01 <- ifelse(garki_sero$tr=="Intervention",1,0)
+#' d <- subset(garki_sero,serosvy==5)
+#'
+#' # control and intervention village measurements
+#' dc <- subset(d, tr=="Control")
+#' di <- subset(d,tr=="Intervention")
+#'
+#' # estimate means in control and intervention villages
+#' # set a seed for perfectly reproducible splits
+#' # in the V-fold cross validation
+#' set.seed(12345)
+#' cmean <-tmleAb(Y=log10(dc$ifatpftitre+1),
+#'                W=dc[,c("ageyrs","sex","village")],
+#'                id=dc$id)
+#' set.seed(12345)
+#' imean <-tmleAb(Y=log10(di$ifatpftitre+1),
+#'                W=di[,c("ageyrs","sex","village")],
+#'                id=di$id)
+#'
+#' # estimate targeted difference in means
+#' # bewteen control and intervention villages
+#' # adjusted for age, sex and village
+#' set.seed(12345)
+#' psi_diff <-tmleAb(Y=log10(d$ifatpftitre+1),
+#'                   X=d$tr01,
+#'                   W=d[,c("ageyrs","sex","village")],
+#'                   id=d$id)
+#'}
 #'
 #' @export
 #'
-tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),RFnodesize=NULL,gamdf=NULL) {
+tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),g.SL.library=c("SL.glm"),RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner and tmle packages are loaded
   if (!requireNamespace("SuperLearner", quietly = TRUE)) {
@@ -56,7 +88,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
     fulld <- data.frame(id,Y)
   } else{
     nullW <-FALSE
-    # convert W into a design matrix (SuperLearner does not acommodate factor variables)
+    # convert W into a design matrix (SuperLearner currently does not acommodate factor variables)
     Wdesign <- design_matrix(W)
     fulld <- data.frame(id,Y,Wdesign)
   }
@@ -97,6 +129,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
 			W=subset(fitW,select=c(-X)),
 			id=fitd$id,
 			Q.SL.library=SL.library,
+			g.SL.library=g.SL.library,
 			family=family,
 			fluctuation = "logistic"
 		)
@@ -113,6 +146,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
                            W=emptyW,
                            id=fitd$id,
                            Q.SL.library=SL.library,
+                           g.SL.library=g.SL.library,
                            family=family,
                            fluctuation = "logistic"
     )
