@@ -12,16 +12,22 @@
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
+#' @param cvControl Optional list to control cross-valiation (see \code{\link[SuperLearner]{SuperLearner}} for details).
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
 #' @return \code{agecurveAb} returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables. Observations are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
 #'
 #'
+#' @details The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}}).
 #'
-#' @details The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}})  Note that if \code{SL.randomForest} is included in the library, \code{agecurveAb} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function. Similarly, if \code{SL.gam} is included in the library, \code{agecurveAb} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument \code{gamdf} through this function.
+#' Use \code{cvControl} to optionally control the V-fold cross-validation. The default is to use V=10 folds, without stratification. (see \code{\link[SuperLearner]{SuperLearner.CV.control}} for details).
 #'
-#' @seealso \code{\link{tmleAb}}
-#' @seealso \code{\link[SuperLearner]{SuperLearner}}
+#' If \code{SL.randomForest} is included in the library, \code{agecurveAb} will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument \code{RFnodesize} through this function.
+#'
+#' Similarly, if \code{SL.gam} is included in the library, \code{agecurveAb} will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument \code{gamdf} through this function.
+#'
+#' @seealso
+#' \code{\link{tmleAb}}, \code{\link[SuperLearner]{SuperLearner}}
 #'
 #' @references van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115. \link{http://www.ncbi.nlm.nih.gov/pubmed/17910531}
 #'
@@ -29,6 +35,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # load the Garki project serology data
 #' data("garki_sero")
 #' garki_sero$village <- factor(garki_sero$village)
@@ -42,17 +49,25 @@
 #'
 #' # fit an age-antibody curve in control and intervention villages
 #' # adjusted for sex and village
-#' # set a seed for perfectly reproducible splits in the V-fold cross validation
+#' # set a seed for perfectly reproducible
+#' # splits in the V-fold cross validation
 #' set.seed(12345)
-#' ccurve <-agecurveAb(Y=log10(dc$ifatpftitre+1),Age=dc$ageyrs,W=dc[,c("sex","village")],id=dc$id)
+#' ccurve <-agecurveAb(Y=log10(dc$ifatpftitre+1),
+#'                     Age=dc$ageyrs,
+#'                     W=dc[,c("sex","village")],
+#'                     id=dc$id)
 #' set.seed(12345)
-#' icurve <-agecurveAb(Y=log10(di$ifatpftitre+1),Age=di$ageyrs,W=dc[,c("sex","village")],id=di$id)
+#' icurve <-agecurveAb(Y=log10(di$ifatpftitre+1),
+#'                     Age=di$ageyrs,
+#'                     W=di[,c("sex","village")],
+#'                     id=di$id)
 #'
 #' # plot the curves
 #' plot(ccurve$Age,ccurve$pY,type="l",ylim=c(0,4),bty="l",las=1)
 #' lines(icurve$Age,icurve$pY,col="blue")
+#' }
 #'
-agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.mean","SL.glm","SL.gam","SL.loess"), RFnodesize=NULL,gamdf=NULL) {
+agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.mean","SL.glm","SL.gam","SL.loess"),cvControl=list(),RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner package is loaded
   if (!requireNamespace("SuperLearner", quietly = TRUE)) {
@@ -68,7 +83,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
     fulld <- data.frame(id,Y,Age)
   } else{
     nullW <-FALSE
-    # convert W into a design matrix (SuperLearner does not acommodate factor variables)
+    # convert W into a design matrix (SuperLearner currently does not acommodate factor variables)
     Wdesign <- design_matrix(W)
     fulld <- data.frame(id,Y,Age,Wdesign)
   }
@@ -99,7 +114,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
   }
 
   # Fit SuperLearner
-  SLfit <- SuperLearner::SuperLearner(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,family=family,method="method.NNLS")
+  SLfit <- SuperLearner::SuperLearner(Y=fitd$Y,X=X,id=fitd$id, cvControl=cvControl, SL.library=SL.library,family=family,method="method.NNLS")
   p_res <- cbind(SLfit$cvRisk,SLfit$coef)
   colnames(p_res) <- c("CV-Risk","Coef")
   cat("\nSummary of SuperLearner cross validated risk and \nweights for algorithms included in the library:\n\n")
