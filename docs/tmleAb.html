@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>tmleAb. tmleAb 0.1.2</title>
+<title>tmleAb. tmleAb 0.2.0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.1.2</a>
+      <a class="brand" href="index.html">tmleAb 0.2.0</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -56,7 +56,7 @@
     <h2>Usage</h2>
     <pre><span class="functioncall"><a href='tmleAb.html'>tmleAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="argument">X</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">W</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="string">"gaussian"</span><span class="keyword">,</span>
   <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span> <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">)</span><span class="keyword">,</span>
-  <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+  <span class="argument">g.SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.glm"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -71,7 +71,9 @@
       <dt>family</dt>
       <dd>Model family (gaussian for continuous outcomes, binomial for binary outcomes)</dd>
       <dt>SL.library</dt>
-      <dd>Library of algorithms to include in the ensemble (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details).</dd>
+      <dd>Library of models/algorithms to include in the ensemble for the outcome (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details).</dd>
+      <dt>g.SL.library</dt>
+      <dd>Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).</dd>
       <dt>RFnodesize</dt>
       <dd>Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If <code>SL.library</code> includes <code>SL.randomForest</code>, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.</dd>
       <dt>gamdf</dt>
@@ -100,7 +102,7 @@
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Targeted maximum liklihood estimation (TMLE) for mean antibody levels or differences in antibody levels</p>
+      <p>Targeted maximum liklihood estimation (TMLE) for mean antibody measurements or difference in antibody measurements between groups</p>
 
     </div>
 
@@ -121,7 +123,39 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># TBD</span></div></pre>
+    <pre class="examples"><div class='input'><span class="comment">## Not run: ------------------------------------</span>
+<span class="comment"># # load the Garki project serology data, subset to round 5</span>
+<span class="comment"># data("garki_sero")</span>
+<span class="comment"># garki_sero$village &lt;- factor(garki_sero$village)</span>
+<span class="comment"># garki_sero$sex &lt;- factor(garki_sero$sex)</span>
+<span class="comment"># garki_sero$tr01 &lt;- ifelse(garki_sero$tr=="Intervention",1,0)</span>
+<span class="comment"># d &lt;- subset(garki_sero,serosvy==5)</span>
+<span class="comment"># </span>
+<span class="comment"># # control and intervention village measurements</span>
+<span class="comment"># dc &lt;- subset(d, tr=="Control")</span>
+<span class="comment"># di &lt;- subset(d,tr=="Intervention")</span>
+<span class="comment"># </span>
+<span class="comment"># # estimate means in control and intervention villages</span>
+<span class="comment"># # set a seed for perfectly reproducible splits</span>
+<span class="comment"># # in the V-fold cross validation</span>
+<span class="comment"># set.seed(12345)</span>
+<span class="comment"># cmean &lt;-tmleAb(Y=log10(dc$ifatpftitre+1),</span>
+<span class="comment">#                W=dc[,c("ageyrs","sex","village")],</span>
+<span class="comment">#                id=dc$id)</span>
+<span class="comment"># set.seed(12345)</span>
+<span class="comment"># imean &lt;-tmleAb(Y=log10(di$ifatpftitre+1),</span>
+<span class="comment">#                W=di[,c("ageyrs","sex","village")],</span>
+<span class="comment">#                id=di$id)</span>
+<span class="comment"># </span>
+<span class="comment"># # estimate targeted difference in means</span>
+<span class="comment"># # bewteen control and intervention villages</span>
+<span class="comment"># # adjusted for age, sex and village</span>
+<span class="comment"># set.seed(12345)</span>
+<span class="comment"># psi_diff &lt;-tmleAb(Y=log10(d$ifatpftitre+1),</span>
+<span class="comment">#                   X=d$tr01,</span>
+<span class="comment">#                   W=d[,c("ageyrs","sex","village")],</span>
+<span class="comment">#                   id=d$id)</span>
+<span class="comment">## ---------------------------------------------</span></div></pre>
   </div>
   <div class="span4 sidebar">
     <!-- <ul>
@@ -132,11 +166,7 @@
     </ul> -->
 
     <h2>See also</h2>
-      <p><code><a href='agecurveAb.html'>agecurveAb</a></code></p>
-
-      <p><code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
-
-      <p><code><a href='http://www.rdocumentation.org/packages/tmle/topics/tmle'>tmle</a></code></p>
+      <p><code><a href='agecurveAb.html'>agecurveAb</a></code>, <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code>,  <code><a href='http://www.rdocumentation.org/packages/tmle/topics/tmle'>tmle</a></code></p>
 
     
 

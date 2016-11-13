@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>agecurveAb. tmleAb 0.1.2</title>
+<title>agecurveAb. tmleAb 0.2.0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.1.2</a>
+      <a class="brand" href="index.html">tmleAb 0.2.0</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -56,7 +56,7 @@
     <h2>Usage</h2>
     <pre><span class="functioncall"><a href='agecurveAb.html'>agecurveAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">Age</span><span class="keyword">,</span> <span class="argument">W</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/family'>gaussian</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span>
   <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span> <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">)</span><span class="keyword">,</span>
-  <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+  <span class="argument">cvControl</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -72,6 +72,8 @@
       <dd>Model family (gaussian for continuous outcomes, binomial for binary outcomes)</dd>
       <dt>SL.library</dt>
       <dd>Library of algorithms to include in the ensemble (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details).</dd>
+      <dt>cvControl</dt>
+      <dd>Optional list to control cross-valiation (see <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> for details).</dd>
       <dt>RFnodesize</dt>
       <dd>Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If <code>SL.library</code> includes <code>SL.randomForest</code>, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.</dd>
       <dt>gamdf</dt>
@@ -97,19 +99,55 @@
     <div class="Details">
       <h2>Details</h2>
 
-      <p>The <code>agecurveAb</code> function is a wrapper for <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> that provides a convenient interface for this specific estimation problem. If the <code>SL.library</code> argument includes just one model or algorithm, then there is no &#39;ensemble&#39; but the function provides a standard interface for using single algorithms (e.g., <code>SL.loess</code>)  Note that if <code>SL.randomForest</code> is included in the library, <code>agecurveAb</code> will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument <code>RFnodesize</code> through this function. Similarly, if <code>SL.gam</code> is included in the library, <code>agecurveAb</code> will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument <code>gamdf</code> through this function.</p>
+      <p>The <code>agecurveAb</code> function is a wrapper for <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> that provides a convenient interface for this specific estimation problem. If the <code>SL.library</code> argument includes just one model or algorithm, then there is no &#39;ensemble&#39; but the function provides a standard interface for using single algorithms (e.g., <code>SL.loess</code>).</p>
+
+      <p>Use <code>cvControl</code> to optionally control the V-fold cross-validation. The default is to use V=10 folds, without stratification. (see <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner.CV.control'>SuperLearner.CV.control</a></code> for details).</p>
+
+      <p>If <code>SL.randomForest</code> is included in the library, <code>agecurveAb</code> will select the minimum node size (between 15 and 40) with cross-validation to avoid over-fitting. If you wish to control the randomForest node size options using a range other than 15-40, you can do so by passing an argument <code>RFnodesize</code> through this function.</p>
+
+      <p>Similarly, if <code>SL.gam</code> is included in the library, <code>agecurveAb</code> will select the optimal degrees of freedom for natural splines (between 2 and 10) with cross-validation to get the correct amount of smoothing.  If you wish to control the GAM df search, you can do so by passing an argument <code>gamdf</code> through this function.</p>
 
     </div>
 
     <div class="References">
       <h2>References</h2>
 
-      <p>van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.</p>
+      <p>van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115. http://www.ncbi.nlm.nih.gov/pubmed/17910531</p>
 
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># TBD</span></div></pre>
+    <pre class="examples"><div class='input'><span class="comment">## Not run: ------------------------------------</span>
+<span class="comment"># # load the Garki project serology data</span>
+<span class="comment"># data("garki_sero")</span>
+<span class="comment"># garki_sero$village &lt;- factor(garki_sero$village)</span>
+<span class="comment"># garki_sero$sex &lt;- factor(garki_sero$sex)</span>
+<span class="comment"># </span>
+<span class="comment"># # control village measurements in round 5</span>
+<span class="comment"># dc &lt;- subset(garki_sero,serosvy==5 &amp; tr=="Control")</span>
+<span class="comment"># </span>
+<span class="comment"># # intervention village measurements in round 5</span>
+<span class="comment"># di &lt;- subset(garki_sero,serosvy==5 &amp; tr=="Intervention")</span>
+<span class="comment"># </span>
+<span class="comment"># # fit an age-antibody curve in control and intervention villages</span>
+<span class="comment"># # adjusted for sex and village</span>
+<span class="comment"># # set a seed for perfectly reproducible</span>
+<span class="comment"># # splits in the V-fold cross validation</span>
+<span class="comment"># set.seed(12345)</span>
+<span class="comment"># ccurve &lt;-agecurveAb(Y=log10(dc$ifatpftitre+1),</span>
+<span class="comment">#                     Age=dc$ageyrs,</span>
+<span class="comment">#                     W=dc[,c("sex","village")],</span>
+<span class="comment">#                     id=dc$id)</span>
+<span class="comment"># set.seed(12345)</span>
+<span class="comment"># icurve &lt;-agecurveAb(Y=log10(di$ifatpftitre+1),</span>
+<span class="comment">#                     Age=di$ageyrs,</span>
+<span class="comment">#                     W=di[,c("sex","village")],</span>
+<span class="comment">#                     id=di$id)</span>
+<span class="comment"># </span>
+<span class="comment"># # plot the curves</span>
+<span class="comment"># plot(ccurve$Age,ccurve$pY,type="l",ylim=c(0,4),bty="l",las=1)</span>
+<span class="comment"># lines(icurve$Age,icurve$pY,col="blue")</span>
+<span class="comment">## ---------------------------------------------</span></div></pre>
   </div>
   <div class="span4 sidebar">
     <!-- <ul>
@@ -120,9 +158,7 @@
     </ul> -->
 
     <h2>See also</h2>
-      <p><code><a href='tmleAb.html'>tmleAb</a></code></p>
-
-      <p><code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
+      <p><code><a href='tmleAb.html'>tmleAb</a></code>, <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
 
     
 

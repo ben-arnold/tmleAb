@@ -1,9 +1,12 @@
 ---
 title: "tmleAb"
-author: "vignette for version 0.1.2"
+author: "vignette for version 0.2.0"
 date: "`r Sys.Date()`"
-output:
-  rmarkdown::html_document:
+output: 
+  html_document:
+    theme: default
+    highlight: haddock
+    mode: selfcontained
     toc: true
     toc_float: true
     fig_width: 6
@@ -28,7 +31,9 @@ require(scales)
 
 ## Overview
 
-This vignette describes the main functions in the `tmleAb` package. The software is written in [R](http://www.r-project.org) and is developed on [GitHub](http://www.github.com/ben-arnold/tmleAb). We also recommend the free [RStudio](https://www.rstudio.com/) computing environment.
+This vignette describes the main functions in the `tmleAb` package. The software is written in [R](http://www.r-project.org) and is developed on [GitHub](http://www.github.com/ben-arnold/tmleAb). We also recommend the free [RStudio](https://www.rstudio.com/) computing environment.  
+
+This package is based on work funded by the National Institute of Allergy and Infectius Diseases grant K01-AI119180.
 
 `tmleAb` is first and foremost a convenience wrapper for two related R packages (both required): `SuperLearner` and `tmle` both on the [CRAN repository](https://cran.r-project.org/). Gruber and van der Laan^[Gruber S, van der Laan M. tmle: An R Package for Targeted Maximum Likelihood Estimation. J Stat Softw. 2012;51: 1–35.] provide a helpful overview of the `tmle` package, and the `SuperLearner` [GitHub page](https://github.com/ecpolley/SuperLearner) includes additional resources beyond the R package and the original article^[van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol. 2007;6: 1544–6115.].
 
@@ -53,9 +58,9 @@ Please see the article _Measuring population changes in infectious disease trans
 ## Istallation and Updates
 
 You can install this package from GitHub using the `devtools` package in R. 
-```
+```{r install,eval=FALSE}
 library(devtools)
-install_github("ben-arnold/tmleAb")
+devtools::install_github("ben-arnold/tmleAb")
 ```
 
 The package is in active development, so periodically check for updates!  We have many updated features planned.  If you use the package and have any comments please send them along -- we'd love to hear from you.
@@ -67,7 +72,6 @@ The `agecurveAb` function provides a convenient way to estimate an age-dependent
 ```{r read data}
 # load the package into R
 library(tmleAb)
-library(SuperLearner)
 # load the Garki serology data (included in the package)
 data(garki_sero)
 # and subset it to measurement rounds 3-5, ages <20, non-missing IFA Pf titres
@@ -180,7 +184,7 @@ fit_iadj <- agecurveAb(Y=di$logpftitre,Age=di$ageyrs,id=di$id,
                        W=subset(di,select=c("sex","wetseason","vname")),
                        SL.library=mylib)
 ```
-Although the cross-validated MSE ("risk") is slightly lower after adjusting for the additional covariates, the mean age-antibody relationship is remarkably similar after adjustment.
+Although the cross-validated MSE ("risk") is slightly lower after adjusting for the additional covariates, the mean age-antibody relationship is very similar after adjustment.
 
 ```{r plot intervention adj}
 # compare the results with the unadjusted curve
@@ -205,7 +209,7 @@ Here, the parameter of interest is the group mean or difference in means, margin
 
 ### arguments
 
-The `tmleAb` function has (by design) almost identical arguments to `agecurveAb`, but replaces `Age` with `X`:
+The `tmleAb` function has (by design) almost identical arguments to `agecurveAb`. These are the most important arguments:
 
 * `Y` : antibody measurement
 
@@ -221,7 +225,7 @@ The `tmleAb` function has (by design) almost identical arguments to `agecurveAb`
 If `X=NULL`, then `tmleAb` estimates the marginal mean antibody level along with influence curve based standard errors.  If `X` includes a binary indicator for groups, then `tmleAb` estimates the difference between groups and provides inference for the difference.
 
 ### estimate group means
-Above in the `agecurveAb` example, we used the _P. falciparum_ IFA test results in control and intervention villages. In the notation above, intervention is denoted $X=1$ and control is $X=0$. Here, we illustrate how to estimate group means and in the next section a difference in means.
+Above in the `agecurveAb` example, we used the _P. falciparum_ IFA test results in control and intervention villages. Using the notation above, intervention is denoted $X=1$ and control is $X=0$. Here, we illustrate how to estimate group means and in the next section a difference in means.
 
 ```{r fit EYx,cache=TRUE}
 # list of models and algorithms to include:
@@ -245,6 +249,7 @@ The age-antibody curves in control and intervention villages look different, and
 # make a binary indicator variable for intervention vs. control
 d$tr01 <- ifelse(d$tr=="Intervention",1,0)
 W <- data.frame(Age=d$ageyrs)
+# estimate the difference between groups
 psi_diff <- tmleAb(Y=d$logpftitre,X=d$tr01,W=W,id=d$id,SL.library=mylib)
 ```
 
@@ -261,7 +266,7 @@ The `tmleAb` function returns a list that includes the following objects:
 
 ## Additional functions
 
-The `tmleAb` package includes some additional functions that are listed on the reference page. Most are internal functions that you can ignore, but some are useful.  If you wish to evaluate the predictive performance of the super learner and its constituent algorithms, then the `cvSLAb()` function provides a convenient wrapper for the `CV.SuperLearner()` routine.  If you wish to fit age-dependent antibody acquisition models, then the `Yman2016()` function enables this.  
+The `tmleAb` package includes some additional functions that are listed on the reference page. Most are internal functions that you can ignore, but some are useful.  If you wish to evaluate the predictive performance of the Super Learner and its constituent algorithms, then the `cvSLAb()` function provides a convenient wrapper for the `CV.SuperLearner()` routine.  If you wish to fit age-dependent antibody acquisition models, then the `Yman2016()` function enables this.  
 
 
 ## References

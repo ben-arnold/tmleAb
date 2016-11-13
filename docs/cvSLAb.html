@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>cvSLAb. tmleAb 0.1.2</title>
+<title>cvSLAb. tmleAb 0.2.0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.1.2</a>
+      <a class="brand" href="index.html">tmleAb 0.2.0</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -100,7 +100,22 @@ This function returns an object of class <code>CV.SuperLearner</code> (see the <
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># TBD</span></div></pre>
+    <pre class="examples"><div class='input'><span class="comment">## Not run: ------------------------------------</span>
+<span class="comment"># # load the Garki project serology data, subset to round 5 intervention</span>
+<span class="comment"># data("garki_sero")</span>
+<span class="comment"># garki_sero$village &lt;- factor(garki_sero$village)</span>
+<span class="comment"># garki_sero$sex &lt;- factor(garki_sero$sex)</span>
+<span class="comment"># garki_sero$tr01 &lt;- ifelse(garki_sero$tr=="Intervention",1,0)</span>
+<span class="comment"># d &lt;- subset(garki_sero,serosvy==5 &amp; tr=="Intervention")</span>
+<span class="comment"># </span>
+<span class="comment"># # fit the cross-validated super learner</span>
+<span class="comment"># # with just Age as the predictor</span>
+<span class="comment"># set.seed(62522)</span>
+<span class="comment"># CVfit &lt;- cvSLAb(Y=log10(d$ifatpftitre+1),X=data.frame(Age=d$ageyrs),id=d$id)</span>
+<span class="comment"># </span>
+<span class="comment"># # plot cross-validated MSE ("Risk")</span>
+<span class="comment"># plot(CVfit)</span>
+<span class="comment">## ---------------------------------------------</span></div></pre>
   </div>
   <div class="span4 sidebar">
     <!-- <ul>
@@ -111,9 +126,7 @@ This function returns an object of class <code>CV.SuperLearner</code> (see the <
     </ul> -->
 
     <h2>See also</h2>
-      <p><code><a href='tmleAb.html'>tmleAb</a></code></p>
-
-      <p><code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
+      <p><code><a href='tmleAb.html'>tmleAb</a></code>, <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code></p>
 
     
 
