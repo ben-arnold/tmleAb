@@ -4,9 +4,9 @@
 \alias{cvSLAb}
 \title{Estimate cross-validated risk for the super learner fit to antibody data}
 \usage{
-cvSLAb(Y, X, id = 1:length(Y), family = gaussian(), V = 10,
-  SL.library = c("SL.mean", "SL.glm", "SL.bayesglm", "SL.loess", "SL.gam",
-  "SL.randomForest"), RFnodesize = NULL, gamdf = NULL)
+cvSLAb(Y, X, id = 1:length(Y), V = 10, SL.library = c("SL.mean", "SL.glm",
+  "SL.bayesglm", "SL.loess", "SL.gam", "SL.randomForest"), RFnodesize = NULL,
+  gamdf = NULL)
 }
 \arguments{
 \item{Y}{Antibody measurement. Must be a numeric vector.}
@@ -15,7 +15,7 @@ cvSLAb(Y, X, id = 1:length(Y), family = gaussian(), V = 10,
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
 
-\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
+\item{V}{Number of folds to use in the cross validation (default is 10)}
 
 \item{SL.library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
 
@@ -30,7 +30,7 @@ This function returns an object of class \code{CV.SuperLearner} (see the \code{\
 A convenience wrapper for \code{\link[SuperLearner]{CV.SuperLearner}} for antibody measurements.
 }
 \details{
-The SuperLearner function builds a estimator, but does not contain an estimate on the performance of the estimator. Various methods exist for estimator performance evaluation. If you are familiar with the super learner algorithm, it should be no surprise we recommend using cross-validation to evaluate the honest performance of the super learner estimator. The function \code{cvSLAb} provides a convenient wrapper for the \code{CV.SuperLearner} routine to compute the V-fold cross-validated risk estimate for the super learner (and all algorithms in \code{SL.library} for comparison). The wrapper adds convenience by restricting the dataset to complete cases, transforming the covariate matrix (\code{W}) into a data.frame, and allowing the user to tune parameters in the Random Forest and GAM libraries if they are included in \code{SL.library}.
+The SuperLearner function builds a estimator, but does not contain an estimate on the performance of the estimator. Various methods exist for estimator performance evaluation. If you are familiar with the super learner algorithm, it should be no surprise we recommend using cross-validation to evaluate the honest performance of the super learner estimator. The function \code{cvSLAb} provides a convenient wrapper for the \code{CV.SuperLearner} routine to compute the V-fold cross-validated risk estimate for the super learner (and all algorithms in \code{SL.library} for comparison). The wrapper adds convenience by restricting the dataset to complete cases, transforming the covariate matrix (\code{W}) into a data.frame, and allowing the user to tune parameters in the Random Forest and GAM libraries if they are included in \code{SL.library}. It assumes a continuous outcome (\code{family=gaussian()}), but can be run on binary outcomes without problems.
 }
 \examples{
 \dontrun{

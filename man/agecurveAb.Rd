@@ -32,7 +32,7 @@ agecurveAb(Y, Age, W = NULL, id = NULL, SL.library = c("SL.mean",
 \code{agecurveAb} uses ensemble machine learning with \code{\link[SuperLearner]{SuperLearner}} to fit population mean antibody curves by age. If covariates \code{W} are included, the predicted curve is marginally adjusted for \code{W}.
 }
 \details{
-The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}}). \code{agecurveAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate seroprevalence as a function of age and other covariates.
+The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{SL.loess} for \code{[stats]{loess}}). \code{agecurveAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate seroprevalence as a function of age and other covariates.
 
 Use \code{cvControl} to optionally control the V-fold cross-validation. The default is to use V=10 folds, without stratification. (see \code{\link[SuperLearner]{SuperLearner.CV.control}} for details).
 

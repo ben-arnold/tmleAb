@@ -97,7 +97,7 @@
     <div class="Details">
       <h2>Details</h2>
 
-      <p>The <code>agecurveAb</code> function is a wrapper for <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> that provides a convenient interface for this specific estimation problem. If the <code>SL.library</code> argument includes just one model or algorithm, then there is no &#39;ensemble&#39; but the function provides a standard interface for using single algorithms (e.g., <code>SL.loess</code>). <code>agecurveAb</code> assumes a continuous outcome (<code>family=&#39;gaussian&#39;</code>), but if a binary outcome is passed to the function it will estimate seroprevalence as a function of age and other covariates.</p>
+      <p>The <code>agecurveAb</code> function is a wrapper for <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> that provides a convenient interface for this specific estimation problem. If the <code>SL.library</code> argument includes just one model or algorithm, then there is no &#39;ensemble&#39; but the function provides a standard interface for using single algorithms (e.g., <code>SL.loess</code> for <code>[stats]{loess}</code>). <code>agecurveAb</code> assumes a continuous outcome (<code>family=&#39;gaussian&#39;</code>), but if a binary outcome is passed to the function it will estimate seroprevalence as a function of age and other covariates.</p>
 
       <p>Use <code>cvControl</code> to optionally control the V-fold cross-validation. The default is to use V=10 folds, without stratification. (see <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner.CV.control'>SuperLearner.CV.control</a></code> for details).</p>
 

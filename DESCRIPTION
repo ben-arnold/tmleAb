@@ -4,14 +4,14 @@ Title: Targeted maximum likelihood estimation for antibody measurements
 Version: 0.3.0
 Authors@R: as.person(c("Ben Arnold <benarnold@berkeley.edu> [aut, cre]","Kunal Mishra <kmisrha9@berkeley.edu> [aut]","Mark van der Laan <laan@berkeley.edu> [aut]","Alan Hubbard <hubbard@berkeley.edu> [aut]"))
 URL: http://github.com/ben-arnold/tmleAb
-Description: Targeted maximum likelihood estimation for antibody measurements in R. In addition to estimating age-dependent
-    antibody curves, the tmleAb package makes it easy to estimate marginally
-    adjusted means from the curves, and compare marginally adjusted means between
-    populations. This package is in large part a convenience wrapper: the heavy lifting for machine
-    learning is conducted using the \code{\link[SuperLearner]{SuperLearner}} package, and statistical estimation
-    is conducted using the \code{\link[tmle]{tmle}} package.
-    However, it also provides easy access to parametric modeling methods applied to antibody data.
-License: This software is distributed under the GPL-2 license
+Description: Targeted maximum likelihood estimation for antibody measurements in
+    R. In addition to estimating age-dependent antibody curves, the tmleAb package
+    makes it easy to estimate marginally adjusted means from the curves, and compare
+    marginally adjusted means between populations. This package is in large part a
+    convenience wrapper: the heavy lifting for machine learning is conducted using
+    the \code{\link[SuperLearner]{SuperLearner}} package, and statistical estimation
+    is conducted using the \code{\link[tmle]{tmle}} package. However, it also
+    provides easy access to parametric modeling methods applied to antibody data.
 LazyData: TRUE
 Imports:
     SuperLearner (>= 2.0),
@@ -25,5 +25,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-RoxygenNote: 5.0.1
+License: GPL-2
+oxygenNote: 5.0.1
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1

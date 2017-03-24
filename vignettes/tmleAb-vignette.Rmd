@@ -21,6 +21,8 @@ vignette: >
 
 ```{r algorithm libraries,include=FALSE}
 # load other algorithm packages to clean up the output for agecurveAb(), below
+require(tmle)
+require(SuperLearner)
 require(randomForest)
 require(arm)
 require(gam)
