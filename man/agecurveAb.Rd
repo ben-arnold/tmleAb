@@ -4,9 +4,9 @@
 \alias{agecurveAb}
 \title{Fit an age-dependent antibody curve with ensemble machine learning}
 \usage{
-agecurveAb(Y, Age, W = NULL, id = NULL, family = gaussian(),
-  SL.library = c("SL.mean", "SL.glm", "SL.gam", "SL.loess"),
-  cvControl = list(), RFnodesize = NULL, gamdf = NULL)
+agecurveAb(Y, Age, W = NULL, id = NULL, SL.library = c("SL.mean",
+  "SL.glm", "SL.gam", "SL.loess"), cvControl = list(), RFnodesize = NULL,
+  gamdf = NULL)
 }
 \arguments{
 \item{Y}{Antibody measurement. Must be a numeric vector.}
@@ -16,8 +16,6 @@ agecurveAb(Y, Age, W = NULL, id = NULL, family = gaussian(),
 \item{W}{An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve}
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
-
-\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
 
 \item{SL.library}{Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
 
@@ -34,7 +32,7 @@ agecurveAb(Y, Age, W = NULL, id = NULL, family = gaussian(),
 \code{agecurveAb} uses ensemble machine learning with \code{\link[SuperLearner]{SuperLearner}} to fit population mean antibody curves by age. If covariates \code{W} are included, the predicted curve is marginally adjusted for \code{W}.
 }
 \details{
-The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}}).
+The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}}). \code{agecurveAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate seroprevalence as a function of age and other covariates.
 
 Use \code{cvControl} to optionally control the V-fold cross-validation. The default is to use V=10 folds, without stratification. (see \code{\link[SuperLearner]{SuperLearner.CV.control}} for details).
 

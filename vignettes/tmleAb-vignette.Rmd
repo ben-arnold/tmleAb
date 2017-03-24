@@ -1,6 +1,6 @@
 ---
 title: "tmleAb"
-author: "vignette for version 0.2.0"
+author: "vignette for version 0.3.0"
 date: "`r Sys.Date()`"
 output: 
   html_document:

@@ -4,9 +4,9 @@
 \alias{tmleAb}
 \title{Targeted maximum liklihood estimation for antibody measurements}
 \usage{
-tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
-  SL.library = c("SL.mean", "SL.glm", "SL.gam", "SL.loess"),
-  g.SL.library = c("SL.glm"), RFnodesize = NULL, gamdf = NULL)
+tmleAb(Y, X = NULL, W = NULL, id = NULL, SL.library = c("SL.mean",
+  "SL.glm", "SL.gam", "SL.loess"), g.SL.library = c("SL.glm"),
+  RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
 \item{Y}{antibody measurement}
@@ -16,8 +16,6 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
 \item{W}{matrix of covariates -- should probably at minimum include the individual's age (if available).}
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
-
-\item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
 
 \item{SL.library}{Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
 
@@ -44,7 +42,7 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
 Targeted maximum liklihood estimation (TMLE) for mean antibody measurements or difference in antibody measurements between groups
 }
 \details{
-The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE).
+The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE). \code{tmleAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate means or differences in terms of seroprevalence.
 }
 \examples{
 \dontrun{

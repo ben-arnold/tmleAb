@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>tmleAb. tmleAb 0.2.0</title>
+<title>tmleAb. tmleAb 0.3.0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.2.0</a>
+      <a class="brand" href="index.html">tmleAb 0.3.0</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -54,9 +54,9 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='tmleAb.html'>tmleAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="argument">X</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">W</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="string">"gaussian"</span><span class="keyword">,</span>
-  <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span> <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">)</span><span class="keyword">,</span>
-  <span class="argument">g.SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.glm"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+    <pre><span class="functioncall"><a href='tmleAb.html'>tmleAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="argument">X</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">W</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span>
+  <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">g.SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.glm"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -68,8 +68,6 @@
       <dd>matrix of covariates -- should probably at minimum include the individual&#39;s age (if available).</dd>
       <dt>id</dt>
       <dd>An optional cluster or repeated measures id variable. For cross-validation splits, <code>id</code> forces observations in the same cluster or for the same individual to be in the same validation fold.</dd>
-      <dt>family</dt>
-      <dd>Model family (gaussian for continuous outcomes, binomial for binary outcomes)</dd>
       <dt>SL.library</dt>
       <dd>Library of models/algorithms to include in the ensemble for the outcome (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details).</dd>
       <dt>g.SL.library</dt>
@@ -109,7 +107,7 @@
     <div class="Details">
       <h2>Details</h2>
 
-      <p>The <code>tmleAb</code> function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE).</p>
+      <p>The <code>tmleAb</code> function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE). <code>tmleAb</code> assumes a continuous outcome (<code>family=&#39;gaussian&#39;</code>), but if a binary outcome is passed to the function it will estimate means or differences in terms of seroprevalence.</p>
 
     </div>
 

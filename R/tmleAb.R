@@ -7,14 +7,13 @@
 #' @param X comparison group  (must be binary, 0/1). If \code{X=NULL}, then the function returns the mean (rather than the difference between levels of \code{X}).
 #' @param W matrix of covariates -- should probably at minimum include the individual's age (if available).
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
-#' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param g.SL.library Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
 #' @details
-#' The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE).
+#' The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE). \code{tmleAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate means or differences in terms of seroprevalence.
 #'
 #' @return \code{psi} Mean (if \code{X=NULL}) or difference
 #' @return \code{se} Standard error of \code{psi}, estimated from the influence curve
@@ -66,7 +65,7 @@
 #'
 #' @export
 #'
-tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),g.SL.library=c("SL.glm"),RFnodesize=NULL,gamdf=NULL) {
+tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),g.SL.library=c("SL.glm"),RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner and tmle packages are loaded
   if (!requireNamespace("SuperLearner", quietly = TRUE)) {
@@ -110,7 +109,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
 	# select optimal node size (tree depth) using cross-validated risk
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
-	  cvRF <- ab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,family=family,SL.library=SL.library,RFnodesize=RFnodesize)
+	  cvRF <- ab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 
@@ -130,7 +129,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
 			id=fitd$id,
 			Q.SL.library=SL.library,
 			g.SL.library=g.SL.library,
-			family=family,
+			family="gaussian",
 			fluctuation = "logistic"
 		)
 		tmle::print.tmle(tmle_fit)
@@ -147,7 +146,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
                            id=fitd$id,
                            Q.SL.library=SL.library,
                            g.SL.library=g.SL.library,
-                           family=family,
+                           family="gaussian",
                            fluctuation = "logistic"
     )
     tmle::print.tmle(tmle_fit)
@@ -162,7 +161,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
 			W=fitW,
 			id=fitd$id,
 			Q.SL.library=SL.library,
-			family=family,
+			family="gaussian",
 			fluctuation = "logistic"
 		)
 		tmle::print.tmle(tmle_fit)
@@ -178,7 +177,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.me
                            W=emptyW,
                            id=fitd$id,
                            Q.SL.library=SL.library,
-                           family=family,
+                           family="gaussian",
                            fluctuation = "logistic"
     )
     tmle::print.tmle(tmle_fit)

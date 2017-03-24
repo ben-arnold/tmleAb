@@ -1,7 +1,7 @@
 
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to the tmleAb package\nTargeted maximum likelihood estimation for antibody measurements.\n(Version 0.2.0)\n\nPeriodically check for the latest development version using \ndevtools::install_github('ben-arnold/tmleAb')  \n\nThis software is based on work funded by the National Institute of Allergy and Infectius Diseases grant K01-AI119180\n\n")
+  packageStartupMessage("Welcome to the tmleAb package\nTargeted maximum likelihood estimation for antibody measurements.\n(Version 0.3.0, release date 2017-03-24)\n\nPeriodically check for the latest development version using \ndevtools::install_github('ben-arnold/tmleAb')  \n\nThis software is based on work funded by the\nNational Institute of Allergy and Infectious Diseases\ngrant K01-AI119180\n\n")
 }
 
 .onLoad <- function(libname, pkgname) {

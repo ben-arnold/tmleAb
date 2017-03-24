@@ -9,7 +9,6 @@
 #' @param Age Age of the individual at the time of measurement. Must be a numeric vector.
 #' @param W An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
-#' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param cvControl Optional list to control cross-valiation (see \code{\link[SuperLearner]{SuperLearner}} for details).
@@ -18,7 +17,7 @@
 #' @return \code{agecurveAb} returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables. Observations are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
 #'
 #'
-#' @details The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}}).
+#' @details The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{\link[stats]{SL.loess}}). \code{agecurveAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate seroprevalence as a function of age and other covariates.
 #'
 #' Use \code{cvControl} to optionally control the V-fold cross-validation. The default is to use V=10 folds, without stratification. (see \code{\link[SuperLearner]{SuperLearner.CV.control}} for details).
 #'
@@ -67,7 +66,7 @@
 #' lines(icurve$Age,icurve$pY,col="blue")
 #' }
 #'
-agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.mean","SL.glm","SL.gam","SL.loess"),cvControl=list(),RFnodesize=NULL,gamdf=NULL) {
+agecurveAb <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.gam","SL.loess"),cvControl=list(),RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner package is loaded
   if (!requireNamespace("SuperLearner", quietly = TRUE)) {
@@ -113,8 +112,8 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,family=gaussian(),SL.library= c("SL.m
     SL.library <- cvGAM$SL.library
   }
 
-  # Fit SuperLearner
-  SLfit <- SuperLearner::SuperLearner(Y=fitd$Y,X=X,id=fitd$id, cvControl=cvControl, SL.library=SL.library,family=family,method="method.NNLS")
+  # Fit SuperLearner ensemble
+  SLfit <- SuperLearner::SuperLearner(Y=fitd$Y,X=X,id=fitd$id, cvControl=cvControl, SL.library=SL.library,family="gaussian",method="method.NNLS")
   p_res <- cbind(SLfit$cvRisk,SLfit$coef)
   colnames(p_res) <- c("CV-Risk","Coef")
   cat("\nSummary of SuperLearner cross validated risk and \nweights for algorithms included in the library:\n\n")
