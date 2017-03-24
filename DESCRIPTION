@@ -18,9 +18,10 @@ Imports:
     tmle (>= 1.2.0)
 Suggests:
     gam,
+    gbm,
     glmnet,
+    polspline,
     randomForest,
-    polysplines,
     knitr,
     rmarkdown,
     testthat
