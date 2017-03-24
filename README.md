@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/ben-arnold/tmleAb.svg)](https://travis-ci.org/ben-arnold/tmleAb)
+![CRAN](http://www.r-pkg.org/badges/version/tmleAb)
+
 # tmleAb
 tmleAb: Targeted maximum likelihood estimation for antibody data
 
