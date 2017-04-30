@@ -7,6 +7,7 @@
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param family Model family (gaussian for continuous outcomes, binomial for binary outcomes)
 #' @param SL.library SuperLearner library
+#' @param cvControl Optional list to control cross-valiation (see \code{\link[SuperLearner]{SuperLearner}} for details).
 #' @param print logical. print messages? Defaults to FALSE
 #' @param df a sequence of degrees of freedom to control the smoothness of natural splines in the GAM model. Defaults to 2:6
 #'
@@ -17,7 +18,7 @@
 #' @keywords internal
 #' @export
 
-ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:10) {
+ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,cvControl=list(),print=FALSE, df=2:10) {
   if(is.null(df)) {
     df <- 2:10
   }
@@ -42,7 +43,7 @@ ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,print=FALSE, df=2:
   # estimate cross-validated Risks for different node sizes
   cvRisks <- rep(NA,length(df))
   for(nn in seq(length(df))) {
-    fit <- SuperLearner(Y=Y,X=X,id=id,family=family,SL.library=paste("SL.gam.df",df[nn],sep=""))
+    fit <- SuperLearner(Y=Y,X=X,id=id,family=family,SL.library=paste("SL.gam.df",df[nn],sep=""),cvControl=cvControl)
     cvRisks[nn] <- fit$cvRisk
   }
   # identify the lowest risk

@@ -100,7 +100,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.
   # select optimal node size (tree depth) using cross-validated risk
   # and then update the ensemble library to include the optimal node size
   if (length(grep("SL.randomForest",SL.library))>0) {
-    cvRF <- ab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,RFnodesize=RFnodesize)
+    cvRF <- ab_cvRF(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,cvControl=cvControl,RFnodesize=RFnodesize)
     SL.library <- cvRF$SL.library
   }
 
@@ -108,7 +108,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.
   # select the optimal degrees of freedom for the smoothing splines using cross-validated risk
   # and then updated the ensemble library to include the optimal df
   if (length(grep("SL.gam",SL.library))>0) {
-    cvGAM <- ab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,df=gamdf)
+    cvGAM <- ab_cvGAM(Y=fitd$Y,X=X,id=fitd$id,SL.library=SL.library,cvControl=cvControl,df=gamdf)
     SL.library <- cvGAM$SL.library
   }
 
