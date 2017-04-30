@@ -10,11 +10,11 @@
 #' @param W An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param SL.library Library of algorithms to include in the ensemble (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
-#' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param cvControl Optional list to control cross-valiation (see \code{\link[SuperLearner]{SuperLearner}} for details).
+#' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
-#' @return \code{agecurveAb} returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables. Observations are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
+#' @return \code{agecurveAb} returns a list of objects, which includes the inputs used for estimation, along with fitted results (\code{pY}) and the \code{\link[SuperLearner]{SuperLearner}} object itself (\code{SLfit}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Also note that factors in \code{W} are converted to design-matrix-style indicator variables. Objects are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
 #'
 #'
 #' @details The \code{agecurveAb} function is a wrapper for \code{\link[SuperLearner]{SuperLearner}} that provides a convenient interface for this specific estimation problem. If the \code{SL.library} argument includes just one model or algorithm, then there is no 'ensemble' but the function provides a standard interface for using single algorithms (e.g., \code{SL.loess} for \code{[stats]{loess}}). \code{agecurveAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate seroprevalence as a function of age and other covariates.
@@ -139,9 +139,10 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.
     res <- merge(fitd,data.frame(Age=As,pY=pY),by="Age",all.x=T,all.y=T)
   }
 
-  # return the data frame with predicted values, sorted by Age for convenience
+  # return a list of objects, sorted by Age for convenience
   res <- res[order(res$Age),]
-  return(res)
+
+  list(pY=res$pY,Age=res$Age,Y=res$Y,W=subset(fitd,select=-c(1:3)),id=res$id,fit=SLfit)
 }
 
 
