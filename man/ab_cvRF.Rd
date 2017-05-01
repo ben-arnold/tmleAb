@@ -4,8 +4,8 @@
 \alias{ab_cvRF}
 \title{Select optimal tree depth for SL.randomForest() using cross-validation}
 \usage{
-ab_cvRF(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
-  RFnodesize = seq(15, 40, by = 5))
+ab_cvRF(Y, X, id = NULL, family = gaussian(), SL.library,
+  cvControl = list(), print = FALSE, RFnodesize = seq(15, 40, by = 5))
 }
 \arguments{
 \item{Y}{The outcome. Must be a numeric vector.}
@@ -17,6 +17,8 @@ ab_cvRF(Y, X, id = NULL, family = gaussian(), SL.library, print = FALSE,
 \item{family}{Model family (gaussian for continuous outcomes, binomial for binary outcomes)}
 
 \item{SL.library}{SuperLearner library}
+
+\item{cvControl}{Optional list to control cross-valiation (see \code{\link[SuperLearner]{SuperLearner}} for details).}
 
 \item{print}{logical. print messages? Defaults to FALSE}
 
@@ -35,4 +37,3 @@ ab_cvRF is an internal tuning function called by \code{agecurveAb} and \code{tml
 # TBD
 }
 \keyword{internal}
-

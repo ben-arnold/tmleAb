@@ -22,4 +22,3 @@ B. F. Arnold et al., Serological measures of malaria transmission in haiti: comp
 A. R. Freeman et al., A community-based trial for the control of lymphatic filariasis and iodine deficiency using salt fortified with diethylcarbamazine and iodine. Am. J. Trop. Med. Hyg. 65, 865–871 (2001).
 }
 \keyword{datasets}
-

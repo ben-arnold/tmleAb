@@ -26,7 +26,7 @@ agecurveAb(Y, Age, W = NULL, id = NULL, SL.library = c("SL.mean",
 \item{gamdf}{Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.}
 }
 \value{
-\code{agecurveAb} returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (\code{pY}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Factors in \code{W} are converted to design-matrix-style indicator variables. Observations are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
+\code{agecurveAb} returns a list of objects, which includes the inputs used for estimation, along with fitted results (\code{pY}) and the \code{\link[SuperLearner]{SuperLearner}} object itself (\code{SLfit}). Note that the estimation dataset excludes any observations with missing values in \code{Y}, \code{Age}, \code{W} (if not NULL), or \code{id} (if specified). Also note that factors in \code{W} are converted to design-matrix-style indicator variables. Objects are sorted by \code{Age} for more convenient plotting. If covariates are included, then \code{pY} is the mean predicted antibody level at \code{Age=a}, averaged over the covariates \code{W}.
 }
 \description{
 \code{agecurveAb} uses ensemble machine learning with \code{\link[SuperLearner]{SuperLearner}} to fit population mean antibody curves by age. If covariates \code{W} are included, the predicted curve is marginally adjusted for \code{W}.
@@ -80,4 +80,3 @@ van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol.
 \seealso{
 \code{\link{tmleAb}}, \code{\link[SuperLearner]{SuperLearner}}
 }
-

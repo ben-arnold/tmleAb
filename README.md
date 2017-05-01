@@ -4,7 +4,7 @@
 # tmleAb
 tmleAb: Targeted maximum likelihood estimation for antibody data
 
-The `tmleAb` package estimates age-dependent antibody curves, makes it easy to estimate marginally adjusted means from the curves, and compare marginally adjusted means between populations. 
+The `tmleAb` package estimates age-dependent antibody curves with ensemble machine learning, makes it easier to estimate marginally adjusted means from the curves, and compare marginally adjusted means between populations. 
 
 This package is mostly a convenience wrapper: the heavy lifting for machine learning is conducted using the `SuperLearner` package, and statistical estimation is conducted using the `tmle` package. In addition to these features, `tmleAb` also provides some methods for parametric models applied to antibody data (such as antibody acquisition models).
 

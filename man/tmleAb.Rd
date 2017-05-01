@@ -88,4 +88,3 @@ van der Laan MJ, Polley EC, Hubbard AE. Super Learner. Stat Appl Genet Mol Biol.
 \seealso{
 \code{\link[tmleAb]{agecurveAb}}, \code{\link[SuperLearner]{SuperLearner}},  \code{\link[tmle]{tmle}}
 }
-

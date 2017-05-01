@@ -20,4 +20,3 @@ pred Predicted values given \code{newdata}
 Internal prediction method for SL.Yman2016
 }
 \keyword{internal}
-

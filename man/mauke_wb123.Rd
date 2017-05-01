@@ -26,4 +26,3 @@ C. Steel, J. Kubofcik, E. A. Ottesen, T. B. Nutman, Antibody to the filarial ant
 J. Kubofcik, D. L. Fink, T. B. Nutman, Identification of Wb123 as an early and specific marker of Wuchereria bancrofti infection. PLoS Negl. Trop. Dis. 6, e1930 (2012).
 }
 \keyword{datasets}
-

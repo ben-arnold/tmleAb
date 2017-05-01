@@ -1,6 +1,6 @@
 ---
 title: "tmleAb"
-author: "vignette for version 0.3.0"
+author: "vignette for version 0.3.1"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -138,7 +138,7 @@ As with the intervention villages, GAM is given the full weight in the super lea
 
 ### returned values
 
-`agecurveAb` returns an object of class data.frame that includes the actual dataset (feature matrix) used for estimation, along with fitted results (`pY`). Note that the estimation dataset drops any observations with missing values in `Y`, `Age`, `W` (if not NULL), and `id` (if specified). Factors in `W` are converted to design-matrix-style indicator variables. The data are sorted by `Age`. If the call includes covariates `W`, then `pY` values are marginally adjusted values at each age $A=a$.
+`agecurveAb` returns a list of objects that includes the input (feature matrix) used for estimation, along with fitted results (`pY`). Note that the objects returned from `agecurveAb` _exclude_ observations with missing values in `Y`, `Age`, `W` (if not NULL), and `id` (if specified). Also note that factors in `W` are converted to design-matrix-style indicator variables. The objects are sorted by `Age` to make it easier to plot results. If the call includes covariates `W`, then `pY` values are marginally adjusted values at each age $A=a$.
 
 ### visualizing the results
 

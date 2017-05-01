@@ -32,4 +32,3 @@ The \code{SL.Yman2016} wrapper enables the inclusion of this model in a \code{\l
 \code{\link[SuperLearner]{SuperLearner}}
 }
 \keyword{internal}
-

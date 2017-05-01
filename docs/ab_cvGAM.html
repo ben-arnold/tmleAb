@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>ab_cvGAM. tmleAb 0.3.0</title>
+<title>ab_cvGAM. tmleAb 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.3.0</a>
+      <a class="brand" href="index.html">tmleAb 0.3.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -54,8 +54,8 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='ab_cvGAM.html'>ab_cvGAM</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">X</span><span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/family'>gaussian</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">SL.library</span><span class="keyword">,</span> <span class="argument">print</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span>
-  <span class="argument">df</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">2</span><span class="keyword">:</span><span class="number">10</span><span class="keyword">)</span></pre>
+    <pre><span class="functioncall"><a href='ab_cvGAM.html'>ab_cvGAM</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="symbol">X</span><span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">family</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/stats/topics/family'>gaussian</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">SL.library</span><span class="keyword">,</span>
+  <span class="argument">cvControl</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">print</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">df</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">2</span><span class="keyword">:</span><span class="number">10</span><span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -69,6 +69,8 @@
       <dd>Model family (gaussian for continuous outcomes, binomial for binary outcomes)</dd>
       <dt>SL.library</dt>
       <dd>SuperLearner library</dd>
+      <dt>cvControl</dt>
+      <dd>Optional list to control cross-valiation (see <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> for details).</dd>
       <dt>print</dt>
       <dd>logical. print messages? Defaults to FALSE</dd>
       <dt>df</dt>

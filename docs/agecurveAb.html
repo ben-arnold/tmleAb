@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>agecurveAb. tmleAb 0.3.0</title>
+<title>agecurveAb. tmleAb 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.3.0</a>
+      <a class="brand" href="index.html">tmleAb 0.3.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -82,7 +82,7 @@
       <h2>Value</h2>
 
       <p><dl>
-<code>agecurveAb</code> returns a data.frame, which includes the dataset (feature matrix) used for estimation, along with fitted results (<code>pY</code>). Note that the estimation dataset excludes any observations with missing values in <code>Y</code>, <code>Age</code>, <code>W</code> (if not NULL), or <code>id</code> (if specified). Factors in <code>W</code> are converted to design-matrix-style indicator variables. Observations are sorted by <code>Age</code> for more convenient plotting. If covariates are included, then <code>pY</code> is the mean predicted antibody level at <code>Age=a</code>, averaged over the covariates <code>W</code>.
+<code>agecurveAb</code> returns a list of objects, which includes the inputs used for estimation, along with fitted results (<code>pY</code>) and the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> object itself (<code>SLfit</code>). Note that the estimation dataset excludes any observations with missing values in <code>Y</code>, <code>Age</code>, <code>W</code> (if not NULL), or <code>id</code> (if specified). Also note that factors in <code>W</code> are converted to design-matrix-style indicator variables. Objects are sorted by <code>Age</code> for more convenient plotting. If covariates are included, then <code>pY</code> is the mean predicted antibody level at <code>Age=a</code>, averaged over the covariates <code>W</code>.
 </dl></p>
 
     </div>

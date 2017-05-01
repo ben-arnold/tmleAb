@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Home. tmleAb 0.3.0</title>
+<title>Home. tmleAb 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.3.0</a>
+      <a class="brand" href="index.html">tmleAb 0.3.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -51,11 +51,14 @@
       
       <div class="row">
   <div class="span8">
-    <h1>tmleAb</h1>
+    <p><a href="https://travis-ci.org/ben-arnold/tmleAb"><img src="https://travis-ci.org/ben-arnold/tmleAb.svg" alt="Build Status"/></a>
+<img src="http://www.r-pkg.org/badges/version/tmleAb" alt="CRAN"/></p>
+
+<h1>tmleAb</h1>
 
 <p>tmleAb: Targeted maximum likelihood estimation for antibody data</p>
 
-<p>The <code>tmleAb</code> package estimates age-dependent antibody curves, makes it easy to estimate marginally adjusted means from the curves, and compare marginally adjusted means between populations. </p>
+<p>The <code>tmleAb</code> package estimates age-dependent antibody curves with ensemble machine learning, makes it easier to estimate marginally adjusted means from the curves, and compare marginally adjusted means between populations. </p>
 
 <p>This package is mostly a convenience wrapper: the heavy lifting for machine learning is conducted using the <code>SuperLearner</code> package, and statistical estimation is conducted using the <code>tmle</code> package. In addition to these features, <code>tmleAb</code> also provides some methods for parametric models applied to antibody data (such as antibody acquisition models).</p>
 

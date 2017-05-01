@@ -65,4 +65,3 @@ SLfit2
 \references{
 Yman V, White MT, Rono J, Arcà B, Osier FH, Troye-Blomberg M, et al. Antibody acquisition models: A new tool for serological surveillance of malaria transmission intensity. Sci Rep. ; 2016;6: 19472. (\url{http://www.nature.com/articles/srep19472})
 }
-

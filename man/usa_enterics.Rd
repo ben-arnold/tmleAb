@@ -47,4 +47,3 @@ X. Jiang, M. Wang, D. Y. Graham, M. K. Estes, Expression, self-assembly, and ant
 \code{\link{haiti_enterics}}
 }
 \keyword{datasets}
-
