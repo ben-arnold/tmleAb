@@ -73,6 +73,7 @@ agecurveAb <-function(Y,Age,W=NULL,id=NULL,SL.library= c("SL.mean","SL.glm","SL.
     stop("The SuperLearner package needed for this function to work. Please install it.",
          call. = FALSE)
   }
+  require(SuperLearner)
 
   if (is.null(id)) id <- 1:length(Y)
 

@@ -31,6 +31,7 @@ ab_cvRF <- function(Y,X,id=NULL,family=gaussian(),SL.library,cvControl=list(),pr
     cat("\n",RFnodesize[1],"to",RFnodesize[length(RFnodesize)],"using V-fold cross-validation.")
     cat("\nThis could take a few minutes, depending on the size of your dataset...\n")
   }
+  require(SuperLearner)
 
   if(is.null(id)) id <- 1:length(Y)
 

@@ -28,6 +28,7 @@ ab_cvGAM <- function(Y,X,id=NULL,family=gaussian(),SL.library,cvControl=list(),p
     cat("\nTuning the fit by selecting the optimal df for the smoothing splines")
     cat("\nfrom ",df[1]," to ",df[length(df)]," using V-fold cross-validation.")
   }
+  require(SuperLearner)
 
   if(is.null(id)) id <- 1:length(Y)
 

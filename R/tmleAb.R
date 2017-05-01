@@ -76,6 +76,8 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
     stop("You need the tmle package for this function to work. Please install it.",
          call. = FALSE)
   }
+  require(SuperLearner)
+  require(tmle)
 
   if (is.null(id)) {
     id <- 1:length(Y)
