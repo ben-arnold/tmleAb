@@ -9,6 +9,7 @@
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
 #' @param SL.library Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param g.SL.library Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).
+#' @param V Number of cross-validation folds for Super Learning to estimate outcome (Q) and treatment (g) models (default is \code{V=5}).
 #' @param RFnodesize Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
@@ -65,7 +66,7 @@
 #'
 #' @export
 #'
-tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),g.SL.library=c("SL.glm"),RFnodesize=NULL,gamdf=NULL) {
+tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),g.SL.library=c("SL.glm"),V=5,RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner and tmle packages are loaded
   if (!requireNamespace("SuperLearner", quietly = TRUE)) {
@@ -131,6 +132,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 			id=fitd$id,
 			Q.SL.library=SL.library,
 			g.SL.library=g.SL.library,
+			V=V,
 			family="gaussian",
 			fluctuation = "logistic"
 		)
@@ -148,6 +150,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
                            id=fitd$id,
                            Q.SL.library=SL.library,
                            g.SL.library=g.SL.library,
+                           V=V,
                            family="gaussian",
                            fluctuation = "logistic"
     )
@@ -163,6 +166,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 			W=fitW,
 			id=fitd$id,
 			Q.SL.library=SL.library,
+			V=V,
 			family="gaussian",
 			fluctuation = "logistic"
 		)
@@ -179,6 +183,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
                            W=emptyW,
                            id=fitd$id,
                            Q.SL.library=SL.library,
+                           V=V,
                            family="gaussian",
                            fluctuation = "logistic"
     )

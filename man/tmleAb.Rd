@@ -5,7 +5,7 @@
 \title{Targeted maximum liklihood estimation for antibody measurements}
 \usage{
 tmleAb(Y, X = NULL, W = NULL, id = NULL, SL.library = c("SL.mean",
-  "SL.glm", "SL.gam", "SL.loess"), g.SL.library = c("SL.glm"),
+  "SL.glm", "SL.gam", "SL.loess"), g.SL.library = c("SL.glm"), V = 5,
   RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
@@ -20,6 +20,8 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, SL.library = c("SL.mean",
 \item{SL.library}{Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
 
 \item{g.SL.library}{Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).}
+
+\item{V}{Number of cross-validation folds for Super Learning to estimate outcome (Q) and treatment (g) models (default is \code{V=5}).}
 
 \item{RFnodesize}{Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If \code{SL.library} includes \code{SL.randomForest}, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.}
 
