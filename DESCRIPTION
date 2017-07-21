@@ -1,7 +1,7 @@
 Package: tmleAb
 Type: Package
 Title: Targeted maximum likelihood estimation for antibody measurements
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: as.person(c("Ben Arnold <benarnold@berkeley.edu> [aut, cre]","Kunal Mishra <kmisrha9@berkeley.edu> [aut]","Mark van der Laan <laan@berkeley.edu> [aut]","Alan Hubbard <hubbard@berkeley.edu> [aut]"))
 URL: http://github.com/ben-arnold/tmleAb
 Description: Targeted maximum likelihood estimation for antibody measurements in

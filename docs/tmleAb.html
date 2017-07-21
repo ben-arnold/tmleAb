@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>tmleAb. tmleAb 0.3.1</title>
+<title>tmleAb. tmleAb 0.3.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="index.html">tmleAb 0.3.1</a>
+      <a class="brand" href="index.html">tmleAb 0.3.2</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html">Home</a></li>
@@ -55,7 +55,7 @@
   <div class="span8">
     <h2>Usage</h2>
     <pre><span class="functioncall"><a href='tmleAb.html'>tmleAb</a></span><span class="keyword">(</span><span class="symbol">Y</span><span class="keyword">,</span> <span class="argument">X</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">W</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">id</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.mean"</span><span class="keyword">,</span>
-  <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">g.SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.glm"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="string">"SL.glm"</span><span class="keyword">,</span> <span class="string">"SL.gam"</span><span class="keyword">,</span> <span class="string">"SL.loess"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">g.SL.library</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"SL.glm"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">V</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">5</span><span class="keyword">,</span>
   <span class="argument">RFnodesize</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">gamdf</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
     
     <h2>Arguments</h2>
@@ -72,6 +72,8 @@
       <dd>Library of models/algorithms to include in the ensemble for the outcome (see the <code><a href='http://www.rdocumentation.org/packages/SuperLearner/topics/SuperLearner'>SuperLearner</a></code> package for details).</dd>
       <dt>g.SL.library</dt>
       <dd>Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).</dd>
+      <dt>V</dt>
+      <dd>Number of cross-validation folds for Super Learning to estimate outcome (Q) and treatment (g) models (default is <code>V=5</code>).</dd>
       <dt>RFnodesize</dt>
       <dd>Optional argument to specify a range of minimum node sizes for the random Forest algorithm. If <code>SL.library</code> includes <code>SL.randomForest</code>, then the default is to search over node sizes of 15,20,...40. Specifying this option will override the default.</dd>
       <dt>gamdf</dt>
