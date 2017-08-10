@@ -1,7 +1,7 @@
 Package: tmleAb
 Type: Package
 Title: Targeted maximum likelihood estimation for antibody measurements
-Version: 0.3.2
+Version: 0.3.3
 Authors@R: as.person(c("Ben Arnold <benarnold@berkeley.edu> [aut, cre]","Kunal Mishra <kmisrha9@berkeley.edu> [aut]","Mark van der Laan <laan@berkeley.edu> [aut]","Alan Hubbard <hubbard@berkeley.edu> [aut]"))
 URL: http://github.com/ben-arnold/tmleAb
 Description: Targeted maximum likelihood estimation for antibody measurements in
@@ -14,8 +14,8 @@ Description: Targeted maximum likelihood estimation for antibody measurements in
     provides access to parametric modeling methods applied to antibody data.
 LazyData: TRUE
 Imports:
-    SuperLearner (>= 2.0),
-    tmle (>= 1.2.0)
+    SuperLearner (>= 2.0-22),
+    tmle (>= 1.2.0-5)
 Suggests:
     gam,
     gbm,
