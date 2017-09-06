@@ -10,6 +10,12 @@ This package is mostly a convenience wrapper: the heavy lifting for machine lear
 
 The package's web interface is: http://ben-arnold.github.io/tmleAb/
 
+An article that describes many of the methods implmented in the package is here:
+http://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0005616
+
+With an associated GitHub repository here:
+https://github.com/ben-arnold/antibody-curves
+
 ## Installation
 
 Install this package using the `devtools` package in R. 
