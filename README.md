@@ -10,6 +10,9 @@ This package is mostly a convenience wrapper: the heavy lifting for machine lear
 
 The package's web interface is: http://ben-arnold.github.io/tmleAb/
 
+An article that provides details for much of the methodology implemented in the package, and the underlying datasets included, is here:
+http://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0005616
+
 ## Installation
 
 Install this package using the `devtools` package in R. 
