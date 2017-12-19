@@ -15,3 +15,6 @@ vignettes/*.pdf
 .httr-oauth
 .Rproj.user
 inst/doc
+
+# Mac system files
+.DS_Store
