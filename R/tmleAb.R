@@ -7,6 +7,7 @@
 #' @param X comparison group  (must be binary, 0/1). If \code{X=NULL}, then the function returns the mean (rather than the difference between levels of \code{X}).
 #' @param W matrix of covariates -- should probably at minimum include the individual's age (if available).
 #' @param id An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.
+#' @param family Outcome family, choose \code{gaussian} for continuous outcomes and \code{binomial} for binary outcomes (default \code{family="gaussian"})
 #' @param SL.library Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).
 #' @param g.SL.library Optional library of models/algorithms to model group assignment. Default is to use main terms logistic regression (SL.glm).
 #' @param V Number of cross-validation folds for Super Learning to estimate outcome (Q) and treatment (g) models (default is \code{V=5}).
@@ -14,7 +15,11 @@
 #' @param gamdf Optional argument to specify a range of degrees of freedom for natural smoothing splines in a generalized additive model. If \code{SL.library} includes \code{SL.gam}, then the default is to search over a range of df=2-10. Specifying this option will override the default.
 #'
 #' @details
-#' The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE). \code{tmleAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate means or differences in terms of seroprevalence.
+#' The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE). 
+#' 
+#' The function assumes a continuous outcome as the default (\code{family="gaussian"}). If you pass a binary outcome to the function with the \code{family="gaussian"} argument it will still estimate seroprevalence, but it will not necessarily bound predictions between 0 and 1. If you specify \code{family="binomial"} then the predictions will be bound between 0 and 1. Note that some estimation routines do not support binary outcomes (e.g., \code{SL.loess}), and you will see an error if you specify a binomial family with them in the library.  
+#' 
+#' Also note that if you specify \code{family="binomial"} for a binary outcome with a comparison group (\code{X=}), then other contrasts are available to you besides the difference in means (the default stored in \code{psi}). Specifically the relative risk (RR) and odds ratio (OR) will be saved in the \code{tmle_fit$estimates} list.
 #'
 #' @return \code{psi} Mean (if \code{X=NULL}) or difference
 #' @return \code{se} Standard error of \code{psi}, estimated from the influence curve
@@ -66,7 +71,7 @@
 #'
 #' @export
 #'
-tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),g.SL.library=c("SL.glm"),V=5,RFnodesize=NULL,gamdf=NULL) {
+tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,family="gaussian",SL.library=c("SL.mean","SL.glm","SL.gam","SL.loess"),g.SL.library=c("SL.glm"),V=5,RFnodesize=NULL,gamdf=NULL) {
 
   # ensure SuperLeaner and tmle packages are loaded
   if (!requireNamespace("SuperLearner", quietly = TRUE)) {
@@ -112,7 +117,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 	# select optimal node size (tree depth) using cross-validated risk
 	# and then update the ensemble library to include the optimal node size
 	if (length(grep("SL.randomForest",SL.library))>0) {
-	  cvRF <- ab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,SL.library=SL.library,cvControl=list(V = V),RFnodesize=RFnodesize)
+	  cvRF <- ab_cvRF(Y=fitd$Y,X=fitW,id=fitd$id,family=family,SL.library=SL.library,cvControl=list(V = V),RFnodesize=RFnodesize)
 	  SL.library <- cvRF$SL.library
 	}
 
@@ -120,7 +125,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 	# select the optimal degrees of freedom for the smoothing splines using cross-validated risk
 	# and then updated the ensemble library to include the optimal df
 	if (length(grep("SL.gam",SL.library))>0) {
-	  cvGAM <- ab_cvGAM(Y=fitd$Y,X=fitW,id=fitd$id,SL.library=SL.library,cvControl=list(V = V),df=gamdf)
+	  cvGAM <- ab_cvGAM(Y=fitd$Y,X=fitW,id=fitd$id,family=family,SL.library=SL.library,cvControl=list(V = V),df=gamdf)
 	  SL.library <- cvGAM$SL.library
 	}
 
@@ -133,7 +138,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 			Q.SL.library=SL.library,
 			g.SL.library=g.SL.library,
 			V=V,
-			family="gaussian",
+			family=family,
 			fluctuation = "logistic"
 		)
 		tmle::print.tmle(tmle_fit)
@@ -143,7 +148,9 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 		p    <- tmle_fit$estimates$ATE$pvalue
 	}
   if (nullX==FALSE & nullW==TRUE) {
-    emptyW <- data.frame(w1=rep(1,nrow(fitd)),w2=rep(1,nrow(fitd)))
+    # if W is null, then create a random normal variable
+    # called emptyW -- it will just enable tmle to run (band-aid solution)
+    emptyW <- data.frame(w1=rnorm(n=nrow(fitd)))
     tmle_fit <- tmle::tmle(Y=fitd$Y,
                            A=fitd$X,
                            W=emptyW,
@@ -151,7 +158,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
                            Q.SL.library=SL.library,
                            g.SL.library=g.SL.library,
                            V=V,
-                           family="gaussian",
+                           family=family,
                            fluctuation = "logistic"
     )
     tmle::print.tmle(tmle_fit)
@@ -167,7 +174,7 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 			id=fitd$id,
 			Q.SL.library=SL.library,
 			V=V,
-			family="gaussian",
+			family=family,
 			fluctuation = "logistic"
 		)
 		tmle::print.tmle(tmle_fit)
@@ -177,14 +184,16 @@ tmleAb <- function(Y,X=NULL,W=NULL,id=NULL,SL.library=c("SL.mean","SL.glm","SL.g
 		p    <- tmle_fit$estimates$EY1$pvalue
   }
   if (nullX==TRUE & nullW==TRUE)  {
-    emptyW <- data.frame(w1=rep(1,nrow(fitd)),w2=rep(1,nrow(fitd)))
+    # if W is null, then create a random normal variable
+    # called emptyW -- it will just enable tmle to run (band-aid solution)
+    emptyW <- data.frame(w1=rnorm(n=nrow(fitd)))
     tmle_fit <- tmle::tmle(Y=fitd$Y,
                            A=NULL,
                            W=emptyW,
                            id=fitd$id,
                            Q.SL.library=SL.library,
                            V=V,
-                           family="gaussian",
+                           family=family,
                            fluctuation = "logistic"
     )
     tmle::print.tmle(tmle_fit)

@@ -4,9 +4,9 @@
 \alias{tmleAb}
 \title{Targeted maximum liklihood estimation for antibody measurements}
 \usage{
-tmleAb(Y, X = NULL, W = NULL, id = NULL, SL.library = c("SL.mean",
-  "SL.glm", "SL.gam", "SL.loess"), g.SL.library = c("SL.glm"), V = 5,
-  RFnodesize = NULL, gamdf = NULL)
+tmleAb(Y, X = NULL, W = NULL, id = NULL, family = "gaussian",
+  SL.library = c("SL.mean", "SL.glm", "SL.gam", "SL.loess"),
+  g.SL.library = c("SL.glm"), V = 5, RFnodesize = NULL, gamdf = NULL)
 }
 \arguments{
 \item{Y}{antibody measurement}
@@ -16,6 +16,8 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, SL.library = c("SL.mean",
 \item{W}{matrix of covariates -- should probably at minimum include the individual's age (if available).}
 
 \item{id}{An optional cluster or repeated measures id variable. For cross-validation splits, \code{id} forces observations in the same cluster or for the same individual to be in the same validation fold.}
+
+\item{family}{Outcome family, choose \code{gaussian} for continuous outcomes and \code{binomial} for binary outcomes (default \code{family="gaussian"})}
 
 \item{SL.library}{Library of models/algorithms to include in the ensemble for the outcome (see the \code{\link[SuperLearner]{SuperLearner}} package for details).}
 
@@ -44,7 +46,11 @@ tmleAb(Y, X = NULL, W = NULL, id = NULL, SL.library = c("SL.mean",
 Targeted maximum liklihood estimation (TMLE) for mean antibody measurements or difference in antibody measurements between groups
 }
 \details{
-The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE). \code{tmleAb} assumes a continuous outcome (\code{family='gaussian'}), but if a binary outcome is passed to the function it will estimate means or differences in terms of seroprevalence.
+The \code{tmleAb} function estimates adjusted means or differences in means in antibody measurements using targeted maximum likelihood estimation (TMLE). 
+
+The function assumes a continuous outcome as the default (\code{family="gaussian"}). If you pass a binary outcome to the function with the \code{family="gaussian"} argument it will still estimate seroprevalence, but it will not necessarily bound predictions between 0 and 1. If you specify \code{family="binomial"} then the predictions will be bound between 0 and 1. Note that some estimation routines do not support binary outcomes (e.g., \code{SL.loess}), and you will see an error if you specify a binomial family with them in the library.  
+
+Also note that if you specify \code{family="binomial"} for a binary outcome with a comparison group (\code{X=}), then other contrasts are available to you besides the difference in means (the default stored in \code{psi}). Specifically the relative risk (RR) and odds ratio (OR) will be saved in the \code{tmle_fit$estimates} list.
 }
 \examples{
 \dontrun{
