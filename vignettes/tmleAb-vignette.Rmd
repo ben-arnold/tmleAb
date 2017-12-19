@@ -1,6 +1,6 @@
 ---
-title: "tmleAb"
-author: "vignette for version 0.3.3"
+title: "tmleAb vignette"
+author: "vignette for version 0.3.4"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -65,7 +65,7 @@ library(devtools)
 devtools::install_github("ben-arnold/tmleAb")
 ```
 
-The package is in active development, so periodically check for updates!  We have many updated features planned.  If you use the package and have any comments please send them along -- we'd love to hear from you.
+The package is in semi-active development.  If you use the package and have run into issues and/or have suggestions for improvement feel free to write and we will try our best to respond!
 
 ## agecurveAb
 
@@ -97,6 +97,8 @@ The `agecurveAb` function has a number of arguments, but these are the most impo
 * `W` : An optional vector, matrix, or data.frame of covariates for each individual used to marginally adjust the curve.
 
 * `id` : An optional cluster or repeated measures id variable. For cross-validation splits, id forces observations in the same cluster or for the same individual to be in the same validation fold.
+
+* `family` : An optional model family for continuous (`gaussian`) or binary (`binomial`) outcomes (default is `family='gaussian'`).
     
 * `SL.library` : library of algorithms to include in the super learner ensemble. 
     + The default is `c("SL.mean","SL.glm","SL.loess", "SL.gam")`, but many others can be included. Use the `listWrappers()` function in the `SuperLearner` package for a full list (or write your own!).
@@ -220,6 +222,8 @@ The `tmleAb` function has (by design) almost identical arguments to `agecurveAb`
 * `W` : A matrix of covariates -- should probably at minimum include the individual's age (if available).
 
 * `id` : An optional cluster or repeated measures id variable. For cross-validation splits, id forces observations in the same cluster or for the same individual to be in the same validation fold.
+
+* `family` : An optional model family for continuous (`gaussian`) or binary (`binomial`) outcomes (default is `family='gaussian'`).
     
 * `SL.library` : library of algorithms to include in the super learner ensemble. 
     + The default is `c("SL.mean","SL.glm","SL.loess", "SL.gam")`, but many others can be included. Use the `listWrappers()` function in the `SuperLearner` package for a full list (or write your own!).

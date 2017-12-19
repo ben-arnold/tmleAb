@@ -1,7 +1,7 @@
 Package: tmleAb
 Type: Package
 Title: Targeted maximum likelihood estimation for antibody measurements
-Version: 0.3.3
+Version: 0.3.4
 Authors@R: as.person(c("Ben Arnold <benarnold@berkeley.edu> [aut, cre]","Kunal Mishra <kmisrha9@berkeley.edu> [aut]","Mark van der Laan <laan@berkeley.edu> [aut]","Alan Hubbard <hubbard@berkeley.edu> [aut]"))
 URL: http://github.com/ben-arnold/tmleAb
 Description: Targeted maximum likelihood estimation for antibody measurements in
@@ -25,7 +25,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-License: GPL-2
+License: GPL-3
 oxygenNote: 5.0.1
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+BugReports: https://github.com/ben-arnold/tmleAb/issues
