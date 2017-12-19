@@ -21,9 +21,9 @@ design_matrix <- function(W) {
     if(is.null(ncol(W)) | ncol(W)==0) {
       stop("Something in wrong with W.\nTo be safe, please try specifying it as class=data.frame.")
     }
-    if(ncol(W)==1) {
-      cat("\n-----------------------------------------\nThe design matrix you supplied is not a matrix or a data.frame\nAssuming that it is a single variable\n-----------------------------------------\n")
-    }
+    # if(ncol(W)==1) {
+    #   cat("\n-----------------------------------------\nThe design matrix you supplied is not a matrix or a data.frame\nAssuming that it is a single variable\n-----------------------------------------\n")
+    # }
 
   }
   ncolW <- ncol(W)
